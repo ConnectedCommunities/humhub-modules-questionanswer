@@ -1,0 +1,13 @@
+{
+    "id": "questionanswer",
+    "name": "Question and Answer",
+    "description": "Adds a Stack Exchange inspired Question and Answer system for spaces",
+    "keywords": [
+        "question", "answer", "stack exchange", "qanda", "q&a"
+    ],
+    "version": "0.1",
+    "humhub": {
+        "minVersion": "0.8"
+    },
+    "screenshots": ["assets/screen1.jpg","assets/screen2.jpg"]
+}
