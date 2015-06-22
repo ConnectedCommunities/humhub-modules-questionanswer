@@ -30,10 +30,20 @@
                     	<?php echo $form->textArea($model,'post_text',array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => "Question details...")); ?>
                     </div>
 
-					<?php echo CHtml::submitButton('Submit'); ?>
+					<?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
                 </div>
             </div>
-
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>Related</strong> Questions</div>
+                <div class="list-group">
+                    <a class="list-group-item" href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
+                    <a class="list-group-item" href="#">Nunc pharetra blandit sapien, et tempor nisi.</a>
+                    <a class="list-group-item" href="#">Duis finibus venenatis commodo. </a>
+                </div>
+                <br>
+            </div>
         </div>
    </div>
 </div>
