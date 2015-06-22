@@ -9,11 +9,11 @@ class m150617_104132_initial extends EDbMigration
             'question_id' => 'int(11) DEFAULT NULL', // id of original question, null if an answer
             'post_title' => 'varchar(255) DEFAULT NULL', // null if an answer
             'post_text' => 'TEXT NOT NULL',
-            'post_type' => 'varchar(255) NOT NULL', // [question, answer]
-            'created_at' => 'datetime NOT NULL',
+            'post_type' =>  'enum(\'question\',\'answer\') NOT NULL', 
+            'created_at' => 'TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP',
             'created_by' => 'int(11) NOT NULL',
-            'updated_at' => 'datetime NOT NULL',
-            'updated_by' => 'int(11) NOT NULL',
+            'updated_at' => 'TIMESTAMP',
+            'updated_by' => 'int(11)',
         ), '');
 
 		$this->createTable('question_votes', array(
