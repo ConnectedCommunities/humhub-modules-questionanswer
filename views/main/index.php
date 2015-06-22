@@ -15,14 +15,6 @@
 <div class="container">
     <div class="row">
         <div class="col-md-9">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <?php echo CHtml::textArea("question", "", array('id'=>'contentForm_question', 'class' => 'form-control autosize contentForm', 'rows' => '1', "tabindex" => "1", "placeholder" => Yii::t('PollsModule.widgets_views_pollForm', "Ask something..."))); ?>
-                    <div class="contentForm_options">
-                        <?php echo CHtml::textArea("answersText", "", array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => Yii::t('PollsModule.widgets_views_pollForm', "Question details..."))); ?>
-                    </div>
-                </div>
-            </div>
             <div class="panel panel-default qanda-panel">
                 <div class="panel-heading">
                     <ul class="nav nav-tabs qanda-header-tabs" id="filter">
@@ -58,6 +50,9 @@
                                 <li><a href="#" class="wallSorting" id="sorting_u"><i class="fa fa-square-o"></i> Last update</a></li>
                             </ul>
                         </li>
+                        <li class="dropdown pull-right">
+                            <?php echo CHtml::link('<i class="fa fa-plus"></i> Ask Question', Yii::app()->createAbsoluteUrl('//questionanswer/main/new_question'), array('class'=>'dropdown-toggle btn btn-info', 'style'=>"padding:8px;")); ?>
+                        </li>
                     </ul>
                 </div>
                 <div class="panel-body">
@@ -84,9 +79,10 @@
                         </div>
 
                         <div class="media-body" style="padding-top:5px; padding-left:10px;">
-
-                            <h4 class="media-heading"><a href="#"><?php echo CHtml::encode($question->post_title); ?></a></h4>
-                            <h5><?php echo CHtml::encode($question->post_text); ?></h5>
+                            <h4 class="media-heading">
+                                <?php echo CHtml::link(CHtml::encode($question->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question->id))); ?>
+                            </h4>
+                            <h5><?php echo CHtml::encode((strlen($question->post_text) > 203) ? substr($question->post_text,0,200).'...' : $question->post_text); ?></h5>
                         </div>
                     </div>
                 <?php } ?>

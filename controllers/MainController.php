@@ -10,6 +10,17 @@ class MainController extends Controller{
         $this->render('index', array('questions' => Question::model()->findAll(array('order'=>'created_at DESC'))));
     }
 
+    public function actionView() {
+
+	    $model = new Question;
+    	
+    	$this->render('view', array(
+    		'question' => Question::model()->findByPk(Yii::app()->request->getParam('id')),
+    		'model' => $model
+    	));
+
+    }
+    
     public function actionAnswer() {
     	$this->render('answer');
     }
@@ -29,8 +40,8 @@ class MainController extends Controller{
 	        $model->attributes=$_POST['Question'];
 	        if($model->validate())
 	        {
-	        	echo "Saved";
 	        	$model->save();
+	        	$this->redirect(Yii::app()->createUrl('//questionanswer/main/index'));
 	            return;
 	        }
 	    }
