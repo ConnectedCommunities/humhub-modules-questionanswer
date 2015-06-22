@@ -12,7 +12,6 @@
 }
 
 </style>
-
 <div class="container">
     <div class="row">
         <div class="col-md-9">
@@ -62,12 +61,17 @@
                     </ul>
                 </div>
                 <div class="panel-body">
+
+                <?php foreach ($questions as $question) { ?>
                     <div class="media" >
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <a class="btn btn-default btn-xs" href="#"><i class="fa fa-angle-up"></i></a><br />
                                 <a class="btn btn-default btn-xs" href="#"><i class="fa fa-angle-down"></i></a>
                             </div>
+                            <!--<a href="" class="pull-left" style="padding-top:5px; padding-right:10px;">
+                                <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">
+                            </a>-->
                             <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
                                 <b>2</b>
                                 <p>votes</p>
@@ -76,61 +80,16 @@
                                 <b>1</b>
                                 <p>answer</p>
                             </div>
-                            <!-- <a href="/index.php?r=user/profile&amp;uguid=ba1069c3-aac0-4088-95b1-18e7d8440f7a" class="pull-left">
-                                <img class="media-object img-rounded user-image user-ba1069c3-aac0-4088-95b1-18e7d8440f7a" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="http://192.168.99.100/img/default_user.jpg?cacheId=0" width="40" height="40">
-                            </a> -->
+
                         </div>
 
                         <div class="media-body" style="padding-top:5px; padding-left:10px;">
-                            <h4 class="media-heading"><a href="/index.php?r=user/profile&amp;uguid=ba1069c3-aac0-4088-95b1-18e7d8440f7a">Lorem ipsum dolor sit amet</a></h4>
-                            <h5>Nunc pharetra blandit sapien, et tempor nisi. Duis finibus venenatis commodo. Ut in metus placerat, tempor massa eget, mollis nisi.</h5>
+
+                            <h4 class="media-heading"><a href="#"><?php echo CHtml::encode($question->post_title); ?></a></h4>
+                            <h5><?php echo CHtml::encode($question->post_text); ?></h5>
                         </div>
-
-
-                        <div class="well well-small comment-container" style="display: none;" id="comment_Post_1">
-                            <div class="comment " id="comments_area_Post_1">
-                            </div>
-
-                            <div id="comment_create_form_Post_1" class="comment_create">
-                            </div>
-                        </div>
-
                     </div>
-
-                    <div class="media" >
-                        <div class="pull-left">
-                            <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
-                                <a class="btn btn-default btn-xs" href="#"><i class="fa fa-angle-up"></i></a><br />
-                                <a class="btn btn-default btn-xs" href="#"><i class="fa fa-angle-down"></i></a>
-                            </div>
-                            <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
-                                <b>2</b>
-                                <p>votes</p>
-                            </div>
-                            <div class="pull-left" style="text-align:center; margin-top:5px;">
-                                <b>1</b>
-                                <p>answer</p>
-                            </div>
-                            <!-- <a href="/index.php?r=user/profile&amp;uguid=ba1069c3-aac0-4088-95b1-18e7d8440f7a" class="pull-left">
-                                <img class="media-object img-rounded user-image user-ba1069c3-aac0-4088-95b1-18e7d8440f7a" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="http://192.168.99.100/img/default_user.jpg?cacheId=0" width="40" height="40">
-                            </a> -->
-                        </div>
-
-                        <div class="media-body" style="padding-top:5px; padding-left:10px;">
-                            <h4 class="media-heading"><a href="/index.php?r=user/profile&amp;uguid=ba1069c3-aac0-4088-95b1-18e7d8440f7a">Lorem ipsum dolor sit amet</a></h4>
-                            <h5>Nunc pharetra blandit sapien, et tempor nisi. Duis finibus venenatis commodo. Ut in metus placerat, tempor massa eget, mollis nisi.</h5>
-                        </div>
-
-
-                        <div class="well well-small comment-container" style="display: none;" id="comment_Post_1">
-                            <div class="comment " id="comments_area_Post_1">
-                            </div>
-
-                            <div id="comment_create_form_Post_1" class="comment_create">
-                            </div>
-                        </div>
-
-                    </div>
+                <?php } ?>
 
                 </div>
             </div>
