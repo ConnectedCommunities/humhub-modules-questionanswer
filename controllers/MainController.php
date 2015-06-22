@@ -12,18 +12,41 @@ class MainController extends Controller{
 
     public function actionView() {
 
+    	error_reporting(E_ALL); 
+		ini_set("display_errors", 1); 
 	    $model = new Question;
+    	$answerModel = new Answer;
     	
+    	$question = Question::model()->findByPk(Yii::app()->request->getParam('id'));
+    	
+    	if(isset($_POST['Answer'])) {
+
+	        $answerModel->attributes=$_POST['Answer'];
+	        $answerModel->created_by = 1;
+	        $answerModel->post_type = "answer";
+	        $answerModel->question_id = $question->id;
+
+	        if($answerModel->validate())
+	        {
+	            // form inputs are valid, do something here
+	            $answerModel->save();
+	            echo "Saved!";
+	            return;
+	        }
+    	}
+
     	$this->render('view', array(
-    		'question' => Question::model()->findByPk(Yii::app()->request->getParam('id')),
-    		'model' => $model
+    		'question' => $question,
+    		'model' => $model,
+    		'answerModel' => $answerModel
     	));
 
     }
     
-    public function actionAnswer() {
-    	$this->render('answer');
-    }
+	public function actionAnswer()
+	{
+    	// do nothing
+	}
 
 	public function actionNew_question()
 	{
