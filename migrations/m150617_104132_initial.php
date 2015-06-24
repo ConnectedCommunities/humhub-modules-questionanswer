@@ -7,9 +7,10 @@ class m150617_104132_initial extends EDbMigration
         $this->createTable('question', array(
             'id' => 'pk',
             'question_id' => 'int(11) DEFAULT NULL', // id of original question, null if an answer
+            'parent_id' => 'int(11) DEFAULT NULL', // id of parent (could be a question, answer or even a comment)
             'post_title' => 'varchar(255) DEFAULT NULL', // null if an answer
             'post_text' => 'TEXT NOT NULL',
-            'post_type' =>  'enum(\'question\',\'answer\') NOT NULL', 
+            'post_type' =>  'enum(\'question\',\'answer\', \'comment\') NOT NULL', 
             'created_at' => 'TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP',
             'created_by' => 'int(11) NOT NULL',
             'updated_at' => 'TIMESTAMP',

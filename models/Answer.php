@@ -105,6 +105,33 @@ class Answer extends HActiveRecord
 		));
 	}
 
+
+	/** 
+	 * Add scopes to Answer model
+	 */
+    public function scopes()
+    {
+        return array(
+            'answers'=>array(
+                'condition'=>"post_type='answer'",
+            )
+        );
+    }
+
+	/** 
+	 * Filters results by the question_id
+	 * @param $question_id
+	 */
+	public function question($question_id)
+	{
+	    $this->getDbCriteria()->mergeWith(array(
+	        'condition'=>"question_id=:question_id", 
+	        'params' => array(':question_id' => $question_id)
+	    ));
+
+	    return $this;
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

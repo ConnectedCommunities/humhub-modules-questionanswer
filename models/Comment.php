@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'question':
  * @property integer $id
  * @property integer $question_id
+ * @property integer $parent_id
  * @property string $post_title
  * @property string $post_text
  * @property string $post_type
@@ -14,7 +15,7 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Question extends HActiveRecord
+class Comment extends HActiveRecord
 {
 	/**
 	 * @return string the associated database table name
@@ -26,15 +27,30 @@ class Question extends HActiveRecord
 
 	/**
 	 * Set default scope so that
-	 * only answers are retrieved 
+	 * only comments are retrieved 
 	 */
     public function defaultScope()
     {
         return array(
-            'condition'=>"post_type='question'",
+            'condition'=>"post_type='comment'",
         );
     }
 
+
+    /** 
+     * Filters results by the question_id
+     * @param $question_id
+     */
+    public function question($question_id)
+    {
+        $this->getDbCriteria()->mergeWith(array(
+            'condition'=>"question_id=:question_id", 
+            'params' => array(':question_id' => $question_id)
+        ));
+
+        return $this;
+    }
+    
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -43,12 +59,14 @@ class Question extends HActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('post_text, post_type, created_by, updated_by', 'required'),
-			array('question_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
-			array('post_title, post_type', 'length', 'max'=>255),
+			array('post_text, post_type, created_by', 'required'),
+			array('question_id, parent_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
+			array('post_title', 'length', 'max'=>255),
+			array('post_type', 'length', 'max'=>8),
+			array('created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, question_id, post_title, post_text, post_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
+			array('id, question_id, parent_id, post_title, post_text, post_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,6 +89,7 @@ class Question extends HActiveRecord
 		return array(
 			'id' => 'ID',
 			'question_id' => 'Question',
+			'parent_id' => 'Parent',
 			'post_title' => 'Post Title',
 			'post_text' => 'Post Text',
 			'post_type' => 'Post Type',
@@ -101,6 +120,7 @@ class Question extends HActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('question_id',$this->question_id);
+		$criteria->compare('parent_id',$this->parent_id);
 		$criteria->compare('post_title',$this->post_title,true);
 		$criteria->compare('post_text',$this->post_text,true);
 		$criteria->compare('post_type',$this->post_type,true);
@@ -118,7 +138,7 @@ class Question extends HActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Question the static model class
+	 * @return Comment the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
