@@ -31,6 +31,7 @@ class MainController extends Controller{
 	        if($answerModel->validate())
 	        {
 	            $answerModel->save();
+	            $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $question->id)));
 	        }
     	}
 
@@ -42,10 +43,10 @@ class MainController extends Controller{
 	        $commentModel->post_type = "comment";
 	        $commentModel->question_id = $question->id;
 
-	        print_r($commentModel);
 	        if($commentModel->validate())
 	        {
 	            $commentModel->save();
+	            $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $question->id)));
 	        }
 
     	}
@@ -58,7 +59,6 @@ class MainController extends Controller{
     	foreach($rawComments as $comment) {
     		if($comment->question_id != null) $comments[$comment->parent_id][] = $comment;
     	}
-
 
     	$this->render('view', array(
     		'question' => $question,
@@ -92,10 +92,10 @@ class MainController extends Controller{
 	        if($model->validate())
 	        {
 	        	$model->save();
-	        	$this->redirect(Yii::app()->createUrl('//questionanswer/main/index'));
-	            return;
+        	    $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $model->id)));
 	        }
 	    }
+
 	    $this->render('new_question',array('model'=>$model));
 	}
 
