@@ -72,8 +72,16 @@
                                 <p>votes</p>
                             </div>
                             <div class="pull-left" style="text-align:center; margin-top:5px;">
-                                <b>1</b>
-                                <p>answer</p>
+                                <b>
+                                <?php 
+                                if(isset($question_stats[$question->id])) {
+                                    echo $question_stats[$question->id]['answer'];
+                                } else {
+                                    echo "0";
+                                }
+                                ?>
+                                </b>
+                                <p>answers</p>
                             </div>
 
                         </div>

@@ -7,7 +7,24 @@ class MainController extends Controller{
 	}
 	
     public function actionIndex(){
-        $this->render('index', array('questions' => Question::model()->findAll(array('order'=>'created_at DESC'))));
+		
+		// Query to get the question stats
+		$question_stats_command = Yii::app()->db->createCommand()
+		    ->select('question_id, post_type, COUNT(*) as count')
+		    ->from('question q')
+		    ->where('post_type != "question"')
+		    ->group('question_id, post_type');
+
+		// Map question stats into an array with the key as the id
+		$question_stats = array();
+		foreach($question_stats_command->queryAll() as $stat) {
+			$question_stats[$stat['question_id']][$stat['post_type']] = $stat['count'];
+		}
+
+        $this->render('index', array(
+        	'questions' => Question::model()->findAll(array('order'=>'created_at DESC')),
+        	'question_stats' => $question_stats
+        ));
     }
 
     public function actionView() {
