@@ -19,20 +19,21 @@ class m150617_104132_initial extends EDbMigration
 
 		$this->createTable('question_votes', array(
             'id' => 'pk',
-            'user_id' => 'int(11) NOT NULL',
             'post_id' => 'int(11) NOT NULL',
-            'created_at' => 'datetime NOT NULL',
+            'vote_on' =>  'varchar(255)', // question, answer
+            'vote_type' =>  'varchar(255)', // up, down, 
+            'created_at' => 'TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP',
             'created_by' => 'int(11) NOT NULL',
-            'updated_at' => 'datetime NOT NULL',
-            'updated_by' => 'int(11) NOT NULL',
+            'updated_at' => 'TIMESTAMP',
+            'updated_by' => 'int(11)',
         ), '');
 
 	}
 
 	public function down()
 	{
-		echo "m150617_104132_initial does not support migration down.\n";
-		return false;
+        $this->dropTable('question');
+        $this->dropTable('question_votes');
 	}
 
 	/*

@@ -61,8 +61,25 @@
                     <div class="media" >
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
-                                <a class="btn btn-default btn-xs" href="#"><i class="fa fa-angle-up"></i></a><br />
-                                <a class="btn btn-default btn-xs" href="#"><i class="fa fa-angle-down"></i></a>
+                                <?php 
+                                // if(in_array($question['id'], $user_voted_on)
+                                $upBtnClass = "";
+                                $downBtnClass = "";
+
+                                // Change the button class to 'active' if the user has voted
+                                if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) {
+
+                                    if($user_vote_history[$question['id']]['question'] == "up") {
+                                        $upBtnClass = "active";
+                                        $downBtnClass = "";
+                                    } else {
+                                        $downBtnClass = "active";
+                                        $upBtnClass = "";
+                                    }
+                                }
+                                ?>
+                                <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass)); ?>
+                                <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass)); ?>
                             </div>
                             <!--<a href="" class="pull-left" style="padding-top:5px; padding-right:10px;">
                                 <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">

@@ -5,14 +5,15 @@
  *
  * The followings are the available columns in table 'question_votes':
  * @property integer $id
- * @property integer $user_id
  * @property integer $post_id
+ * @property string $vote_on
+ * @property string $vote_type
  * @property string $created_at
  * @property integer $created_by
  * @property string $updated_at
  * @property integer $updated_by
  */
-class QuestionVotes extends CActiveRecord
+class QuestionVotes extends HActiveRecord
 {
 	/**
 	 * @return string the associated database table name
@@ -30,11 +31,13 @@ class QuestionVotes extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, post_id, created_at, created_by, updated_at, updated_by', 'required'),
-			array('user_id, post_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
+			array('post_id, created_by', 'required'),
+			array('post_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
+			array('vote_on, vote_type', 'length', 'max'=>255),
+			array('created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, post_id, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
+			array('id, post_id, vote_on, vote_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,8 +59,9 @@ class QuestionVotes extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'user_id' => 'User',
 			'post_id' => 'Post',
+			'vote_on' => 'Vote On',
+			'vote_type' => 'Vote Type',
 			'created_at' => 'Created At',
 			'created_by' => 'Created By',
 			'updated_at' => 'Updated At',
@@ -84,8 +88,9 @@ class QuestionVotes extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('user_id',$this->user_id);
 		$criteria->compare('post_id',$this->post_id);
+		$criteria->compare('vote_on',$this->vote_on,true);
+		$criteria->compare('vote_type',$this->vote_type,true);
 		$criteria->compare('created_at',$this->created_at,true);
 		$criteria->compare('created_by',$this->created_by);
 		$criteria->compare('updated_at',$this->updated_at,true);
