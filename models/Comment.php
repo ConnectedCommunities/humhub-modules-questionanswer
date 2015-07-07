@@ -75,10 +75,9 @@ class Comment extends HActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
+        return array(
+            'user' => array(static::BELONGS_TO, 'User', 'created_by')
+        );
 	}
 
 	/**

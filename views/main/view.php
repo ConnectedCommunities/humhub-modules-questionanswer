@@ -51,6 +51,7 @@
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     echo $comment->post_text;
                                     echo '</div>';
+                                    echo " - " . $comment->user->displayName;
                                 }
                                 echo "</div>";
                             }
@@ -114,6 +115,7 @@
                                 foreach($comments[$question_answer->id] as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     echo $comment->post_text;
+                                    echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
                                     echo '</div>';
                                 }
                                 echo "</div>";
