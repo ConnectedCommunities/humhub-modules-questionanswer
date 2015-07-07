@@ -6,12 +6,39 @@
                     <div class="media">
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
-                                <a class="btn btn-default btn-sm" href="#"><i class="fa fa-angle-up"></i></a><br />
-                                <div class="text-center"><strong>3</strong><br /></div>
-                                <a class="btn btn-default btn-sm" href="#"><i class="fa fa-angle-down"></i></a>
-                            </div>
-                        </div>
+                                <?php 
+                                $upBtnClass = ""; $downBtnClass = "";
 
+                                // Change the button class to 'active' if the user has voted
+                                if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) {
+
+                                    if($user_vote_history[$question['id']]['question'] == "up") {
+                                        $upBtnClass = "active";
+                                        $downBtnClass = "";
+                                    } else {
+                                        $downBtnClass = "active";
+                                        $upBtnClass = "";
+                                    }
+                                }
+                                ?>
+                                <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'btnClass' => 'btn btn-default btn-sm', 'class' => $upBtnClass)); ?>
+                                <div class="text-center"><strong><?php if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) echo $question_vote_stats[$question['id']]['question']['total']; else echo "0"; ?></strong><br /></div>
+                                <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
+                            </div>
+                            
+                        </div>
+                        <div class="media-body" style="position:absolute;top:0;right:0; padding:10px; width:200px; background-color:#708FA0; color:#fff;">
+                            <a href="<?php echo $this->createUrl('//user/profile', array('uguid' => $question->user->guid)); ?>" style="color:#fff;">
+                                <img id="user-account-image" class="img-rounded pull-left"
+                                     src="<?php echo $question->user->getProfileImage()->getUrl(); ?>"
+                                     height="32" width="32" alt="32x32" data-src="holder.js/32x32"
+                                     style="width: 32px; height: 32px; margin-right:10px;"/>
+
+                                <div class="user-title pull-left hidden-xs">
+                                    <strong><?php echo CHtml::encode($question->user->displayName); ?></strong><br/><span class="truncate"><?php echo CHtml::encode($question->user->profile->title); ?></span>
+                                </div>
+                            </a>
+                        </div>
                         <div class="media-body" style="padding-top:5px; ">
                             <h3 class="media-heading">
                                 <?php echo CHtml::link(CHtml::encode($question->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question->id))); ?>
@@ -29,6 +56,7 @@
                             }
                             ?>
                             <br />
+                            <br />
                             <?php $this->renderPartial('comment', array('model' => $commentModel, 'parent_id' => $question->id)); ?>
                         </div>
                     </div>
@@ -42,17 +70,42 @@
                     <div class="media">
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
-                                <a class="btn btn-default btn-sm" href="#"><i class="fa fa-angle-up"></i></a><br />
-                                <div class="text-center"><strong>3</strong><br /></div>
-                                <a class="btn btn-default btn-sm" href="#"><i class="fa fa-angle-down"></i></a>
+                                <?php 
+                                $upBtnClass = ""; $downBtnClass = "";
+
+                                // Change the button class to 'active' if the user has voted
+                                if(array_key_exists($question_answer['id'], $user_vote_history) && array_key_exists('answer', $user_vote_history[$question_answer['id']])) {
+
+                                    if($user_vote_history[$question_answer['id']]['answer'] == "up") {
+                                        $upBtnClass = "active";
+                                        $downBtnClass = "";
+                                    } else {
+                                        $downBtnClass = "active";
+                                        $upBtnClass = "";
+                                    }
+                                }
+                                ?>
+                                <?php echo $this->renderPartial('vote', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'btnClass' => 'btn btn-default btn-sm', 'class' => $upBtnClass)); ?>
+                                <div class="text-center"><strong><?php if(array_key_exists($question_answer['id'], $user_vote_history) && array_key_exists('answer', $user_vote_history[$question_answer['id']])) echo $question_vote_stats[$question_answer['id']]['answer']['total']; else echo "0"; ?></strong><br /></div>
+                                <?php echo $this->renderPartial('vote', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
                             </div>
                         </div>
+                        <div class="media-body" style="position:absolute;top:0;right:0; padding:10px; width:200px; background-color:#708FA0; color:#fff;">
+                            <a href="<?php echo $this->createUrl('//user/profile', array('uguid' => $question_answer->user->guid)); ?>" style="color:#fff;">
+                                <img id="user-account-image" class="img-rounded pull-left"
+                                     src="<?php echo $question_answer->user->getProfileImage()->getUrl(); ?>"
+                                     height="32" width="32" alt="32x32" data-src="holder.js/32x32"
+                                     style="width: 32px; height: 32px; margin-right:10px;"/>
 
+                                <div class="user-title pull-left hidden-xs">
+                                    <strong><?php echo CHtml::encode($question_answer->user->displayName); ?></strong><br/><span class="truncate"><?php echo CHtml::encode($question_answer->user->profile->title); ?></span>
+                                </div>
+                            </a>
+                        </div>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
                             <?php echo nl2br(CHtml::encode($question_answer->post_text)); ?>
                             <br />
-                            <hr />
                             <br />
 
                             <?php

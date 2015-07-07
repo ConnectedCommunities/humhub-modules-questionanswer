@@ -40,9 +40,21 @@ class MainController extends Controller{
 		// Map question vote stats into an array with the keu as the id
 		$question_vote_stats = array();
 
+		// Keep a total of votes
+		$total = 0;
 
 		foreach($question_vote_stats_command->queryAll() as $stat) {
+			
+			if(!isset($question_vote_stats[$stat['post_id']][$stat['vote_on']]['total']))
+				$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] = $stat['count'];
+			else 
+				$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] += $stat['count'];
+
+			
+			$total = $total + $stat['count'];
+
 			$question_vote_stats[$stat['post_id']][$stat['vote_on']][$stat['vote_type']] = $stat['count'];
+			$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] = $total;
 			
 			if(!in_array($stat['post_id'], $user_voted_on) && $stat['created_by'] == Yii::app()->user->id) {
 				$user_voted_on[] = $stat['post_id'];
@@ -122,6 +134,25 @@ class MainController extends Controller{
 
     	}
 
+		// User has just voted on a question
+		$questionVotesModel = new QuestionVotes;
+	    if(isset($_POST['QuestionVotes']))
+	    {
+	        $questionVotesModel->attributes=$_POST['QuestionVotes'];
+            $questionVotesModel->created_by = Yii::app()->user->id;
+        	
+	        if($questionVotesModel->validate())
+	        {
+
+	        	// TODO: If the user has previously voted on this, drop it 
+	        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::app()->user->id));
+	        	if($previousVote) $previousVote->delete();
+
+	            $questionVotesModel->save();
+	            $this->redirect($this->createUrl('//questionanswer/main/index'));
+	        }
+	    }
+
     	$answers = Answer::model()->question($question->id)->answers()->findAll();
     	$rawComments = Comment::model()->question($question->id)->findAll(); // order by question_id, time desc
 
@@ -131,13 +162,52 @@ class MainController extends Controller{
     		if($comment->question_id != null) $comments[$comment->parent_id][] = $comment;
     	}
 
+
+		// Query the user's vote history
+		$question_vote_stats_command = Yii::app()->db->createCommand()
+			->select('post_id, created_by, vote_on, vote_type, count(*) as count')
+			->from('question_votes qv') 
+			->group('post_id, vote_type');
+
+		// Create an array containing the questions the user has voted on
+		$user_voted_on = array();
+
+		// Store users votes so we can show them what they voted on
+		$user_vote_history = array();
+
+		// Map question vote stats into an array with the keu as the id
+		$question_vote_stats = array();
+
+		foreach($question_vote_stats_command->queryAll() as $stat) {
+			
+			$question_vote_stats[$stat['post_id']][$stat['vote_on']][$stat['vote_type']] = $stat['count'];
+			
+			if(!isset($question_vote_stats[$stat['post_id']][$stat['vote_on']]['total']))
+				$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] = $stat['count'];
+			else 
+				$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] += $stat['count'];
+
+			
+			if(!in_array($stat['post_id'], $user_voted_on) && $stat['created_by'] == Yii::app()->user->id) {
+				$user_voted_on[] = $stat['post_id'];
+			}
+
+			if($stat['created_by'] == Yii::app()->user->id) {
+				$user_vote_history[$stat['post_id']][$stat['vote_on']] = $stat['vote_type'];
+			}
+		}
+
     	$this->render('view', array(
+    		'author' => '',
     		'question' => $question,
     		'answers' => $answers,
     		'model' => $model,
     		'answerModel' => $answerModel,
     		'commentModel' => $commentModel,
-    		'comments' => $comments
+    		'comments' => $comments,
+        	'question_vote_stats' => $question_vote_stats,
+        	'user_vote_history' => $user_vote_history,
+        	'user_voted_on' => $user_voted_on
     	));
 
     }

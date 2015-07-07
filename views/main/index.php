@@ -62,9 +62,7 @@
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <?php 
-                                // if(in_array($question['id'], $user_voted_on)
-                                $upBtnClass = "";
-                                $downBtnClass = "";
+                                $upBtnClass = ""; $downBtnClass = "";
 
                                 // Change the button class to 'active' if the user has voted
                                 if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) {
@@ -85,7 +83,14 @@
                                 <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">
                             </a>-->
                             <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
-                                <b>2</b>
+                                <b>
+                                <?php 
+
+                                if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) {
+                                    echo $question_vote_stats[$question['id']]['question']['total'];
+                                }
+                                ?>
+                                </b>
                                 <p>votes</p>
                             </div>
                             <div class="pull-left" style="text-align:center; margin-top:5px;">
