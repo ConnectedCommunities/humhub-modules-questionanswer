@@ -8,15 +8,12 @@
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 
                                 <?php 
-                                
-                                ?>
-                                <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
 
                                 // Change the button class to 'active' if the user has voted
-                                if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) {
-
-                                    if($user_vote_history[$question['id']]['question'] == "up") {
+                                $vote = QuestionVotes::model()->post($question['id'])->user(Yii::app()->user->id)->find();
+                                if($vote) {
+                                    if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
                                         $downBtnClass = "";
                                     } else {
@@ -24,9 +21,12 @@
                                         $upBtnClass = "";
                                     }
                                 }
+                        
                                 ?>
                                 <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'btnClass' => 'btn btn-default btn-sm', 'class' => $upBtnClass)); ?>
-                                <div class="text-center"><strong><?php if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) echo $question_vote_stats[$question['id']]['question']['total']; else echo "0"; ?></strong><br /></div>
+                                <div class="text-center"><strong>
+                                <?php echo QuestionVotes::model()->score($question['id']); ?>
+                                </strong><br /></div>
                                 <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
                             </div>
                             
@@ -49,9 +49,11 @@
                             </h3>
                             <?php echo nl2br(CHtml::encode($question->post_text)); ?>
                             <?php
-                            if(array_key_exists($question->id, $comments)) {
+
+                            $comments = Answer::model()->findByPk($question->id)->comments;
+                            if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
-                                foreach($comments[$question->id] as $comment) {
+                                foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     echo $comment->post_text;
                                     echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
@@ -62,7 +64,7 @@
                             ?>
                             <br />
                             <br />
-                            <?php $this->renderPartial('comment', array('model' => $commentModel, 'parent_id' => $question->id)); ?>
+                            <?php $this->renderPartial('comment', array('model' => new Comment, 'parent_id' => $question->id)); ?>
                         </div>
                     </div>
 
@@ -77,11 +79,9 @@
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
-
-                                // Change the button class to 'active' if the user has voted
-                                if(array_key_exists($question_answer['id'], $user_vote_history) && array_key_exists('answer', $user_vote_history[$question_answer['id']])) {
-
-                                    if($user_vote_history[$question_answer['id']]['answer'] == "up") {
+                                $vote = QuestionVotes::model()->post($question_answer['id'])->user(Yii::app()->user->id)->find();
+                                if($vote) {
+                                    if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
                                         $downBtnClass = "";
                                     } else {
@@ -91,30 +91,31 @@
                                 }
                                 ?>
                                 <?php echo $this->renderPartial('vote', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'btnClass' => 'btn btn-default btn-sm', 'class' => $upBtnClass)); ?>
-                                <div class="text-center"><strong><?php if(array_key_exists($question_answer['id'], $user_vote_history) && array_key_exists('answer', $user_vote_history[$question_answer['id']])) echo $question_vote_stats[$question_answer['id']]['answer']['total']; else echo "0"; ?></strong><br /></div>
+                                <div class="text-center"><strong><?php echo $question_answer['score']; ?></strong><br /></div>
                                 <?php echo $this->renderPartial('vote', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
                             </div>
                         </div>
+                        <?php $user = User::model()->findByPk($question_answer['created_by']); ?>
                         <div class="media-body" style="position:absolute;top:0;right:0; padding:10px; width:200px; background-color:#708FA0; color:#fff;">
-                            <a href="<?php echo $this->createUrl('//user/profile', array('uguid' => $question_answer->user->guid)); ?>" style="color:#fff;">
+                            <a href="<?php echo $this->createUrl('//user/profile', array('uguid' => $user->guid)); ?>" style="color:#fff;">
                                 <img id="user-account-image" class="img-rounded pull-left"
-                                     src="<?php echo $question_answer->user->getProfileImage()->getUrl(); ?>"
+                                     src="<?php echo $user->getProfileImage()->getUrl(); ?>"
                                      height="32" width="32" alt="32x32" data-src="holder.js/32x32"
                                      style="width: 32px; height: 32px; margin-right:10px;"/>
 
                                 <div class="user-title pull-left hidden-xs">
-                                    <strong><?php echo CHtml::encode($question_answer->user->displayName); ?></strong><br/><span class="truncate"><?php echo CHtml::encode($question_answer->user->profile->title); ?></span>
+                                    <strong><?php echo CHtml::encode($user->displayName); ?></strong><br/><span class="truncate"><?php echo CHtml::encode($user->profile->title); ?></span>
                                 </div>
                             </a>
                         </div>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
-                            <?php echo nl2br(CHtml::encode($question_answer->post_text)); ?>
+                            <?php echo nl2br(CHtml::encode($question_answer['post_text'])); ?>
                             <br />
                             <br />
                             <?php 
                             
-                            if(Yii::app()->user->id == $question->user->id) {
+                            if(Yii::app()->user->id == $author) {
                                 echo $this->renderPartial('vote_best_answer', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes));
                             }
 
@@ -126,11 +127,10 @@
                                 //      etc with ease 
                             // }
 
-                            ?>
-                            <?php
-                            if(array_key_exists($question_answer->id, $comments)) {
+                            $comments = Answer::model()->findByPk($question_answer['id'])->comments;
+                            if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
-                                foreach($comments[$question_answer->id] as $comment) {
+                                foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     echo $comment->post_text;
                                     echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
@@ -140,7 +140,7 @@
                             }
                             ?>
                             <br />
-                            <?php $this->renderPartial('comment', array('model' => $commentModel, 'parent_id' => $question_answer->id)); ?>
+                            <?php $this->renderPartial('comment', array('model' => new Comment, 'parent_id' => $question_answer['id'])); ?>
                         </div>
 
                     </div>
@@ -150,7 +150,7 @@
             <?php } ?>
 
 
-            <?php $this->renderPartial('answer', array('model' => $answerModel)); ?>
+            <?php $this->renderPartial('answer', array('model' => new Answer)); ?>
 
         </div>
 

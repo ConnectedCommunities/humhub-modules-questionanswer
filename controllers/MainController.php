@@ -41,15 +41,12 @@ class MainController extends Controller{
 
     	error_reporting(E_ALL); 
 		ini_set("display_errors", 1); 
-	    
-	    $model = new Question;
-    	$answerModel = new Answer;
-    	$commentModel = new Comment;
-
+    	
     	$question = Question::model()->findByPk(Yii::app()->request->getParam('id'));
     	
     	if(isset($_POST['Answer'])) {
-
+			
+			$answerModel = new Answer;
 	        $answerModel->attributes=$_POST['Answer'];
 	        $answerModel->created_by = Yii::app()->user->id;
 	        $answerModel->post_type = "answer";
@@ -64,7 +61,8 @@ class MainController extends Controller{
 
 
     	if(isset($_POST['Comment'])) {
-	        
+        	
+        	$commentModel = new Comment;
 	        $commentModel->attributes=$_POST['Comment'];
 	        $commentModel->created_by = Yii::app()->user->id;
 	        $commentModel->post_type = "comment";
@@ -79,9 +77,9 @@ class MainController extends Controller{
     	}
 
 		// User has just voted on a question
-		$questionVotesModel = new QuestionVotes;
 	    if(isset($_POST['QuestionVotes']))
 	    {
+	    	$questionVotesModel = new QuestionVotes;
 	        $questionVotesModel->attributes=$_POST['QuestionVotes'];
             $questionVotesModel->created_by = Yii::app()->user->id;
         	
@@ -97,61 +95,11 @@ class MainController extends Controller{
 	        }
 	    }
 
-    	$answers = Answer::model()->question($question->id)->answers()->findAll();
-    	$rawComments = Comment::model()->question($question->id)->findAll(); // order by question_id, time desc
-
-    	// Map comments into an array with the key matching the answer id
-    	$comments = array();
-    	foreach($rawComments as $comment) {
-    		if($comment->question_id != null) $comments[$comment->parent_id][] = $comment;
-    	}
-
-
-		// Query the user's vote history
-		$question_vote_stats_command = Yii::app()->db->createCommand()
-			->select('post_id, created_by, vote_on, vote_type, count(*) as count')
-			->from('question_votes qv') 
-			->group('post_id, vote_type');
-
-		// Create an array containing the questions the user has voted on
-		$user_voted_on = array();
-
-		// Store users votes so we can show them what they voted on
-		$user_vote_history = array();
-
-		// Map question vote stats into an array with the keu as the id
-		$question_vote_stats = array();
-
-		foreach($question_vote_stats_command->queryAll() as $stat) {
-			
-			$question_vote_stats[$stat['post_id']][$stat['vote_on']][$stat['vote_type']] = $stat['count'];
-			
-			if(!isset($question_vote_stats[$stat['post_id']][$stat['vote_on']]['total']))
-				$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] = $stat['count'];
-			else 
-				$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] += $stat['count'];
-
-			
-			if(!in_array($stat['post_id'], $user_voted_on) && $stat['created_by'] == Yii::app()->user->id) {
-				$user_voted_on[] = $stat['post_id'];
-			}
-
-			if($stat['created_by'] == Yii::app()->user->id) {
-				$user_vote_history[$stat['post_id']][$stat['vote_on']] = $stat['vote_type'];
-			}
-		}
 
     	$this->render('view', array(
-    		'author' => '',
+    		'author' => $question->user->id,
     		'question' => $question,
-    		'answers' => $answers,
-    		'model' => $model,
-    		'answerModel' => $answerModel,
-    		'commentModel' => $commentModel,
-    		'comments' => $comments,
-        	'question_vote_stats' => $question_vote_stats,
-        	'user_vote_history' => $user_vote_history,
-        	'user_voted_on' => $user_voted_on
+    		'answers' => Answer::model()->overview($question->id),
     	));
 
     }
