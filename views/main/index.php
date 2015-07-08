@@ -62,16 +62,16 @@
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <?php 
-                                $upBtnClass = ""; $downBtnClass = "";
+                                $upBtnClass = ""; $downBtnClass = ""; $vote = "";
 
                                 // Change the button class to 'active' if the user has voted
-                                if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) {
-
-                                    if($user_vote_history[$question['id']]['question'] == "up") {
-                                        $upBtnClass = "active";
+                                $vote = QuestionVotes::model()->post($question['id'])->user(Yii::app()->user->id)->find();
+                                if($vote) {
+                                    if($vote->vote_type == "up") {
+                                        $upBtnClass = "active btn-info";
                                         $downBtnClass = "";
                                     } else {
-                                        $downBtnClass = "active";
+                                        $downBtnClass = "active btn-info";
                                         $upBtnClass = "";
                                     }
                                 }
@@ -83,26 +83,11 @@
                                 <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">
                             </a>-->
                             <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
-                                <b>
-                                <?php 
-
-                                if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) {
-                                    echo $question_vote_stats[$question['id']]['question']['total'];
-                                }
-                                ?>
-                                </b>
+                                <b><?php echo $question['vote_count']; ?></b>
                                 <p>votes</p>
                             </div>
                             <div class="pull-left" style="text-align:center; margin-top:5px;">
-                                <b>
-                                <?php 
-                                if(isset($question_stats[$question->id])) {
-                                    echo $question_stats[$question->id]['answer'];
-                                } else {
-                                    echo "0";
-                                }
-                                ?>
-                                </b>
+                                <b><?php echo $question['answers']; ?></b>
                                 <p>answers</p>
                             </div>
 
@@ -110,9 +95,9 @@
 
                         <div class="media-body" style="padding-top:5px; padding-left:10px;">
                             <h4 class="media-heading">
-                                <?php echo CHtml::link(CHtml::encode($question->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question->id))); ?>
+                                <?php echo CHtml::link(CHtml::encode($question['post_title']), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question['id']))); ?>
                             </h4>
-                            <h5><?php echo CHtml::encode((strlen($question->post_text) > 203) ? substr($question->post_text,0,200).'...' : $question->post_text); ?></h5>
+                            <h5><?php echo CHtml::encode((strlen($question['post_text']) > 203) ? substr($question['post_text'],0,200).'...' : $question['post_text']); ?></h5>
                         </div>
                     </div>
                 <?php } ?>

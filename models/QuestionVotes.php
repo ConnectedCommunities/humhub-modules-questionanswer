@@ -101,6 +101,74 @@ class QuestionVotes extends HActiveRecord
 		));
 	}
 
+	/** 
+	 * Add scopes to Answer model
+	 */
+    public function scopes()
+    {
+        return array(
+            'votes_on_questions'=>array(
+                'condition'=>"vote_on='question'",
+            )
+        );
+    }
+
+	/** 
+	 * Filters results by post_id
+	 * @param $user_id
+	 */
+	public function post($post_id)
+	{
+	    $this->getDbCriteria()->mergeWith(array(
+	        'condition'=>"post_id=:post_id", 
+	        'params' => array(':post_id' => $post_id)
+	    ));
+
+	    return $this;
+	}
+
+	/** 
+	 * Filters results by user_id
+	 * @param $user_id
+	 */
+	public function user($user_id)
+	{
+	    $this->getDbCriteria()->mergeWith(array(
+	        'condition'=>"created_by=:user_id", 
+	        'params' => array(':user_id' => $user_id)
+	    ));
+
+	    return $this;
+	}
+
+	/** 
+	 * Filters results by the question_id
+	 * @param $question_id
+	 */
+	public function question($question_id)
+	{
+	    $this->getDbCriteria()->mergeWith(array(
+	        'condition'=>"question_id=:question_id", 
+	        'params' => array(':question_id' => $question_id)
+	    ));
+
+	    return $this;
+	}
+
+
+	/** 
+	 * Returns votes a user has cast on a post
+	 */
+	public function user_vote($post_id, $user_id)
+	{
+	    $this->getDbCriteria()->mergeWith(array(
+	        'condition'=>"created_by=:user_id AND post_id=:post_id", 
+	        'params' => array(':user_id' => $user_id, ':post_id' => $post_id)
+	    ));
+
+	    return $this;
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

@@ -11,60 +11,6 @@ class MainController extends Controller{
     	error_reporting(E_ALL); 
 		ini_set("display_errors", 1); 
 
-		// Query to get the question stats
-		$question_stats_command = Yii::app()->db->createCommand()
-		    ->select('question_id, post_type, COUNT(*) as count')
-		    ->from('question q')
-		    ->where('post_type != "question"')
-		    ->group('question_id, post_type');
-
-		// Map question stats into an array with the key as the id
-		$question_stats = array();
-		foreach($question_stats_command->queryAll() as $stat) {
-			$question_stats[$stat['question_id']][$stat['post_type']] = $stat['count'];
-		}
-
-		// Query the user's vote history
-		$question_vote_stats_command = Yii::app()->db->createCommand()
-			->select('post_id, created_by, vote_on, vote_type, count(*) as count')
-			->from('question_votes qv') 
-			->where('vote_on = "question"')
-			->group('post_id, vote_type');
-
-		// Create an array containing the questions the user has voted on
-		$user_voted_on = array();
-
-		// Store users votes so we can show them what they voted on
-		$user_vote_history = array();
-
-		// Map question vote stats into an array with the keu as the id
-		$question_vote_stats = array();
-
-		// Keep a total of votes
-		$total = 0;
-
-		foreach($question_vote_stats_command->queryAll() as $stat) {
-			
-			if(!isset($question_vote_stats[$stat['post_id']][$stat['vote_on']]['total']))
-				$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] = $stat['count'];
-			else 
-				$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] += $stat['count'];
-
-			
-			$total = $total + $stat['count'];
-
-			$question_vote_stats[$stat['post_id']][$stat['vote_on']][$stat['vote_type']] = $stat['count'];
-			$question_vote_stats[$stat['post_id']][$stat['vote_on']]['total'] = $total;
-			
-			if(!in_array($stat['post_id'], $user_voted_on) && $stat['created_by'] == Yii::app()->user->id) {
-				$user_voted_on[] = $stat['post_id'];
-			}
-
-			if($stat['created_by'] == Yii::app()->user->id) {
-				$user_vote_history[$stat['post_id']][$stat['vote_on']] = $stat['vote_type'];
-			}
-		}
-
 		// User has just voted on a question
 		$questionVotesModel = new QuestionVotes;
 	    if(isset($_POST['QuestionVotes']))
@@ -84,13 +30,11 @@ class MainController extends Controller{
 	        }
 	    }
 
+
         $this->render('index', array(
-        	'questions' => Question::model()->findAll(array('order'=>'created_at DESC')),
-        	'question_stats' => $question_stats,
-        	'question_vote_stats' => $question_vote_stats,
-        	'user_vote_history' => $user_vote_history,
-        	'user_voted_on' => $user_voted_on
+        	'questions' => Question::model()->overview(),
         ));
+        
     }
 
     public function actionView() {
@@ -149,7 +93,7 @@ class MainController extends Controller{
 	        	if($previousVote) $previousVote->delete();
 
 	            $questionVotesModel->save();
-	            $this->redirect($this->createUrl('//questionanswer/main/index'));
+	            $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $question->id)));
 	        }
 	    }
 

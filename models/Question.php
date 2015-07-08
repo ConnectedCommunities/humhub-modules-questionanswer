@@ -58,7 +58,9 @@ class Question extends HActiveRecord
 	public function relations()
 	{
         return array(
-            'user' => array(static::BELONGS_TO, 'User', 'created_by')
+            'user' => array(static::BELONGS_TO, 'User', 'created_by'),
+            'answers' => array(static::HAS_MANY, 'Answer', 'question_id'),
+            'votes' => array(static::HAS_MANY, 'QuestionVotes', 'post_id'),
         );
 	}
 
@@ -123,4 +125,25 @@ class Question extends HActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	/** 
+	 * Returns a list of questions with stats
+	 */
+	public static function overview() 
+	{
+
+		// $list= Yii::app()->db->createCommand('select * from post where category=:category')->bindValue('category',$category)->queryAll();
+		$sql = "SELECT q.id, q.post_title, q.post_text, q.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes
+				FROM question q
+				LEFT JOIN question_votes up ON (q.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
+				LEFT JOIN question_votes down ON (q.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
+				LEFT JOIN question answers ON (q.id = answers.question_id AND answers.post_type = 'answer')
+				WHERE q.post_type = 'question'
+				GROUP BY q.id
+				ORDER BY score DESC, vote_count DESC";
+
+		return Yii::app()->db->createCommand($sql)->queryAll();
+
+	}
+
 }

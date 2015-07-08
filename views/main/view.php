@@ -6,6 +6,10 @@
                     <div class="media">
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+                                
+                                <?php 
+                                
+                                ?>
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
 
@@ -13,10 +17,10 @@
                                 if(array_key_exists($question['id'], $user_vote_history) && array_key_exists('question', $user_vote_history[$question['id']])) {
 
                                     if($user_vote_history[$question['id']]['question'] == "up") {
-                                        $upBtnClass = "active";
+                                        $upBtnClass = "active btn-info";
                                         $downBtnClass = "";
                                     } else {
-                                        $downBtnClass = "active";
+                                        $downBtnClass = "active btn-info";
                                         $upBtnClass = "";
                                     }
                                 }
@@ -78,10 +82,10 @@
                                 if(array_key_exists($question_answer['id'], $user_vote_history) && array_key_exists('answer', $user_vote_history[$question_answer['id']])) {
 
                                     if($user_vote_history[$question_answer['id']]['answer'] == "up") {
-                                        $upBtnClass = "active";
+                                        $upBtnClass = "active btn-info";
                                         $downBtnClass = "";
                                     } else {
-                                        $downBtnClass = "active";
+                                        $downBtnClass = "active btn-info";
                                         $upBtnClass = "";
                                     }
                                 }
@@ -108,7 +112,21 @@
                             <?php echo nl2br(CHtml::encode($question_answer->post_text)); ?>
                             <br />
                             <br />
+                            <?php 
+                            
+                            if(Yii::app()->user->id == $question->user->id) {
+                                echo $this->renderPartial('vote_best_answer', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes));
+                            }
 
+                            // @TODO 
+                            // if(isset($accepted_answer_id) && $accepted_answer_id == $question_answer->id) {
+                                // show accepted answer "tag"
+                                // NOTE: It might be worth moving the "joining together logic" into a query
+                                //      now. So we can make it order the best answer at the top and attach the vote stats
+                                //      etc with ease 
+                            // }
+
+                            ?>
                             <?php
                             if(array_key_exists($question_answer->id, $comments)) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
@@ -124,6 +142,7 @@
                             <br />
                             <?php $this->renderPartial('comment', array('model' => $commentModel, 'parent_id' => $question_answer->id)); ?>
                         </div>
+
                     </div>
                     
                 </div>
