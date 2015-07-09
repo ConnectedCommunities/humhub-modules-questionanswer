@@ -141,20 +141,6 @@ class QuestionVotes extends HActiveRecord
 	    return $this;
 	}
 
-	/** 
-	 * Filters results by the question_id
-	 * @param $question_id
-	 */
-	public function question($question_id)
-	{
-	    $this->getDbCriteria()->mergeWith(array(
-	        'condition'=>"question_id=:question_id", 
-	        'params' => array(':question_id' => $question_id)
-	    ));
-
-	    return $this;
-	}
-
 
 	/** 
 	 * Returns votes a user has cast on a post
@@ -177,6 +163,22 @@ class QuestionVotes extends HActiveRecord
 		// Calculate the "score" (up votes minus down votes)
 		$sql = "SELECT ((SELECT COUNT(*) FROM question_votes WHERE vote_type = 'up' AND post_id=:post_id) - (SELECT COUNT(*) FROM question_votes WHERE vote_type = 'down' AND post_id=:post_id))";
 		return Yii::app()->db->createCommand($sql)->bindValue('post_id', $post_id)->queryScalar();
+
+	}
+
+
+	/** 
+	 * Returns the accepted answer for a question
+	 * @param $question_id
+	 */
+	public function findAcceptedAnswer($question_id) {
+
+		$sql = "SELECT * FROM question_votes
+				WHERE post_id IN (SELECT id FROM question WHERE question_id = :question_id)
+				AND vote_on = 'answer' 
+				AND vote_type = 'accepted_answer'";
+
+		return QuestionVotes::model()->findBySql($sql, array(':question_id' => $question_id));
 
 	}
 

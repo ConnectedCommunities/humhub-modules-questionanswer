@@ -43,7 +43,7 @@ class MainController extends Controller{
 		ini_set("display_errors", 1); 
     	
     	$question = Question::model()->findByPk(Yii::app()->request->getParam('id'));
-    	
+
     	if(isset($_POST['Answer'])) {
 			
 			$answerModel = new Answer;
@@ -86,9 +86,21 @@ class MainController extends Controller{
 	        if($questionVotesModel->validate())
 	        {
 
-	        	// TODO: If the user has previously voted on this, drop it 
-	        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::app()->user->id));
-	        	if($previousVote) $previousVote->delete();
+
+	        	// Is the author "voting" on the accepted answer?
+	        	if($question->created_by == $questionVotesModel->created_by && $questionVotesModel->vote_type == "accepted_answer") {
+
+		        	// If the user has previously selected a best answer, drop the old one
+		        	$previousAccepted = QuestionVotes::model()->findAcceptedAnswer($question->id);
+		        	if($previousAccepted) $previousAccepted->delete();
+
+	        	} else { // no, just a normal up/down vote then
+
+		        	// If the user has previously voted on this, drop it 
+		        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::app()->user->id));
+		        	if($previousVote) $previousVote->delete();
+
+	        	}
 
 	            $questionVotesModel->save();
 	            $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $question->id)));
