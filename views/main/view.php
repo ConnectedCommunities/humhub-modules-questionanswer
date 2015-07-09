@@ -115,9 +115,8 @@
                             <br />
                             <?php 
                             
-                            if(Yii::app()->user->id == $author) {
-                                echo $this->renderPartial('vote_best_answer', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes));
-                            }
+                            echo $this->renderPartial('vote_best_answer', array('post_id' => $question_answer['id'], 'author' => $author, 'model' => new QuestionVotes, 'accepted_answer' => ($question_answer['answer_status'] ? true : false)));
+
 
                             // @TODO 
                             // if(isset($accepted_answer_id) && $accepted_answer_id == $question_answer->id) {
