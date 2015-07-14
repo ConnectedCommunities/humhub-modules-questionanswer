@@ -17,7 +17,7 @@ class m150617_104132_initial extends EDbMigration
             'updated_by' => 'int(11)',
         ), '');
 
-		$this->createTable('question_votes', array(
+        $this->createTable('question_votes', array(
             'id' => 'pk',
             'post_id' => 'int(11) NOT NULL',
             'vote_on' =>  'varchar(255)', // question, answer
@@ -28,12 +28,26 @@ class m150617_104132_initial extends EDbMigration
             'updated_by' => 'int(11)',
         ), '');
 
+        $this->createTable('tag', array(
+            'id' => 'pk',
+            'key' => 'varchar(255)',
+            'description' => 'TEXT',   
+        ), '');
+
+        $this->createTable('question_tag', array(
+            'id' => 'pk',
+            'question_id' => 'int(11) NOT NULL',
+            'tag_id' => 'int(11) NOT NULL',
+        ), '');
+
 	}
 
 	public function down()
 	{
         $this->dropTable('question');
         $this->dropTable('question_votes');
+        $this->dropTable('tags');
+        $this->dropTable('question_tags');
 	}
 
 	/*
