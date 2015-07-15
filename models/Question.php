@@ -62,6 +62,7 @@ class Question extends HActiveRecord
             'answers' => array(static::HAS_MANY, 'Answer', 'question_id'),
             'votes' => array(static::HAS_MANY, 'QuestionVotes', 'post_id'),
             'comments' => array(static::HAS_MANY, 'Comment', 'parent_id'),
+            'tags'=>array(self::HAS_MANY, 'QuestionTag', 'question_id'),
         );
 	}
 

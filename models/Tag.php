@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'tag':
  * @property integer $id
- * @property string $key
+ * @property string $tag
  * @property string $description
  */
 class Tag extends HActiveRecord
@@ -26,11 +26,11 @@ class Tag extends HActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('key', 'length', 'max'=>255),
+			array('tag', 'length', 'max'=>255),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, key, description', 'safe', 'on'=>'search'),
+			array('id, tag, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,7 +52,7 @@ class Tag extends HActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'key' => 'Key',
+			'tag' => 'Tag',
 			'description' => 'Description',
 		);
 	}
@@ -76,13 +76,35 @@ class Tag extends HActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('key',$this->key,true);
+		$criteria->compare('tag',$this->tag,true);
 		$criteria->compare('description',$this->description,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
+
+	/** 
+	 * Find and return the first tag that matches 
+	 * If it cannot find a match, create the tag
+	 * @param  String  $tag
+	 */
+	public function firstOrCreate($tag) 
+	{
+
+		$foundTag = Tag::model()->find('tag=:tag', array(':tag'=>$tag));
+
+		if($foundTag) { // found tag
+			return $foundTag;
+		} else {
+			$tagModel = new Tag;
+			$tagModel->tag = $tag;
+			$tagModel->save();
+			return $tagModel;
+		}
+
+	}
+
 
 	/**
 	 * Returns the static model of the specified AR class.

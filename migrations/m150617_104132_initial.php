@@ -30,7 +30,7 @@ class m150617_104132_initial extends EDbMigration
 
         $this->createTable('tag', array(
             'id' => 'pk',
-            'key' => 'varchar(255)',
+            'tag' => 'varchar(255)',
             'description' => 'TEXT',   
         ), '');
 

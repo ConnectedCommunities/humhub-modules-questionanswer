@@ -22,14 +22,15 @@
 	            <div class="panel-body">
 	            	<?php echo $form->errorSummary($model); ?>
             		<?php echo $form->error($model,'post_title'); ?>
-            		<?php echo $form->textArea($model,'post_title',array('id'=>'contentForm_question', 'class' => 'form-control autosize contentForm', 'rows' => '1', "tabindex" => "1", "placeholder" => "Ask something...")); ?>
+            		<?php echo $form->textArea($model,'post_title',array('id'=>'contentForm_question', 'class' => 'form-control autosize contentForm', 'rows' => '1', "placeholder" => "Ask something...")); ?>
 
                     
                     <div class="contentForm_options">
                     	<?php echo $form->error($model,'post_text'); ?>
-                    	<?php echo $form->textArea($model,'post_text',array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => "Question details...")); ?>
+                    	<?php echo $form->textArea($model,'post_text',array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Question details...")); ?>
+                    <br />
+                        <?php echo CHtml::textarea('Tags', null, array('class' => 'form-control autosize contentForm', 'rows' => '1', "placeholder" => "Tags... Specify at least one tag for your question")); ?>
                     </div>
-
 					<?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
                 </div>
             </div>

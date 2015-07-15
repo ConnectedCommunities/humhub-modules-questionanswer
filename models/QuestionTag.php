@@ -43,7 +43,7 @@ class QuestionTag extends HActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'question' => array(static::BELONGS_TO, 'Question', 'question_id'),
-			'tag' => array(static::BELONGS_TO, 'Tags', 'tag_id'),
+			'tag' => array(static::BELONGS_TO, 'Tag', 'tag_id'),
 		);
 	}
 

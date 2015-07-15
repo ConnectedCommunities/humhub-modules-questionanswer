@@ -107,7 +107,6 @@ class MainController extends Controller{
 	        }
 	    }
 
-
     	$this->render('view', array(
     		'author' => $question->user->id,
     		'question' => $question,
@@ -133,10 +132,41 @@ class MainController extends Controller{
 	    
 	    if(isset($_POST['Question']))
 	    {
+	    	
 	        $model->attributes=$_POST['Question'];
 	        if($model->validate())
 	        {
 	        	$model->save();
+
+			    if(isset($_POST['Question']))
+			    {
+			    	
+			        $model->attributes=$_POST['Question'];
+			        if($model->validate())
+			        {
+			        	$model->save();
+
+			        	// Question has been saved, add the tags
+						if(isset($_POST['Tags'])) {
+
+							// Split tag string into array 
+							$tags = explode(", ", $_POST['Tags']);
+							foreach($tags as $tag) {
+								$tag = Tag::model()->firstOrCreate($tag);
+								$question_tag = new QuestionTag;
+								$question_tag->question_id = $model->id;
+								$question_tag->tag_id = $tag->id;
+								$question_tag->save();
+							}
+
+						} else {
+							// throw error(?) no tag provided
+						}
+
+		        	    $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $model->id)));
+			        }
+			    }
+			    
         	    $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $model->id)));
 	        }
 	    }
