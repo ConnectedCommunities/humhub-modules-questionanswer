@@ -16,7 +16,7 @@
                                     if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
                                         $downBtnClass = "";
-                                    } else {
+                                    } else if($vote->vote_type =="down") {
                                         $downBtnClass = "active btn-info";
                                         $upBtnClass = "";
                                     }
@@ -86,7 +86,7 @@
                                     if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
                                         $downBtnClass = "";
-                                    } else {
+                                    } else if($vote->vote_type == "down") {
                                         $downBtnClass = "active btn-info";
                                         $upBtnClass = "";
                                     }
