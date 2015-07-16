@@ -117,6 +117,22 @@ class Question extends HActiveRecord
 		));
 	}
 
+
+	/** 
+	 * Filters results by tag_id
+	 * @param $tag_id
+	 */
+	public function tag($tag_id)
+	{
+	    $this->getDbCriteria()->mergeWith(array(
+	        'condition'=>"tag_id=:tag_id", 
+	        'params' => array(':tag_id' => $tag_id)
+	    ));
+
+	    return $this;
+	}
+
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -145,6 +161,30 @@ class Question extends HActiveRecord
 				ORDER BY score DESC, vote_count DESC";
 
 		return Yii::app()->db->createCommand($sql)->queryAll();
+
+	}
+
+
+	/** 
+	 * Returns a list of questions with stats for a tag
+	 * @parma int $tag_id
+	 */
+	public static function tag_overview($tag_id) 
+	{
+
+		// $list= Yii::app()->db->createCommand('select * from post where category=:category')->bindValue('category',$category)->queryAll();
+		$sql = "SELECT q.id, q.post_title, q.post_text, q.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes
+				FROM question_tag qt, question q
+				LEFT JOIN question_votes up ON (q.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
+				LEFT JOIN question_votes down ON (q.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
+				LEFT JOIN question answers ON (q.id = answers.question_id AND answers.post_type = 'answer')
+				WHERE q.post_type = 'question'
+                AND qt.question_id = q.id 
+                AND qt.tag_id = :tag_id
+				GROUP BY q.id
+				ORDER BY score DESC, vote_count DESC, q.created_at DESC";
+
+		return Yii::app()->db->createCommand($sql)->bindValue('tag_id', $tag_id)->queryAll();
 
 	}
 

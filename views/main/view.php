@@ -49,7 +49,7 @@
                             </h3>
                             <?php echo nl2br(CHtml::encode($question->post_text)); ?>
                             <br /><br />    <?php foreach($question->tags as $tag) { ?>
-                                <span class="label label-default"><a href="#"><?php echo $tag->tag->tag; ?></a></span>
+                                <span class="label label-default"><a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->tag_id)); ?>"><?php echo $tag->tag->tag; ?></a></span>
                             <?php } ?>
                             <?php
                             $comments = Answer::model()->findByPk($question->id)->comments;
@@ -118,15 +118,6 @@
                             <?php 
                             
                             echo $this->renderPartial('vote_best_answer', array('post_id' => $question_answer['id'], 'author' => $author, 'model' => new QuestionVotes, 'accepted_answer' => ($question_answer['answer_status'] ? true : false)));
-
-
-                            // @TODO 
-                            // if(isset($accepted_answer_id) && $accepted_answer_id == $question_answer->id) {
-                                // show accepted answer "tag"
-                                // NOTE: It might be worth moving the "joining together logic" into a query
-                                //      now. So we can make it order the best answer at the top and attach the vote stats
-                                //      etc with ease 
-                            // }
 
                             $comments = Answer::model()->findByPk($question_answer['id'])->comments;
                             if($comments) {

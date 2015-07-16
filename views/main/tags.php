@@ -14,6 +14,10 @@
 </style>
 <div class="container">
     <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center">Questions Tagged: <?php echo $tag->tag; ?></h3>
+        </div>
+        <div class="row">
         <div class="col-md-9">
             <div class="panel panel-default qanda-panel">
                 <?php $this->renderPartial('../partials/top_menu_bar'); ?>

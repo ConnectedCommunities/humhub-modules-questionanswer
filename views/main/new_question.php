@@ -29,7 +29,7 @@
                     	<?php echo $form->error($model,'post_text'); ?>
                     	<?php echo $form->textArea($model,'post_text',array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Question details...")); ?>
                     <br />
-                        <?php echo CHtml::textarea('Tags', null, array('class' => 'form-control autosize contentForm', 'rows' => '1', "placeholder" => "Tags... Specify at least one tag for your question")); ?>
+                        <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Tags... Specify at least one tag for your question")); ?>
                     </div>
 					<?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
                 </div>

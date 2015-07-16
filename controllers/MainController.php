@@ -6,6 +6,11 @@ class MainController extends Controller{
         return parent::init();
 	}
 	
+	/** 
+	 * Index
+	 * Shows the index page and handles
+	 * a vote being cast
+	 */
     public function actionIndex(){
 		
     	error_reporting(E_ALL); 
@@ -37,6 +42,11 @@ class MainController extends Controller{
         
     }
 
+    /** 
+     * Controller action for viewing a questions.
+     * Also provides functionality for creating an answer,
+     * adding a comment and voting.
+     */
     public function actionView() {
 
     	error_reporting(E_ALL); 
@@ -120,6 +130,11 @@ class MainController extends Controller{
     	// do nothing
 	}
 
+	/** 
+	 * Method to show the views for 
+	 * asking a new question and actually
+	 * creating the new question
+	 */
 	public function actionNew_question()
 	{
 
@@ -175,6 +190,10 @@ class MainController extends Controller{
 	}
 
 
+	/** 
+	 * Method for handling the user
+	 * voting on a question or answer
+	 */
 	public function actionVote()
 	{
 	    $model=new QuestionVotes;
@@ -202,4 +221,50 @@ class MainController extends Controller{
 	    }
 	    $this->render('vote',array('model'=>$model));
 	}
+
+
+	/** 
+	 * Controller for viewing a
+	 * tag and loading up all questions
+	 * from within that tag
+	 */
+    public function actionTag() {
+		
+    	error_reporting(E_ALL); 
+		ini_set("display_errors", 1); 
+
+    	$tag = Tag::model()->findByPk(Yii::app()->request->getParam('id'));
+
+    	// Find all questions with that tag
+		$criteria = new CDbCriteria();
+		$criteria->condition = "tag_id=:tag_id";
+		$criteria->params = array(':tag_id' => $tag->id);
+		$questions = Question::model()->with('tags')->findAll($criteria);
+
+		// User has just voted on a question
+		$questionVotesModel = new QuestionVotes;
+	    if(isset($_POST['QuestionVotes']))
+	    {
+	        $questionVotesModel->attributes=$_POST['QuestionVotes'];
+            $questionVotesModel->created_by = Yii::app()->user->id;
+        	
+	        if($questionVotesModel->validate())
+	        {
+
+	        	// TODO: If the user has previously voted on this, drop it 
+	        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::app()->user->id));
+	        	if($previousVote) $previousVote->delete();
+
+	            $questionVotesModel->save();
+	            $this->redirect($this->createUrl('//questionanswer/main/index'));
+	        }
+	    }
+
+
+        $this->render('tags', array(
+        	'tag' => $tag,
+        	'questions' => Question::model()->tag_overview($tag->id)
+        ));
+        
+    }
 }
