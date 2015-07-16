@@ -192,4 +192,50 @@ class QuestionVotes extends HActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	/** 
+	 * Cast a vote
+	 * @param QuestionVote 
+	 * @param int question_id (optional)
+	 */
+	public static function castVote($questionVotesModel, $question_id) 
+	{
+		
+		$question = Question::model()->findByPk($question_id);
+		$questionVotesModel->created_by = Yii::app()->user->id;	
+    
+        if($questionVotesModel->validate())
+        {
+
+        	// Is the author "voting" on the accepted answer?
+        	if($question->created_by == $questionVotesModel->created_by && $questionVotesModel->vote_type == "accepted_answer") {
+
+	        	// If the user has previously selected a best answer, drop the old one
+	        	$previousAccepted = QuestionVotes::model()->findAcceptedAnswer($question->id);
+	        	if($previousAccepted) $previousAccepted->delete();
+
+        	} else { // no, just a normal up/down vote then
+
+	        	// If the user has previously voted on this, drop it 
+	        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::app()->user->id));
+	        	if($previousVote) $previousVote->delete();
+
+        	}
+
+            $questionVotesModel->save();
+            return true;
+        } else {
+        	return false;
+        }
+
+	}
+
+	/** 
+	 * Mark an answer as the best answer
+	 * @param QuestionVotes
+	 */
+	public static function markBestAnswer($questionVotesModel) 
+	{
+
+	}
 }
