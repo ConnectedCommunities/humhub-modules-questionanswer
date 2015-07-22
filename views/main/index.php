@@ -59,7 +59,8 @@
                             <h4 class="media-heading">
                                 <?php echo CHtml::link(CHtml::encode($question['post_title']), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question['id']))); ?>
                             </h4>
-                            <h5><?php echo CHtml::encode((strlen($question['post_text']) > 203) ? substr($question['post_text'],0,200).'...' : $question['post_text']); ?></h5>
+
+                            <h5><?php echo CHtml::encode(Helpers::truncateText($question['post_text'], 200)); ?></h5>
                         </div>
                     </div>
                 <?php } ?>
