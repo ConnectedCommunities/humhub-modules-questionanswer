@@ -14,7 +14,7 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Question extends HActiveRecord
+class Question extends HActiveRecordContentContainer implements ISearchable
 {
 	/**
 	 * @return string the associated database table name
@@ -132,6 +132,17 @@ class Question extends HActiveRecord
 	    return $this;
 	}
 
+    /**
+     * Returns URL to the Question
+     *
+     * @param array $parameters
+     * @return string
+     */
+    public function getUrl($parameters = array())
+    {
+    	return $this->createUrl('//questionanswer/main/view', $parameters);
+    }
+
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -187,5 +198,59 @@ class Question extends HActiveRecord
 		return Yii::app()->db->createCommand($sql)->bindValue('tag_id', $tag_id)->queryAll();
 
 	}
+
+
+    /**
+     * After Save Addons
+     *
+     * @return type
+     */
+    protected function afterSave()
+    {
+        HSearch::getInstance()->addModel($this);
+        return parent::afterSave();
+    }
+
+
+    /**
+     * Returns an array of informations used by search subsystem.
+     * Function is defined in interface ISearchable
+     *
+     * @return Array
+     */
+    public function getSearchAttributes()
+    {
+
+    	// THIS WORKS PERFECTLY IF YOU ADD THE QUESTION MODEL TO THE QUERY 
+    	// See: Line 84, /protected/controllers/SearchController.php
+
+        $attributes = array(
+
+        	// Assignments
+            'belongsToType' => 'Question',
+            'belongsToId' => $this->id,
+            'belongsToGuid' => $this->user->guid,
+
+            // Information about the record
+            'model' => 'Question',
+            'pk' => $this->id,
+            'title' => $this->post_title,
+            'url' => $this->getUrl(array('id' => $this->id)),
+
+            // Extra indexed fields
+            'post_text' => $this->post_text
+        );
+
+
+        return $attributes;
+    }
+
+    /**
+     * Returns the Search Result Output
+     */
+    public function getSearchResult()
+    {
+        return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionSearchResultWidget', array('question' => $this), true);
+    }
 
 }
