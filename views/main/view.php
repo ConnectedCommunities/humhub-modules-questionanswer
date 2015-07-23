@@ -157,15 +157,17 @@
                 <br>
             </div>
 
+            <?php if(count($related) > 0) { ?>
             <div class="panel panel-default">
                 <div class="panel-heading"><strong>Related</strong> Questions</div>
                 <div class="list-group">
-                    <?php if(count($related) > 0) foreach ($related as $question) { ?>
+                    <?php foreach ($related as $question) { ?>
                         <a class="list-group-item" href="<?php echo Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question['id'])); ?>"><?php echo CHtml::encode($question['post_title']); ?></a>
                     <?php } ?>
                 </div>
                 <br>
             </div>
+            <?php } ?>
         </div>
     </div>
 </div>
