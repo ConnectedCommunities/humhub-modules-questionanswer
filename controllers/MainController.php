@@ -120,6 +120,7 @@ class MainController extends Controller{
     		'author' => $question->user->id,
     		'question' => $question,
     		'answers' => Answer::model()->overview($question->id),
+    		'related' => Question::model()->related($question->id),
     	));
 
     }

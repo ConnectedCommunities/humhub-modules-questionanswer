@@ -200,6 +200,24 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 	}
 
 
+	/** 
+	 * Returns a series of related questions
+	 */
+	public static function related($question_id) {
+
+		$sql = "SELECT q.id, q.post_title, COUNT(*) FROM question q, question_tag qt
+				WHERE q.ID = qt.question_id
+				AND qt.tag_id IN (
+					SELECT tag_id FROM question_tag WHERE question_id = :question_id
+				) AND qt.question_id != :question_id
+				GROUP BY qt.question_id
+				ORDER BY COUNT(*) DESC";
+
+		return Yii::app()->db->createCommand($sql)->bindValue('question_id', $question_id)->queryAll();
+
+	}
+
+
     /**
      * After Save Addons
      *

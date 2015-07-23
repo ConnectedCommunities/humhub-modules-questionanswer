@@ -160,9 +160,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><strong>Related</strong> Questions</div>
                 <div class="list-group">
-                    <a class="list-group-item" href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                    <a class="list-group-item" href="#">Nunc pharetra blandit sapien, et tempor nisi.</a>
-                    <a class="list-group-item" href="#">Duis finibus venenatis commodo. </a>
+                    <?php if(count($related) > 0) foreach ($related as $question) { ?>
+                        <a class="list-group-item" href="<?php echo Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question['id'])); ?>"><?php echo CHtml::encode($question['post_title']); ?></a>
+                    <?php } ?>
                 </div>
                 <br>
             </div>
