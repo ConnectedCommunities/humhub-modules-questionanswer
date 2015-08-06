@@ -211,7 +211,8 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 					SELECT tag_id FROM question_tag WHERE question_id = :question_id
 				) AND qt.question_id != :question_id
 				GROUP BY qt.question_id
-				ORDER BY COUNT(*) DESC";
+				ORDER BY COUNT(*) DESC
+				LIMIT 0, 5";
 
 		return Yii::app()->db->createCommand($sql)->bindValue('question_id', $question_id)->queryAll();
 
