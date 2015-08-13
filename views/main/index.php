@@ -19,6 +19,14 @@
                 <?php $this->renderPartial('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
 
+                <?php
+                // $this->widget('application.modules.reportcontent.widgets.ReportContentWidget', array('object' => Post::model()->findByPk(1))); 
+                // $this->widget('application.modules_core.file.widgets.FileUploadListWidget',[
+                //     'uploaderId' => 'cover_uploader'
+                // ]); 
+                // $this->widget('application.modules_core.admin.widgets.AdminMenuWidget', array()); 
+                ?>
+
                 <?php foreach ($questions as $question) { ?>
                     <div class="media" >
                         <div class="pull-left">

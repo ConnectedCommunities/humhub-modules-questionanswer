@@ -212,7 +212,7 @@ class QuestionVotes extends HActiveRecord
 
 	        	// If the user has previously selected a best answer, drop the old one
 	        	$previousAccepted = QuestionVotes::model()->findAcceptedAnswer($question->id);
-	        	if($previousAccepted) $previousAccepted->delete();
+	        	if($previousAccepted && $previousAccepted->post_id != $question->id) $previousAccepted->delete();
 
         	} else { // no, just a normal up/down vote then
 
