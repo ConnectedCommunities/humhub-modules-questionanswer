@@ -31,18 +31,11 @@
                             </div>
                             
                         </div>
-                        <div class="media-body" style="position:absolute;top:0;right:0; padding:10px; width:200px; background-color:#708FA0; color:#fff;">
-                            <a href="<?php echo $this->createUrl('//user/profile', array('uguid' => $question->user->guid)); ?>" style="color:#fff;">
-                                <img id="user-account-image" class="img-rounded pull-left"
-                                     src="<?php echo $question->user->getProfileImage()->getUrl(); ?>"
-                                     height="32" width="32" alt="32x32" data-src="holder.js/32x32"
-                                     style="width: 32px; height: 32px; margin-right:10px;"/>
+                        
+                        <?php
+                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $question->user));
+                        ?>
 
-                                <div class="user-title pull-left hidden-xs">
-                                    <strong><?php echo CHtml::encode($question->user->displayName); ?></strong><br/><span class="truncate"><?php echo CHtml::encode($question->user->profile->title); ?></span>
-                                </div>
-                            </a>
-                        </div>
                         <div class="media-body" style="padding-top:5px; ">
                             <h3 class="media-heading">
                                 <?php echo CHtml::link(CHtml::encode($question->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question->id))); ?>
@@ -97,19 +90,10 @@
                                 <?php echo $this->renderPartial('vote', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
                             </div>
                         </div>
-                        <?php $user = User::model()->findByPk($question_answer['created_by']); ?>
-                        <div class="media-body" style="position:absolute;top:0;right:0; padding:10px; width:200px; background-color:#708FA0; color:#fff;">
-                            <a href="<?php echo $this->createUrl('//user/profile', array('uguid' => $user->guid)); ?>" style="color:#fff;">
-                                <img id="user-account-image" class="img-rounded pull-left"
-                                     src="<?php echo $user->getProfileImage()->getUrl(); ?>"
-                                     height="32" width="32" alt="32x32" data-src="holder.js/32x32"
-                                     style="width: 32px; height: 32px; margin-right:10px;"/>
-
-                                <div class="user-title pull-left hidden-xs">
-                                    <strong><?php echo CHtml::encode($user->displayName); ?></strong><br/><span class="truncate"><?php echo CHtml::encode($user->profile->title); ?></span>
-                                </div>
-                            </a>
-                        </div>
+                        <?php $user = User::model()->findByPk($question_answer['created_by']); ?>                        
+                        <?php
+                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $user));
+                        ?>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
                             <?php echo nl2br(CHtml::encode($question_answer['post_text'])); ?>
