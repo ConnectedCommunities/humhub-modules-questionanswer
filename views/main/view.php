@@ -134,7 +134,9 @@
             <?php } ?>
 
 
-            <?php $this->renderPartial('answer', array('model' => new Answer)); ?>
+            <?php
+            $this->widget('application.modules.questionanswer.widgets.AnswerFormWidget', array('model' => new Answer));
+            ?>
 
         </div>
 
