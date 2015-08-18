@@ -4,7 +4,7 @@
  * UserSearchResultWidget displays a user inside the search results.
  * The widget will be called by the User Model getSearchOutput method.
  *
- * @package humhub.modules_core.user.widgets
+ * @package application.modules.questionanswer.widgets
  * @since 0.5
  * @author Luke
  */

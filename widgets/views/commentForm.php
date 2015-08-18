@@ -6,7 +6,6 @@
     // you need to use the performAjaxValidation()-method described there.
     'enableAjaxValidation'=>false,
 )); ?>
-<?php if(isset($test)) echo $test; ?>
 <?php echo $form->errorSummary($model); ?>
 <?php echo $form->error($model,'post_text'); ?>
 <?php echo $form->textArea($model,'post_text',array('id' => "contentForm_answersText", 'rows' => '2', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => "Add comment...")); ?>

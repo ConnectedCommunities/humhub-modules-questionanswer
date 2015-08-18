@@ -59,7 +59,13 @@
                             ?>
                             <br />
                             <br />
-                            <?php $this->renderPartial('comment', array('model' => new Comment, 'parent_id' => $question->id)); ?>
+                            <?php 
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'parent_id' => $question->id));
+                            ?>
+
+                            <a href="#">Edit</a>
+                            &bull;
+                            <a href="#">Delete</a>
                         </div>
                     </div>
 
@@ -116,7 +122,9 @@
                             }
                             ?>
                             <br />
-                            <?php $this->renderPartial('comment', array('model' => new Comment, 'parent_id' => $question_answer['id'])); ?>
+                            <?php 
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'parent_id' => $question_answer['id']));
+                            ?>
                         </div>
 
                     </div>
