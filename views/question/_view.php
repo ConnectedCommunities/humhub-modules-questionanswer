@@ -2,50 +2,48 @@
 /* @var $this QuestionController */
 /* @var $data Question */
 ?>
+<div class="media" >
+    <div class="pull-left">
+        <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+            <?php 
+            $upBtnClass = ""; $downBtnClass = ""; $vote = "";
 
-<div class="view">
+            // Change the button class to 'active' if the user has voted
+            $vote = QuestionVotes::model()->post($data->id)->user(Yii::app()->user->id)->find();
+            if($vote) {
+                if($vote->vote_type == "up") {
+                    $upBtnClass = "active btn-info";
+                    $downBtnClass = "";
+                } else {
+                    $downBtnClass = "active btn-info";
+                    $upBtnClass = "";
+                }
+            }
+            
+            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass)); 
+            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass)); 
+			?>
+        </div>
+        <!--<a href="" class="pull-left" style="padding-top:5px; padding-right:10px;">
+            <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">
+        </a>-->
+        <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
+            <b>0<?php // echo $question['vote_count']; ?></b>
+            <p>votes</p>
+        </div>
+        <div class="pull-left" style="text-align:center; margin-top:5px;">
+            <b>0<?php // echo $question['answers']; ?></b>
+            <p>answers</p>
+        </div>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+    </div>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('question_id')); ?>:</b>
-	<?php echo CHtml::encode($data->question_id); ?>
-	<br />
+    <div class="media-body" style="padding-top:5px; padding-left:10px;">
+        <h4 class="media-heading">
+        	<?php echo CHtml::link(CHtml::encode($data->post_title), array('view', 'id'=>$data->id)); ?>
+        </h4>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('parent_id')); ?>:</b>
-	<?php echo CHtml::encode($data->parent_id); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('post_title')); ?>:</b>
-	<?php echo CHtml::encode($data->post_title); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('post_text')); ?>:</b>
-	<?php echo CHtml::encode($data->post_text); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('post_type')); ?>:</b>
-	<?php echo CHtml::encode($data->post_type); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>
-	<?php echo CHtml::encode($data->created_at); ?>
-	<br />
-
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('created_by')); ?>:</b>
-	<?php echo CHtml::encode($data->created_by); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('updated_at')); ?>:</b>
-	<?php echo CHtml::encode($data->updated_at); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('updated_by')); ?>:</b>
-	<?php echo CHtml::encode($data->updated_by); ?>
-	<br />
-
-	*/ ?>
-
+        <h5><?php echo CHtml::encode(Helpers::truncateText($data->post_text, 200)); ?></h5>
+    </div>
 </div>
+

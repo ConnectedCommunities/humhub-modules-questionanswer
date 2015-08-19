@@ -2,13 +2,6 @@
 
 class QuestionController extends Controller
 {
-	/**
-	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
-	 * using two-column layout. See 'protected/views/layouts/column2.php'.
-	 */
-	public $layout='//layouts/column2';
-	public $breadcrumbs=array();
-	public $menu=array();
 	
 	/**
 	 * @return array action filters
@@ -53,8 +46,16 @@ class QuestionController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id);
+
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+
+    		'author' => $model->user->id,
+    		'question' => $model,
+    		'answers' => Answer::model()->overview($model->id),
+    		'related' => Question::model()->related($model->id),
+
+			'model'=> $model,
 		));
 	}
 

@@ -1,40 +1,182 @@
 <?php
 /* @var $this QuestionController */
 /* @var $model Question */
-
-$this->breadcrumbs=array(
-	'Questions'=>array('index'),
-	$model->id,
-);
-
-$this->menu=array(
-	array('label'=>'List Question', 'url'=>array('index')),
-	array('label'=>'Create Question', 'url'=>array('create')),
-	array('label'=>'Update Question', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Question', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Question', 'url'=>array('admin')),
-);
-
-
-// print_r($this->breadcrumbs);
-print_r($this->menu);
 ?>
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="pull-left">
+                            <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+                                
+                                <?php 
+                                $upBtnClass = ""; $downBtnClass = "";
 
-<h1>View Question #<?php echo $model->id; ?></h1>
+                                // Change the button class to 'active' if the user has voted
+                                $vote = QuestionVotes::model()->post($model->id)->user(Yii::app()->user->id)->find();
+                                if($vote) {
+                                    if($vote->vote_type == "up") {
+                                        $upBtnClass = "active btn-info";
+                                        $downBtnClass = "";
+                                    } else if($vote->vote_type =="down") {
+                                        $downBtnClass = "active btn-info";
+                                        $upBtnClass = "";
+                                    }
+                                }
+                        
+                                ?>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'id',
-		'question_id',
-		'parent_id',
-		'post_title',
-		'post_text',
-		'post_type',
-		'created_at',
-		'created_by',
-		'updated_at',
-		'updated_by',
-	),
-)); ?>
+
+
+                                <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass));  ?>
+                                <div class="text-center"><strong>
+                                <?php echo QuestionVotes::model()->score($model->id); ?>
+                                </strong><br /></div>
+								<?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass)); ?>
+                            </div>
+                            
+                        </div>
+                        
+                        <?php
+                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $model->user));
+                        ?>
+
+                        <div class="media-body" style="padding-top:5px; ">
+                            <h3 class="media-heading">
+                                <?php echo CHtml::link(CHtml::encode($model->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $model->id))); ?>
+                            </h3>
+                            <?php echo nl2br(CHtml::encode($model->post_text)); ?>
+                            <br /><br />    <?php foreach($model->tags as $tag) { ?>
+                                <span class="label label-default"><a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->tag_id)); ?>"><?php echo $tag->tag->tag; ?></a></span>
+                            <?php } ?>
+                            <?php
+                            $comments = Answer::model()->findByPk($model->id)->comments;
+                            if($comments) {
+                                echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px;\">";
+                                foreach($comments as $comment) {
+                                    echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
+                                    echo $comment->post_text;
+                                    echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
+                                    echo '</div>';
+                                }
+                                echo "</div>";
+                            }
+                            ?>
+                            <br />
+                            <br />
+                            <?php 
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'parent_id' => $model->id));
+                            ?>
+
+                            <a href="#">Edit</a>
+                            &bull;
+                            <a href="#">Delete</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <?php foreach($answers as $question_answer) { ?>
+            <div class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="pull-left">
+                            <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+                                <?php 
+                                $upBtnClass = ""; $downBtnClass = "";
+                                $vote = QuestionVotes::model()->post($question_answer['id'])->user(Yii::app()->user->id)->find();
+                                if($vote) {
+                                    if($vote->vote_type == "up") {
+                                        $upBtnClass = "active btn-info";
+                                        $downBtnClass = "";
+                                    } else if($vote->vote_type == "down") {
+                                        $downBtnClass = "active btn-info";
+                                        $upBtnClass = "";
+                                    }
+                                }
+                                ?>
+                                <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass));  ?>
+                                <div class="text-center"><strong><?php echo $question_answer['score']; ?></strong><br /></div>
+                                <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass)); ?>
+                            </div>
+                        </div>
+                        <?php $user = User::model()->findByPk($question_answer['created_by']); ?>                        
+                        <?php
+                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $user));
+                        ?>
+                        <div class="media-body" style="padding-top:5px; ">
+                            <br />
+                            <?php echo nl2br(CHtml::encode($question_answer['post_text'])); ?>
+                            <br />
+                            <br />
+                            <?php 
+                            $this->widget('application.modules.questionanswer.widgets.BestAnswerWidget', array(
+								'post_id' => $question_answer['id'], 
+								'author' => $author, 
+								'model' => new QuestionVotes, 
+								'accepted_answer' => ($question_answer['answer_status'] ? true : false)
+                            ));
+
+
+                            $comments = Answer::model()->findByPk($question_answer['id'])->comments;
+                            if($comments) {
+                                echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
+                                foreach($comments as $comment) {
+                                    echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
+                                    echo $comment->post_text;
+                                    echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
+                                    echo '</div>';
+                                }
+                                echo "</div>";
+                            }
+                            ?>
+                            <br />
+                            <?php 
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'parent_id' => $question_answer['id']));
+                            ?>
+                        </div>
+
+                    </div>
+                    
+                </div>
+            </div>
+            <?php } ?>
+
+
+            <?php
+            $this->widget('application.modules.questionanswer.widgets.AnswerFormWidget', array('model' => new Answer));
+            ?>
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>Question</strong> information</div>
+                <div class="list-group">
+                    <a class="list-group-item" href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
+                    <a class="list-group-item" href="#">Nunc pharetra blandit sapien, et tempor nisi.</a>
+                    <a class="list-group-item" href="#">Duis finibus venenatis commodo. </a>
+                </div>
+                <br>
+            </div>
+
+            <?php if(count($related) > 0) { ?>
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>Related</strong> Questions</div>
+                <div class="list-group">
+                    <?php foreach ($related as $question) { ?>
+                        <a class="list-group-item" href="<?php echo Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question['id'])); ?>"><?php echo CHtml::encode($question['post_title']); ?></a>
+                    <?php } ?>
+                </div>
+                <br>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+</div>
+<!-- end: show content -->
+
