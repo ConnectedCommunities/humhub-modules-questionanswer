@@ -2,13 +2,13 @@
 /* @var $this QuestionController */
 /* @var $model Question */
 
-$this->breadcrumbs=array(
+$breadcrumbs=array(
 	'Questions'=>array('index'),
 	$model->id=>array('view','id'=>$model->id),
 	'Update',
 );
 
-$this->menu=array(
+$menu=array(
 	array('label'=>'List Question', 'url'=>array('index')),
 	array('label'=>'Create Question', 'url'=>array('create')),
 	array('label'=>'View Question', 'url'=>array('view', 'id'=>$model->id)),
