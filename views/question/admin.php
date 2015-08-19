@@ -2,12 +2,12 @@
 /* @var $this QuestionController */
 /* @var $model Question */
 
-$this->breadcrumbs=array(
+$breadcrumbs=array(
 	'Questions'=>array('index'),
 	'Manage',
 );
 
-$this->menu=array(
+$menu=array(
 	array('label'=>'List Question', 'url'=>array('index')),
 	array('label'=>'Create Question', 'url'=>array('create')),
 );
