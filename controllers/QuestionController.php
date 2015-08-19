@@ -1,186 +1,175 @@
 <?php
 
-/**
- * PollController handles all poll related actions.
- *
- * @package humhub.modules.polls.controllers
- * @since 0.5
- * @author Luke
- */
-class QuestionController extends ContentContainerController
+class QuestionController extends Controller
 {
+	/**
+	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
+	 * using two-column layout. See 'protected/views/layouts/column2.php'.
+	 */
+	public $layout='//layouts/column2';
+	public $breadcrumbs=array();
+	public $menu=array();
+	
+	/**
+	 * @return array action filters
+	 */
+	public function filters()
+	{
+		return array(
+			'accessControl', // perform access control for CRUD operations
+			'postOnly + delete', // we only allow deletion via POST request
+		);
+	}
 
-    public function actions()
-    {
-        return array(
-            'stream' => array(
-                'class' => 'PollsStreamAction',
-                'contentContainer' => $this->contentContainer
-            ),
-        );
-    }
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
+	public function accessRules()
+	{
+		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('index','view'),
+				'users'=>array('*'),
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
+				'users'=>array('@'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
+				'users'=>array('admin'),
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
+		);
+	}
 
-    public function init()
-    {
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id)
+	{
+		$this->render('view',array(
+			'model'=>$this->loadModel($id),
+		));
+	}
 
-        /**
-         * Fallback for older versions
-         */
-        if (Yii::app()->request->getParam('containerClass') == 'Space') {
-            $_GET['sguid'] = Yii::app()->request->getParam('containerGuid');
-        } elseif (Yii::app()->request->getParam('containerClass') == 'User') {
-            $_GET['uguid'] = Yii::app()->request->getParam('containerGuid');
-        }
-        
-        return parent::init();
-    }
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionCreate()
+	{
+		$model=new Question;
 
-    /**
-     * Shows the questions tab
-     */
-    public function actionShow()
-    {
-        $this->render('show', array());
-    }
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
 
-    /**
-     * Posts a new question  throu the question form
-     *
-     * @return type
-     */
-    public function actionCreate()
-    {
-        $this->forcePostRequest();
-        $_POST = Yii::app()->input->stripClean($_POST);
+		if(isset($_POST['Question']))
+		{
+			$model->attributes=$_POST['Question'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
 
-        $poll = new Poll();
-        $poll->content->populateByForm();
-        $poll->question = Yii::app()->request->getParam('question');
-        $poll->answersText = Yii::app()->request->getParam('answersText');
-        $poll->allow_multiple = Yii::app()->request->getParam('allowMultiple');
+		$this->render('create',array(
+			'model'=>$model,
+		));
+	}
 
-        if ($poll->validate()) {
-            $poll->save();
-            $this->renderJson(array('wallEntryId' => $poll->content->getFirstWallEntryId()));
-        } else {
-            $this->renderJson(array('errors' => $poll->getErrors()), false);
-        }
-    }
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionUpdate($id)
+	{
+		$model=$this->loadModel($id);
 
-    /**
-     * Answers a polls
-     */
-    public function actionAnswer()
-    {
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
 
-        $poll = $this->getPollByParameter();
-        $answers = Yii::app()->request->getParam('answers');
+		if(isset($_POST['Question']))
+		{
+			$model->attributes=$_POST['Question'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
 
-        // Build array of answer ids
-        $votes = array();
-        if (is_array($answers)) {
-            foreach ($answers as $answer_id => $flag) {
-                $votes[] = (int) $answer_id;
-            }
-        } else {
-            $votes[] = $answers;
-        }
+		$this->render('update',array(
+			'model'=>$model,
+		));
+	}
 
-        if (count($votes) > 1 && !$poll->allow_multiple) {
-            throw new CHttpException(401, Yii::t('PollsModule.controllers_PollController', 'Voting for multiple answers is disabled!'));
-        }
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionDelete($id)
+	{
+		$this->loadModel($id)->delete();
 
-        $poll->vote($votes);
-        $this->getPollOut($poll);
-    }
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+	}
 
-    /**
-     * Resets users question answers
-     */
-    public function actionAnswerReset()
-    {
-        $poll = $this->getPollByParameter();
-        $poll->resetAnswer();
-        $this->getPollOut($poll);
-    }
+	/**
+	 * Lists all models.
+	 */
+	public function actionIndex()
+	{
+		$dataProvider=new CActiveDataProvider('Question');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
+		));
+	}
 
-    /**
-     * Returns a user list including the pagination which contains all results
-     * for an answer
-     */
-    public function actionUserListResults()
-    {
-        $poll = $this->getPollByParameter();
+	/**
+	 * Manages all models.
+	 */
+	public function actionAdmin()
+	{
+		$model=new Question('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Question']))
+			$model->attributes=$_GET['Question'];
 
-        $answerId = (int) Yii::app()->request->getQuery('answerId', '');
-        $answer = PollAnswer::model()->findByPk($answerId);
-        if ($answer == null || $poll->id != $answer->poll_id) {
-            throw new CHttpException(401, Yii::t('PollsModule.controllers_PollController', 'Invalid answer!'));
-        }
+		$this->render('admin',array(
+			'model'=>$model,
+		));
+	}
 
-        $page = (int) Yii::app()->request->getParam('page', 1);
-        $total = PollAnswerUser::model()->count('poll_answer_id=:aid', array(':aid' => $answerId));
-        $usersPerPage = HSetting::Get('paginationSize');
+	/**
+	 * Returns the data model based on the primary key given in the GET variable.
+	 * If the data model is not found, an HTTP exception will be raised.
+	 * @param integer $id the ID of the model to be loaded
+	 * @return Question the loaded model
+	 * @throws CHttpException
+	 */
+	public function loadModel($id)
+	{
+		$model=Question::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
 
-        $sql = "SELECT u.* FROM `poll_answer_user` a " .
-                "LEFT JOIN user u ON a.created_by = u.id " .
-                "WHERE a.poll_answer_id=:aid AND u.status=" . User::STATUS_ENABLED . " " .
-                "ORDER BY a.created_at DESC " .
-                "LIMIT " . ($page - 1) * $usersPerPage . "," . $usersPerPage;
-        $params = array(':aid' => $answerId);
-
-        $pagination = new CPagination($total);
-        $pagination->setPageSize($usersPerPage);
-
-        $users = User::model()->findAllBySql($sql, $params);
-        $output = $this->renderPartial('application.modules_core.user.views._listUsers', array(
-            'title' => Yii::t('PollsModule.controllers_PollController', "Users voted for: <strong>{answer}</strong>", array('{answer}' => $answer->answer)),
-            'users' => $users,
-            'pagination' => $pagination
-                ), true);
-
-        Yii::app()->clientScript->render($output);
-        echo $output;
-        Yii::app()->end();
-    }
-
-    /**
-     * Prints the given poll wall output include the affected wall entry id
-     *
-     * @param Poll $poll
-     */
-    private function getPollOut($question)
-    {
-        $output = $question->getWallOut();
-        Yii::app()->clientScript->render($output);
-
-        $json = array();
-        $json['output'] = $output;
-        $json['wallEntryId'] = $question->content->getFirstWallEntryId(); // there should be only one
-        echo CJSON::encode($json);
-        Yii::app()->end();
-    }
-
-    /**
-     * Returns a given poll by given request parameter.
-     *
-     * This method also validates access rights of the requested poll object.
-     */
-    private function getPollByParameter()
-    {
-
-        $pollId = (int) Yii::app()->request->getParam('pollId');
-        $poll = Poll::model()->contentContainer($this->contentContainer)->findByPk($pollId);
-
-        if ($poll == null) {
-            throw new CHttpException(401, Yii::t('PollsModule.controllers_PollController', 'Could not load poll!'));
-        }
-
-        if (!$poll->content->canRead()) {
-            throw new CHttpException(401, Yii::t('PollsModule.controllers_PollController', 'You have insufficient permissions to perform that operation!'));
-        }
-
-        return $poll;
-    }
-
+	/**
+	 * Performs the AJAX validation.
+	 * @param Question $model the model to be validated
+	 */
+	protected function performAjaxValidation($model)
+	{
+		if(isset($_POST['ajax']) && $_POST['ajax']==='question-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+	}
 }
