@@ -70,10 +70,24 @@
                             <?php 
                             $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'parent_id' => $model->id));
                             ?>
-
-                            <a href="#">Edit</a>
+                            <?php 
+                            if(Yii::app()->user->isAdmin() || $model->created_by == Yii::app()->user->id) {
+                            	echo CHtml::link("Edit", array('update', 'id'=>$model->id)); 
+                            }
+                            ?>
                             &bull;
-                            <a href="#">Delete</a>
+							<?php
+						    if(Yii::app()->user->isAdmin()) {
+						    	echo CHtml::linkButton('Delete',array(
+							    'submit'=>$this->createUrl('delete',array('id'=>$model->id)),
+							    'confirm'=>"Are you sure want to delete?",
+								'csrf'=>true,
+							    'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+							}
+
+							?>
+
+                            <a href="#"></a>
                         </div>
                     </div>
 
