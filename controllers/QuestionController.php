@@ -65,17 +65,53 @@ class QuestionController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Question;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Question']))
-		{
-			$model->attributes=$_POST['Question'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
-		}
+	    $model = new Question;
+        $model->created_by = Yii::app()->user->id;
+        $model->post_type = "question";
+	    
+	    if(isset($_POST['Question'])) {
+	    	
+	        $model->attributes=$_POST['Question'];
+	        if($model->validate()) {
+
+	        	$model->save();
+
+	        	// Question has been saved, add the tags
+				if(isset($_POST['Tags'])) {
+
+					// Split tag string into array 
+					$tags = explode(", ", $_POST['Tags']);
+					foreach($tags as $tag) {
+						$tag = Tag::model()->firstOrCreate($tag);
+						$question_tag = new QuestionTag;
+						$question_tag->question_id = $model->id;
+						$question_tag->tag_id = $tag->id;
+						$question_tag->save();
+					}
+
+				} else {
+					// throw error(?) no tag provided
+				}
+			    
+        	    $this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $model->id)));
+	        }
+	    }
+
+
+
+		// $model=new Question;
+
+		// // Uncomment the following line if AJAX validation is needed
+		// // $this->performAjaxValidation($model);
+
+		// if(isset($_POST['Question']))
+		// {
+		// 	$model->attributes=$_POST['Question'];
+		// 	if($model->save())
+		// 		$this->redirect(array('view','id'=>$model->id));
+		// }
 
 		$this->render('create',array(
 			'model'=>$model,
