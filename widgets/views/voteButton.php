@@ -8,6 +8,7 @@ if(!isset($btnClass)) {
 	$btnClass = "btn btn-default btn-xs";
 }
 ?>
+<?php echo $form->hiddenField($model,'should_open_question',array('type'=>"hidden", 'value' => $should_open_question)); ?>
 <?php echo $form->hiddenField($model,'post_id',array('type'=>"hidden", 'value' => $post_id)); ?>
 <?php echo $form->hiddenField($model,'vote_on',array('type'=>"hidden", 'value' => $vote_on)); ?>
 <?php echo $form->hiddenField($model,'vote_type',array('type'=>"hidden", 'value' => $vote_type)); ?>

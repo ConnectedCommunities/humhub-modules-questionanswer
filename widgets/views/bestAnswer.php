@@ -14,6 +14,7 @@ if(Yii::app()->user->id == $author) {
 		'action' => Yii::app()->createUrl('//questionanswer/vote/create')
 	)); 
 
+	echo $form->hiddenField($model,'should_open_question',array('type'=>"hidden", 'value' => $should_open_question)); 
 	echo $form->hiddenField($model,'post_id',array('type'=>"hidden", 'value' => $post_id)); 
 	echo $form->hiddenField($model,'vote_on',array('type'=>"hidden", 'value' => "answer"));
 	echo $form->hiddenField($model,'vote_type',array('type'=>"hidden", 'value' => "accepted_answer")); 

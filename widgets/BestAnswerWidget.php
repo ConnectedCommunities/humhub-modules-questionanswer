@@ -25,6 +25,7 @@ class BestAnswerWidget extends HWidget {
             'author' => $this->author, 
             'model' => $this->model,
             'accepted_answer' => $this->accepted_answer,
+            'should_open_question' => 1 // we want to get redirected back to the question
         ));
 
     }

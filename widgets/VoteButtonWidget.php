@@ -15,7 +15,7 @@ class VoteButtonWidget extends HWidget {
     public $vote_on;
     public $vote_type;
     public $class;
-
+    public $should_open_question;
     /**
      * Executes the widget.
      */
@@ -27,6 +27,7 @@ class VoteButtonWidget extends HWidget {
             'vote_on' => $this->vote_on, 
             'vote_type' => $this->vote_type,
             'class' => $this->class,
+            'should_open_question' => $this->should_open_question
         ));
     }
 

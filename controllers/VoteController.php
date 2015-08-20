@@ -61,8 +61,7 @@ class VoteController extends Controller
 			//			the 'activity' module. For now this will do.
 			switch($model->vote_on) {
 				case "question":
-					$obj = Question::model()->findByPk($model->post_id);
-					$question_id = $obj->post_id;
+					$question_id = $model->post_id;
 				break;
 
 				case "answer":
@@ -72,8 +71,18 @@ class VoteController extends Controller
 
 			}
 
-			if(QuestionVotes::model()->castVote($model, $question_id))
-				$this->redirect(array('//questionanswer/question/view','id'=>$question_id));
+			
+			if(QuestionVotes::model()->castVote($model, $question_id)) {
+
+				if($_POST['QuestionVotes']['should_open_question'] == true) {
+					$this->redirect(array('//questionanswer/question/view','id'=>$question_id));
+				} else {
+					$this->redirect(array('//questionanswer/question/index'));
+				}
+
+			}
+
+
 		}
 
 		$this->render('create',array(

@@ -20,19 +20,24 @@
                 }
             }
             
-            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass)); 
-            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass)); 
-			?>
+            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 0)); 
+            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0)); 
+
+            ?>
         </div>
         <!--<a href="" class="pull-left" style="padding-top:5px; padding-right:10px;">
             <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">
         </a>-->
+        <?php 
+        $stats = Question::model()->stats($data->id); 
+        ?>
+
         <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
-            <b>0<?php // echo $question['vote_count']; ?></b>
+            <b><?php echo $stats['score']; ?></b>
             <p>votes</p>
         </div>
         <div class="pull-left" style="text-align:center; margin-top:5px;">
-            <b>0<?php // echo $question['answers']; ?></b>
+            <b><?php echo $stats['answers']; ?></b>
             <p>answers</p>
         </div>
 
