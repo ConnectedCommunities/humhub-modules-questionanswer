@@ -10,12 +10,8 @@
  */
 class AnswerFormWidget extends HWidget {
 
-    /**
-     * The user object
-     *
-     * @var User
-     */
-    public $model;
+    public $question;
+    public $answer;
 
     /**
      * Executes the widget.
@@ -23,7 +19,8 @@ class AnswerFormWidget extends HWidget {
     public function run() {
 
         $this->render('answerForm', array(
-            'model' => $this->model,
+            'question' => $this->question,
+            'answer' => $this->answer,
         ));
     }
 

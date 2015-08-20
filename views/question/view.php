@@ -30,7 +30,6 @@
                                 ?>
 
 
-
                                 <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass));  ?>
                                 <div class="text-center"><strong>
                                 <?php echo QuestionVotes::model()->score($model->id); ?>
@@ -162,7 +161,7 @@
 
 
             <?php
-            $this->widget('application.modules.questionanswer.widgets.AnswerFormWidget', array('model' => new Answer));
+            $this->widget('application.modules.questionanswer.widgets.AnswerFormWidget', array('question' => $model, 'answer' => new Answer));
             ?>
 
         </div>
