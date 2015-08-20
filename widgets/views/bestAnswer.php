@@ -11,6 +11,7 @@ if(Yii::app()->user->id == $author) {
 	$form=$this->beginWidget('CActiveForm', array(
 		'id'=>'question-votes-vote_best_answer-form',
 		'enableAjaxValidation'=>false,
+		'action' => Yii::app()->createUrl('//questionanswer/vote/create')
 	)); 
 
 	echo $form->hiddenField($model,'post_id',array('type'=>"hidden", 'value' => $post_id)); 

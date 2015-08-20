@@ -55,8 +55,25 @@ class VoteController extends Controller
 		if(isset($_POST['QuestionVotes']))
 		{
 			$model->attributes=$_POST['QuestionVotes'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+
+			// TODO: I'd like to figure out a way to instantiate the model 
+			//			dynamically. I think they might do that with 
+			//			the 'activity' module. For now this will do.
+			switch($model->vote_on) {
+				case "question":
+					$obj = Question::model()->findByPk($model->post_id);
+					$question_id = $obj->post_id;
+				break;
+
+				case "answer":
+					$obj = Answer::model()->findByPk($model->post_id);
+					$question_id = $obj->question_id;
+				break;
+
+			}
+
+			if(QuestionVotes::model()->castVote($model, $question_id))
+				$this->redirect(array('//questionanswer/question/view','id'=>$question_id));
 		}
 
 		$this->render('create',array(
@@ -80,7 +97,7 @@ class VoteController extends Controller
 		{
 			$model->attributes=$_POST['QuestionVotes'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('//questionanswer/question/view','id'=>$model->post_id));
 		}
 
 		$this->render('update',array(
