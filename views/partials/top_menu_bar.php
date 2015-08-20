@@ -22,14 +22,19 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sorting                <b class="caret"></b></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sorting<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#" class="wallSorting" id="sorting_c"><i class="fa fa-check-square-o"></i> Creation time</a></li>
                                 <li><a href="#" class="wallSorting" id="sorting_u"><i class="fa fa-square-o"></i> Last update</a></li>
                             </ul>
                         </li>
+                        <?php if(Yii::app()->user->isAdmin()) { ?>
+                            <li class="dropdown">
+                                <?php echo CHtml::link('Admin', Yii::app()->createUrl('//questionanswer/question/admin'), array()); ?>
+                            </li>
+                        <?php } ?>
                         <li class="dropdown pull-right">
-                            <?php echo CHtml::link('<i class="fa fa-plus"></i> Ask Question', Yii::app()->createAbsoluteUrl('//questionanswer/main/new_question'), array('class'=>'dropdown-toggle btn btn-info', 'style'=>"padding:8px;")); ?>
+                            <?php echo CHtml::link('<i class="fa fa-plus"></i> Ask Question', Yii::app()->createAbsoluteUrl('//questionanswer/question/create'), array('class'=>'dropdown-toggle btn btn-info', 'style'=>"padding:8px;")); ?>
                         </li>
                     </ul>
                 </div>
