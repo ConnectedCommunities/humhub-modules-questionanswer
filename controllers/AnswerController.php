@@ -2,7 +2,7 @@
 
 class AnswerController extends Controller
 {
-	
+
 	/**
 	 * @return array action filters
 	 */
@@ -65,8 +65,11 @@ class AnswerController extends Controller
 		if(isset($_POST['Answer']))
 		{
 			$model->attributes=$_POST['Answer'];
+	        $model->created_by = Yii::app()->user->id;
+	        $model->post_type = "answer";
+
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
 		}
 
 		$this->render('create',array(
