@@ -61,7 +61,7 @@
 
                         <div class="media-body" style="padding-top:5px; padding-left:10px;">
                             <h4 class="media-heading">
-                                <?php echo CHtml::link(CHtml::encode($question['post_title']), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question['id']))); ?>
+                                <?php echo CHtml::link(CHtml::encode($question['post_title']), Yii::app()->createUrl('//questionanswer/question/view', array('id' => $question['id']))); ?>
                             </h4>
                             <h5><?php echo CHtml::encode((strlen($question['post_text']) > 203) ? substr($question['post_text'],0,200).'...' : $question['post_text']); ?></h5>
                         </div>
