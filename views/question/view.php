@@ -48,9 +48,11 @@
                                 <?php echo CHtml::link(CHtml::encode($model->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $model->id))); ?>
                             </h3>
                             <?php echo nl2br(CHtml::encode($model->post_text)); ?>
-                            <br /><br />    <?php foreach($model->tags as $tag) { ?>
+                            <br /><br />
+                            <?php foreach($model->tags as $tag) { ?>
                                 <span class="label label-default"><a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->tag_id)); ?>"><?php echo $tag->tag->tag; ?></a></span>
                             <?php } ?>
+                            <br /><br />
                             <?php
                             $comments = Answer::model()->findByPk($model->id)->comments;
                             if($comments) {
@@ -67,7 +69,7 @@
                             <br />
                             <br />
                             <?php 
-                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'parent_id' => $model->id));
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
                             ?>
                             <?php 
                             if(Yii::app()->user->isAdmin() || $model->created_by == Yii::app()->user->id) {
@@ -149,7 +151,7 @@
                             ?>
                             <br />
                             <?php 
-                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'parent_id' => $question_answer['id']));
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
                             ?>
                             <?php 
                             if(Yii::app()->user->isAdmin() || $question_answer['created_by'] == Yii::app()->user->id) {

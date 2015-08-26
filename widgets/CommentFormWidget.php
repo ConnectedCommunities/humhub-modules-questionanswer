@@ -27,12 +27,21 @@ class CommentFormWidget extends HWidget {
 
 
     /**
+     * The id of question
+     *
+     * @var int
+     */
+    public $question_id;
+
+
+    /**
      * Executes the widget.
      */
     public function run() {
 
         $this->render('commentForm', array(
             'model' => $this->model,
+            'question_id' => $this->question_id,
             'parent_id' => $this->parent_id
         ));
     }

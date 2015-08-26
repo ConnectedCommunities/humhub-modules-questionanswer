@@ -140,7 +140,7 @@ class Answer extends HActiveRecord
 	public static function overview($question_id) 
 	{
 
-		$sql = "SELECT q.id, q.post_title, q.post_text, q.post_type, q.created_by, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes, best.vote_type as answer_status
+		$sql = "SELECT q.id, q.question_id, q.post_title, q.post_text, q.post_type, q.created_by, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes, best.vote_type as answer_status
 				FROM question q
 				LEFT JOIN question_votes up ON (q.id = up.post_id AND up.vote_on = 'answer' AND up.vote_type = 'up')
 				LEFT JOIN question_votes down ON (q.id = down.post_id AND down.vote_on = 'answer' AND down.vote_type = 'down')
