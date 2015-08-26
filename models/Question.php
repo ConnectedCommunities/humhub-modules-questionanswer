@@ -26,7 +26,7 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 
 	/**
 	 * Set default scope so that
-	 * only answers are retrieved 
+	 * only questions are retrieved 
 	 */
     public function defaultScope()
     {
