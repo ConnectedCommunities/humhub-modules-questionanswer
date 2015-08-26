@@ -93,6 +93,7 @@ class AnswerController extends Controller
 		{
 			$model->attributes=$_POST['Answer'];
 			if($model->save())
+				$this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $model->question_id)));
 		}
 
 		$this->render('update',array(
