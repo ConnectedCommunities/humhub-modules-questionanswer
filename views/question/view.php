@@ -128,13 +128,13 @@
                             <br />
                             <?php 
                             $this->widget('application.modules.questionanswer.widgets.BestAnswerWidget', array(
-								'post_id' => $question_answer['id'], 
-								'author' => $author, 
-								'model' => new QuestionVotes, 
-								'accepted_answer' => ($question_answer['answer_status'] ? true : false)
+                                'post_id' => $question_answer['id'], 
+                                'author' => $author, 
+                                'model' => new QuestionVotes, 
+                                'accepted_answer' => ($question_answer['answer_status'] ? true : false)
                             ));
-
-
+                            ?>
+                            <?php
                             $comments = Answer::model()->findByPk($question_answer['id'])->comments;
                             if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
@@ -150,6 +150,22 @@
                             <br />
                             <?php 
                             $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'parent_id' => $question_answer['id']));
+                            ?>
+                            <?php 
+                            if(Yii::app()->user->isAdmin() || $question_answer['created_by'] == Yii::app()->user->id) {
+                                echo CHtml::link("Edit", array('//questionanswer/answer/update', 'id'=>$question_answer['id'])); 
+                            }
+                            ?>
+                            &bull;
+                            <?php
+                            if(Yii::app()->user->isAdmin()) {
+                                echo CHtml::linkButton('Delete',array(
+                                'submit'=>$this->createUrl('//questionanswer/answer/delete',array('id'=>$question_answer['id'])),
+                                'confirm'=>"Are you sure want to delete?",
+                                'csrf'=>true,
+                                'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+                            }
+
                             ?>
                         </div>
 

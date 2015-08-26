@@ -93,7 +93,6 @@ class AnswerController extends Controller
 		{
 			$model->attributes=$_POST['Answer'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
 		}
 
 		$this->render('update',array(

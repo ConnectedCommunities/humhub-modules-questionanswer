@@ -2,12 +2,12 @@
 /* @var $this AnswerController */
 /* @var $model Answer */
 
-$this->breadcrumbs=array(
+$breadcrumbs=array(
 	'Answers'=>array('index'),
 	'Manage',
 );
 
-$this->menu=array(
+$menu=array(
 	array('label'=>'List Answer', 'url'=>array('index')),
 	array('label'=>'Create Answer', 'url'=>array('create')),
 );

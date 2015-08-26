@@ -100,6 +100,8 @@ class Answer extends HActiveRecord
 		$criteria->compare('updated_at',$this->updated_at,true);
 		$criteria->compare('updated_by',$this->updated_by);
 
+		$criteria->compare('post_type', 'answer');
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
