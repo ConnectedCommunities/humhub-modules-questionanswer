@@ -86,7 +86,7 @@
                             <br />
                             <br />
                             <?php 
-                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
+                            $this->widget('application.modules.questionanswer.widgets.CommentFormWidget', array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
                             ?>
                             <?php 
                             if(Yii::app()->user->isAdmin() || $model->created_by == Yii::app()->user->id) {
