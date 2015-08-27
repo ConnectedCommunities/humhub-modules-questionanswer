@@ -93,7 +93,7 @@ class CommentController extends Controller
 		{
 			$model->attributes=$_POST['Comment'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
 		}
 
 		$this->render('update',array(

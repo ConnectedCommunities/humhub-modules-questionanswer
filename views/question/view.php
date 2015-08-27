@@ -61,6 +61,23 @@
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     echo $comment->post_text;
                                     echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
+                                    
+                                    echo "<small>";
+                                    if(Yii::app()->user->isAdmin() || $comment->created_by == Yii::app()->user->id) {
+                                        echo " &#8212; ";
+                                        echo CHtml::link("Edit", array('//questionanswer/comment/update', 'id'=>$comment->id)); 
+                                    }
+                                    
+                                    if(Yii::app()->user->isAdmin()) {
+                                        echo " &bull; ";
+                                        echo CHtml::linkButton('Delete',array(
+                                        'submit'=>$this->createUrl('//questionanswer/comment/delete',array('id'=>$comment->id)),
+                                        'confirm'=>"Are you sure want to delete?",
+                                        'csrf'=>true,
+                                        'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+                                    }
+                                    echo "</small>";
+                                    
                                     echo '</div>';
                                 }
                                 echo "</div>";
@@ -144,6 +161,23 @@
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     echo $comment->post_text;
                                     echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
+                                    
+                                    echo "<small>";
+                                    if(Yii::app()->user->isAdmin() || $comment->created_by == Yii::app()->user->id) {
+                                        echo " &#8212; ";
+                                        echo CHtml::link("Edit", array('//questionanswer/comment/update', 'id'=>$comment->id)); 
+                                    }
+                                    
+                                    if(Yii::app()->user->isAdmin()) {
+                                        echo " &bull; ";
+                                        echo CHtml::linkButton('Delete',array(
+                                        'submit'=>$this->createUrl('//questionanswer/comment/delete',array('id'=>$comment->id)),
+                                        'confirm'=>"Are you sure want to delete?",
+                                        'csrf'=>true,
+                                        'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+                                    }
+                                    echo "</small>";
+
                                     echo '</div>';
                                 }
                                 echo "</div>";
