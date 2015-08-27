@@ -9,7 +9,7 @@ class QuestionAnswerEvents{
     public static function onTopMenuInit($event){
         $event->sender->addItem(array(
             'label' => 'Q&A',
-            'url' => Yii::app()->createUrl('/questionanswer/main/index', array()),
+            'url' => Yii::app()->createUrl('/questionanswer/question/index', array()),
             'icon' => '<i class="fa fa-stack-exchange"></i>',
             'isActive' => (Yii::app()->controller->module && Yii::app()->controller->module->id == 'questionanswer'),
         ));
@@ -26,6 +26,11 @@ class QuestionAnswerEvents{
         foreach (Question::model()->findAll() as $obj) {
             HSearch::getInstance()->addModel($obj);
             print "q";
+        }
+
+        foreach (Tag::model()->findAll() as $obj) {
+            HSearch::getInstance()->addModel($obj);
+            print "t";
         }
     }
 

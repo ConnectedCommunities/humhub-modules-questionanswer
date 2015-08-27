@@ -1,3 +1,8 @@
+<?php
+/* @var $this QuestionController */
+/* @var $model Question */
+?>
+
 <div class="container">
     <div class="row">
         <div class="col-md-9">
@@ -11,7 +16,7 @@
                                 $upBtnClass = ""; $downBtnClass = "";
 
                                 // Change the button class to 'active' if the user has voted
-                                $vote = QuestionVotes::model()->post($question['id'])->user(Yii::app()->user->id)->find();
+                                $vote = QuestionVotes::model()->post($model->id)->user(Yii::app()->user->id)->find();
                                 if($vote) {
                                     if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
@@ -23,35 +28,56 @@
                                 }
                         
                                 ?>
-                                <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'btnClass' => 'btn btn-default btn-sm', 'class' => $upBtnClass)); ?>
+
+
+                                <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));  ?>
                                 <div class="text-center"><strong>
-                                <?php echo QuestionVotes::model()->score($question['id']); ?>
+                                <?php echo QuestionVotes::model()->score($model->id); ?>
                                 </strong><br /></div>
-                                <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
+								<?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass,  'should_open_question' => 1)); ?>
                             </div>
                             
                         </div>
                         
                         <?php
-                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $question->user));
+                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $model->user));
                         ?>
 
                         <div class="media-body" style="padding-top:5px; ">
                             <h3 class="media-heading">
-                                <?php echo CHtml::link(CHtml::encode($question->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question->id))); ?>
+                                <?php echo CHtml::link(CHtml::encode($model->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $model->id))); ?>
                             </h3>
-                            <?php echo nl2br(CHtml::encode($question->post_text)); ?>
-                            <br /><br />    <?php foreach($question->tags as $tag) { ?>
+                            <?php echo nl2br(CHtml::encode($model->post_text)); ?>
+                            <br /><br />
+                            <?php foreach($model->tags as $tag) { ?>
                                 <span class="label label-default"><a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->tag_id)); ?>"><?php echo $tag->tag->tag; ?></a></span>
                             <?php } ?>
+                            <br /><br />
                             <?php
-                            $comments = Answer::model()->findByPk($question->id)->comments;
+                            $comments = Answer::model()->findByPk($model->id)->comments;
                             if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px;\">";
                                 foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     echo $comment->post_text;
                                     echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
+                                    
+                                    echo "<small>";
+                                    if(Yii::app()->user->isAdmin() || $comment->created_by == Yii::app()->user->id) {
+                                        echo " &#8212; ";
+                                        echo CHtml::link("Edit", array('//questionanswer/comment/update', 'id'=>$comment->id)); 
+                                    }
+                                    
+                                    if(Yii::app()->user->isAdmin()) {
+                                        echo " &bull; ";
+                                        echo CHtml::linkButton('Delete',array(
+                                        'submit'=>$this->createUrl('//questionanswer/comment/delete',array('id'=>$comment->id)),
+                                        'confirm'=>"Are you sure want to delete?",
+                                        'csrf'=>true,
+                                        'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+                                    }
+                                    echo "</small>";
+                                    
                                     echo '</div>';
                                 }
                                 echo "</div>";
@@ -60,12 +86,26 @@
                             <br />
                             <br />
                             <?php 
-                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question->id, 'parent_id' => $question->id));
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
                             ?>
-
-                            <a href="#">Edit</a>
+                            <?php 
+                            if(Yii::app()->user->isAdmin() || $model->created_by == Yii::app()->user->id) {
+                            	echo CHtml::link("Edit", array('update', 'id'=>$model->id)); 
+                            }
+                            ?>
                             &bull;
-                            <a href="#">Delete</a>
+							<?php
+						    if(Yii::app()->user->isAdmin()) {
+						    	echo CHtml::linkButton('Delete',array(
+							    'submit'=>$this->createUrl('delete',array('id'=>$model->id)),
+							    'confirm'=>"Are you sure want to delete?",
+								'csrf'=>true,
+							    'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+							}
+
+							?>
+
+                            <a href="#"></a>
                         </div>
                     </div>
 
@@ -91,9 +131,9 @@
                                     }
                                 }
                                 ?>
-                                <?php echo $this->renderPartial('vote', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'btnClass' => 'btn btn-default btn-sm', 'class' => $upBtnClass)); ?>
+                                <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));  ?>
                                 <div class="text-center"><strong><?php echo $question_answer['score']; ?></strong><br /></div>
-                                <?php echo $this->renderPartial('vote', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
+                                <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 1)); ?>
                             </div>
                         </div>
                         <?php $user = User::model()->findByPk($question_answer['created_by']); ?>                        
@@ -106,9 +146,14 @@
                             <br />
                             <br />
                             <?php 
-                            
-                            echo $this->renderPartial('vote_best_answer', array('post_id' => $question_answer['id'], 'author' => $author, 'model' => new QuestionVotes, 'accepted_answer' => ($question_answer['answer_status'] ? true : false)));
-
+                            $this->widget('application.modules.questionanswer.widgets.BestAnswerWidget', array(
+                                'post_id' => $question_answer['id'], 
+                                'author' => $author, 
+                                'model' => new QuestionVotes, 
+                                'accepted_answer' => ($question_answer['answer_status'] ? true : false)
+                            ));
+                            ?>
+                            <?php
                             $comments = Answer::model()->findByPk($question_answer['id'])->comments;
                             if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
@@ -116,6 +161,23 @@
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     echo $comment->post_text;
                                     echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
+                                    
+                                    echo "<small>";
+                                    if(Yii::app()->user->isAdmin() || $comment->created_by == Yii::app()->user->id) {
+                                        echo " &#8212; ";
+                                        echo CHtml::link("Edit", array('//questionanswer/comment/update', 'id'=>$comment->id)); 
+                                    }
+                                    
+                                    if(Yii::app()->user->isAdmin()) {
+                                        echo " &bull; ";
+                                        echo CHtml::linkButton('Delete',array(
+                                        'submit'=>$this->createUrl('//questionanswer/comment/delete',array('id'=>$comment->id)),
+                                        'confirm'=>"Are you sure want to delete?",
+                                        'csrf'=>true,
+                                        'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+                                    }
+                                    echo "</small>";
+
                                     echo '</div>';
                                 }
                                 echo "</div>";
@@ -124,6 +186,22 @@
                             <br />
                             <?php 
                             $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
+                            ?>
+                            <?php 
+                            if(Yii::app()->user->isAdmin() || $question_answer['created_by'] == Yii::app()->user->id) {
+                                echo CHtml::link("Edit", array('//questionanswer/answer/update', 'id'=>$question_answer['id'])); 
+                            }
+                            ?>
+                            &bull;
+                            <?php
+                            if(Yii::app()->user->isAdmin()) {
+                                echo CHtml::linkButton('Delete',array(
+                                'submit'=>$this->createUrl('//questionanswer/answer/delete',array('id'=>$question_answer['id'])),
+                                'confirm'=>"Are you sure want to delete?",
+                                'csrf'=>true,
+                                'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+                            }
+
                             ?>
                         </div>
 
@@ -135,7 +213,7 @@
 
 
             <?php
-            $this->widget('application.modules.questionanswer.widgets.AnswerFormWidget', array('model' => new Answer));
+            $this->widget('application.modules.questionanswer.widgets.AnswerFormWidget', array('question' => $model, 'answer' => new Answer));
             ?>
 
         </div>
@@ -166,3 +244,4 @@
     </div>
 </div>
 <!-- end: show content -->
+

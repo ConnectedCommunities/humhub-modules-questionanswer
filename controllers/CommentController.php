@@ -1,8 +1,8 @@
 <?php
 
-class QuestionController extends Controller
+class CommentController extends Controller
 {
-	
+
 	/**
 	 * @return array action filters
 	 */
@@ -46,16 +46,8 @@ class QuestionController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->loadModel($id);
-
 		$this->render('view',array(
-
-    		'author' => $model->user->id,
-    		'question' => $model,
-    		'answers' => Answer::model()->overview($model->id),
-    		'related' => Question::model()->related($model->id),
-
-			'model'=> $model,
+			'model'=>$this->loadModel($id),
 		));
 	}
 
@@ -65,53 +57,20 @@ class QuestionController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$model=new Comment;
 
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
 
-	    $model = new Question;
-        $model->created_by = Yii::app()->user->id;
-        $model->post_type = "question";
-	    
-	    if(isset($_POST['Question'])) {
-	    	
-	        $model->attributes=$_POST['Question'];
-	        if($model->validate()) {
-
-	        	$model->save();
-
-	        	// Question has been saved, add the tags
-				if(isset($_POST['Tags'])) {
-
-					// Split tag string into array 
-					$tags = explode(", ", $_POST['Tags']);
-					foreach($tags as $tag) {
-						$tag = Tag::model()->firstOrCreate($tag);
-						$question_tag = new QuestionTag;
-						$question_tag->question_id = $model->id;
-						$question_tag->tag_id = $tag->id;
-						$question_tag->save();
-					}
-
-				} else {
-					// throw error(?) no tag provided
-				}
-			    
-        	    $this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $model->id)));
-	        }
-	    }
-
-
-
-		// $model=new Question;
-
-		// // Uncomment the following line if AJAX validation is needed
-		// // $this->performAjaxValidation($model);
-
-		// if(isset($_POST['Question']))
-		// {
-		// 	$model->attributes=$_POST['Question'];
-		// 	if($model->save())
-		// 		$this->redirect(array('view','id'=>$model->id));
-		// }
+		if(isset($_POST['Comment']))
+		{
+			$model->attributes=$_POST['Comment'];
+			$model->created_by = Yii::app()->user->id;
+	        $model->post_type = "comment";
+	        
+			if($model->save())
+				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
+		}
 
 		$this->render('create',array(
 			'model'=>$model,
@@ -130,11 +89,11 @@ class QuestionController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Question']))
+		if(isset($_POST['Comment']))
 		{
-			$model->attributes=$_POST['Question'];
+			$model->attributes=$_POST['Comment'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
 		}
 
 		$this->render('update',array(
@@ -161,7 +120,7 @@ class QuestionController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Question');
+		$dataProvider=new CActiveDataProvider('Comment');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -172,10 +131,10 @@ class QuestionController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Question('search');
+		$model=new Comment('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Question']))
-			$model->attributes=$_GET['Question'];
+		if(isset($_GET['Comment']))
+			$model->attributes=$_GET['Comment'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -186,12 +145,12 @@ class QuestionController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Question the loaded model
+	 * @return Comment the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Question::model()->findByPk($id);
+		$model=Comment::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -199,11 +158,11 @@ class QuestionController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Question $model the model to be validated
+	 * @param Comment $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='question-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='comment-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

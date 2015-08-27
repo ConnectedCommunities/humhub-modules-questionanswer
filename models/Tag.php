@@ -8,7 +8,7 @@
  * @property string $tag
  * @property string $description
  */
-class Tag extends HActiveRecord
+class Tag extends HActiveRecordContentContainer implements ISearchable
 {
 	/**
 	 * @return string the associated database table name
@@ -106,6 +106,18 @@ class Tag extends HActiveRecord
 	}
 
 
+    /**
+     * Returns URL to the Question
+     *
+     * @param array $parameters
+     * @return string
+     */
+    public function getUrl($parameters = array())
+    {
+    	return $this->createUrl('//questionanswer/main/tag', $parameters);
+    }
+
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -116,4 +128,55 @@ class Tag extends HActiveRecord
 	{
 		return parent::model($className);
 	}
+
+
+    /**
+     * After Save Addons
+     *
+     * @return type
+     */
+    protected function afterSave()
+    {
+        HSearch::getInstance()->addModel($this);
+        return parent::afterSave();
+    }
+
+
+    /**
+     * Returns an array of informations used by search subsystem.
+     * Function is defined in interface ISearchable
+     *
+     * @return Array
+     */
+    public function getSearchAttributes()
+    {
+
+        $attributes = array(
+
+        	// Assignments
+            'belongsToType' => 'Tag',
+            'belongsToId' => $this->id,
+            'belongsToGuid' => null,
+
+            // Information about the record
+            'model' => 'Tag',
+            'pk' => $this->id,
+            'title' => $this->tag,
+            'url' => $this->getUrl(array('id' => $this->id)),
+
+            // Extra indexed fields
+            'post_text' => $this->tag
+        );
+
+
+        return $attributes;
+    }
+
+    /**
+     * Returns the Search Result Output
+     */
+    public function getSearchResult()
+    {
+        return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.TagSearchResultWidget', array('tag' => $this), true);
+    }
 }

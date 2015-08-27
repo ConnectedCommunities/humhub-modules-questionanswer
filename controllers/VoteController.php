@@ -1,8 +1,8 @@
 <?php
 
-class QuestionController extends Controller
+class VoteController extends Controller
 {
-	
+
 	/**
 	 * @return array action filters
 	 */
@@ -40,24 +40,6 @@ class QuestionController extends Controller
 		);
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$model = $this->loadModel($id);
-
-		$this->render('view',array(
-
-    		'author' => $model->user->id,
-    		'question' => $model,
-    		'answers' => Answer::model()->overview($model->id),
-    		'related' => Question::model()->related($model->id),
-
-			'model'=> $model,
-		));
-	}
 
 	/**
 	 * Creates a new model.
@@ -65,53 +47,43 @@ class QuestionController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$model=new QuestionVotes;
 
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
 
-	    $model = new Question;
-        $model->created_by = Yii::app()->user->id;
-        $model->post_type = "question";
-	    
-	    if(isset($_POST['Question'])) {
-	    	
-	        $model->attributes=$_POST['Question'];
-	        if($model->validate()) {
+		if(isset($_POST['QuestionVotes']))
+		{
+			$model->attributes=$_POST['QuestionVotes'];
 
-	        	$model->save();
+			// TODO: I'd like to figure out a way to instantiate the model 
+			//			dynamically. I think they might do that with 
+			//			the 'activity' module. For now this will do.
+			switch($model->vote_on) {
+				case "question":
+					$question_id = $model->post_id;
+				break;
 
-	        	// Question has been saved, add the tags
-				if(isset($_POST['Tags'])) {
+				case "answer":
+					$obj = Answer::model()->findByPk($model->post_id);
+					$question_id = $obj->question_id;
+				break;
 
-					// Split tag string into array 
-					$tags = explode(", ", $_POST['Tags']);
-					foreach($tags as $tag) {
-						$tag = Tag::model()->firstOrCreate($tag);
-						$question_tag = new QuestionTag;
-						$question_tag->question_id = $model->id;
-						$question_tag->tag_id = $tag->id;
-						$question_tag->save();
-					}
+			}
 
+			
+			if(QuestionVotes::model()->castVote($model, $question_id)) {
+
+				if($_POST['QuestionVotes']['should_open_question'] == true) {
+					$this->redirect(array('//questionanswer/question/view','id'=>$question_id));
 				} else {
-					// throw error(?) no tag provided
+					$this->redirect(array('//questionanswer/question/index'));
 				}
-			    
-        	    $this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $model->id)));
-	        }
-	    }
+
+			}
 
 
-
-		// $model=new Question;
-
-		// // Uncomment the following line if AJAX validation is needed
-		// // $this->performAjaxValidation($model);
-
-		// if(isset($_POST['Question']))
-		// {
-		// 	$model->attributes=$_POST['Question'];
-		// 	if($model->save())
-		// 		$this->redirect(array('view','id'=>$model->id));
-		// }
+		}
 
 		$this->render('create',array(
 			'model'=>$model,
@@ -130,11 +102,11 @@ class QuestionController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Question']))
+		if(isset($_POST['QuestionVotes']))
 		{
-			$model->attributes=$_POST['Question'];
+			$model->attributes=$_POST['QuestionVotes'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+				$this->redirect(array('//questionanswer/question/view','id'=>$model->post_id));
 		}
 
 		$this->render('update',array(
@@ -156,26 +128,16 @@ class QuestionController extends Controller
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$dataProvider=new CActiveDataProvider('Question');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-	}
 
 	/**
 	 * Manages all models.
 	 */
 	public function actionAdmin()
 	{
-		$model=new Question('search');
+		$model=new QuestionVotes('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Question']))
-			$model->attributes=$_GET['Question'];
+		if(isset($_GET['QuestionVotes']))
+			$model->attributes=$_GET['QuestionVotes'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -186,12 +148,12 @@ class QuestionController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Question the loaded model
+	 * @return QuestionVotes the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Question::model()->findByPk($id);
+		$model=QuestionVotes::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -199,11 +161,11 @@ class QuestionController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Question $model the model to be validated
+	 * @param QuestionVotes $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='question-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='question-votes-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

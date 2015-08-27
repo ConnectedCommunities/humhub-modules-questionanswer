@@ -26,7 +26,7 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 
 	/**
 	 * Set default scope so that
-	 * only answers are retrieved 
+	 * only questions are retrieved 
 	 */
     public function defaultScope()
     {
@@ -175,6 +175,28 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 
 	}
 
+
+	/** 
+	 * Get stats on a question
+	 * @param int $question_id
+	 */
+	public static function stats($question_id) 
+	{
+
+		$sql = "SELECT q.id, q.post_title, q.post_text, q.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes
+				FROM question q
+				LEFT JOIN question_votes up ON (q.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
+				LEFT JOIN question_votes down ON (q.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
+				LEFT JOIN question answers ON (q.id = answers.question_id AND answers.post_type = 'answer')
+				WHERE q.post_type = 'question'
+				AND q.id = :question_id
+				GROUP BY q.id
+				ORDER BY score DESC, vote_count DESC";
+
+		return Yii::app()->db->createCommand($sql)->bindValue('question_id', $question_id)->queryRow();
+
+
+	}
 
 	/** 
 	 * Returns a list of questions with stats for a tag
