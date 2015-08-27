@@ -1,7 +1,7 @@
                 <div class="panel-heading">
                     <ul class="nav nav-tabs qanda-header-tabs" id="filter">
                         <li class="dropdown active">
-                            <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/main/index'); ?>">Questions</a>
+                            <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/index'); ?>">Questions</a>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Unanswered</a>

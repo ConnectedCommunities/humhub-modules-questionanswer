@@ -10,7 +10,7 @@
 ?>
 
 <li>
-    <a href="<?php echo $this->createUrl('//questionanswer/main/view', array('id' => $question->id)); ?>">
+    <a href="<?php echo $this->createUrl('//questionanswer/question/view', array('id' => $question->id)); ?>">
         <div class="media">
             <div class="media-body">
                 <strong><?php echo CHtml::encode($question->post_title); ?> </strong><br>
