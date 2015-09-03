@@ -10,7 +10,7 @@
 ?>
 
 <li>
-    <a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => 1)); ?>">
+    <a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->id)); ?>">
         <div class="media">
             <div class="media-body">
                 TAG: <strong><?php echo CHtml::encode($tag->tag); ?> </strong><br>
