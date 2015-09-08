@@ -161,6 +161,30 @@ class QuestionController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+		// TODO: Use below. 
+		// This will produce the same results as Question::model->overview()
+		// our current implementation does a handful of additional queries 
+		// from within the view to load up question info
+		/*
+		$criteria=new CDbCriteria;
+		$criteria->select = "question.id, question.post_title, question.post_text, question.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes";
+
+		$criteria->join = "LEFT JOIN question_votes up ON (question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
+							LEFT JOIN question_votes down ON (question.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
+							LEFT JOIN question answers ON (question.id = answers.question_id AND answers.post_type = 'answer')";
+
+		$criteria->group = "question.id";
+		$criteria->order = "question.created_at DESC, score DESC, vote_count DESC";
+
+		$dataProvider=new CActiveDataProvider('Question', array(
+			'criteria'=>$criteria
+		));
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
+		));
+		*/
+
 		$dataProvider=new CActiveDataProvider('Question', array(
 			'criteria'=>array(
 				'order'=>'created_at DESC',
@@ -169,6 +193,7 @@ class QuestionController extends Controller
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
+		
 	}
 
 	/** 
@@ -176,10 +201,10 @@ class QuestionController extends Controller
 	 */
 	public function actionUnanswered()
 	{
+
 		$criteria=new CDbCriteria;
 		$criteria->select = "question.id, question.post_title, question.post_text, question.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes";
-		// $criteria->with = array('tags');
-		// $criteria->condition = "tags.question_id = question.id";
+
 		$criteria->join = "LEFT JOIN question_votes up ON (question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
 							LEFT JOIN question_votes down ON (question.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
 							LEFT JOIN question answers ON (question.id = answers.question_id AND answers.post_type = 'answer')";
@@ -187,7 +212,6 @@ class QuestionController extends Controller
 		$criteria->group = "question.id";
 		$criteria->having = "answers = 0";
 		$criteria->order = "score DESC, vote_count DESC, question.created_at DESC";
-
 
 		$dataProvider=new CActiveDataProvider('Question', array(
 			'criteria'=>$criteria
