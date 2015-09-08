@@ -31,7 +31,8 @@ class Question extends HActiveRecordContentContainer implements ISearchable
     public function defaultScope()
     {
         return array(
-            'condition'=>"post_type='question'",
+        	'alias' => $this->tableName(),
+            'condition'=>"question.post_type='question'",
         );
     }
 
@@ -174,7 +175,6 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 		return Yii::app()->db->createCommand($sql)->queryAll();
 
 	}
-
 
 	/** 
 	 * Get stats on a question
