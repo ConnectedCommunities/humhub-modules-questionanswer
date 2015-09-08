@@ -14,7 +14,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                 	<strong>Ask</strong> a new question
@@ -33,17 +33,6 @@
                     </div>
 					<?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading"><strong>Related</strong> Questions</div>
-                <div class="list-group">
-                    <a class="list-group-item" href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                    <a class="list-group-item" href="#">Nunc pharetra blandit sapien, et tempor nisi.</a>
-                    <a class="list-group-item" href="#">Duis finibus venenatis commodo. </a>
-                </div>
-                <br>
             </div>
         </div>
    </div>
