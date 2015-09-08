@@ -219,27 +219,22 @@
         </div>
 
         <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading"><strong>Question</strong> information</div>
-                <div class="list-group">
-                    <a class="list-group-item" href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                    <a class="list-group-item" href="#">Nunc pharetra blandit sapien, et tempor nisi.</a>
-                    <a class="list-group-item" href="#">Duis finibus venenatis commodo. </a>
-                </div>
-                <br>
-            </div>
-
-            <?php if(count($related) > 0) { ?>
+            
             <div class="panel panel-default">
                 <div class="panel-heading"><strong>Related</strong> Questions</div>
-                <div class="list-group">
-                    <?php foreach ($related as $question) { ?>
-                        <a class="list-group-item" href="<?php echo Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question['id'])); ?>"><?php echo CHtml::encode($question['post_title']); ?></a>
-                    <?php } ?>
-                </div>
-                <br>
+                <?php if(count($related) > 0) { ?>
+                    <div class="list-group">
+                        <?php foreach ($related as $question) { ?>
+                            <a class="list-group-item" href="<?php echo Yii::app()->createUrl('//questionanswer/main/view', array('id' => $question['id'])); ?>"><?php echo CHtml::encode($question['post_title']); ?></a>
+                        <?php } ?>
+                    </div>
+                    <br>
+                <?php } else { ?>
+                    <div class="panel-body"><p>No related questions</p></div>
+                <?php } ?>
+                
             </div>
-            <?php } ?>
+            
         </div>
     </div>
 </div>
