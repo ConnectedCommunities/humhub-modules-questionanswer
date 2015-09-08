@@ -40,7 +40,7 @@
                         </div>
                         
                         <?php
-                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $model->user));
+                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $model->user, 'timestamp' => $model->created_at));
                         ?>
 
                         <div class="media-body" style="padding-top:5px; ">
@@ -138,7 +138,7 @@
                         </div>
                         <?php $user = User::model()->findByPk($question_answer['created_by']); ?>                        
                         <?php
-                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $user));
+                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $user, 'timestamp' => $question_answer['created_at']));
                         ?>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
@@ -232,7 +232,6 @@
                 <?php } else { ?>
                     <div class="panel-body"><p>No related questions</p></div>
                 <?php } ?>
-                
             </div>
             
         </div>

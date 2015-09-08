@@ -17,6 +17,13 @@ class ProfileWidget extends HWidget {
      */
     public $user;
 
+    /** 
+     * Timestamp
+     *
+     * @var Datetime
+     */
+    public $timestamp;
+
     /**
      * Executes the widget.
      */
@@ -24,6 +31,7 @@ class ProfileWidget extends HWidget {
 
         $this->render('profile', array(
             'user' => $this->user,
+            'timestamp' => $this->timestamp
         ));
     }
 
