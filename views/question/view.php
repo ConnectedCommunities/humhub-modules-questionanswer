@@ -45,7 +45,7 @@
 
                         <div class="media-body" style="padding-top:5px; ">
                             <h3 class="media-heading">
-                                <?php echo CHtml::link(CHtml::encode($model->post_title), Yii::app()->createUrl('//questionanswer/main/view', array('id' => $model->id))); ?>
+                                <?php echo CHtml::link(CHtml::encode($model->post_title), Yii::app()->createUrl('//questionanswer/question/view', array('id' => $model->id))); ?>
                             </h3>
                             <?php echo nl2br(CHtml::encode($model->post_text)); ?>
                             <br /><br />

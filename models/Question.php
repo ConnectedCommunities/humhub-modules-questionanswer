@@ -141,7 +141,7 @@ class Question extends HActiveRecordContentContainer implements ISearchable
      */
     public function getUrl($parameters = array())
     {
-    	return $this->createUrl('//questionanswer/main/view', $parameters);
+    	return $this->createUrl('//questionanswer/question/view', $parameters);
     }
 
 
