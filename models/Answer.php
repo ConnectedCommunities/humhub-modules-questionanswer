@@ -14,7 +14,7 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Answer extends HActiveRecord
+class Answer extends HActiveRecord implements ISearchable
 {
 	/**
 	 * @return string the associated database table name
@@ -154,6 +154,18 @@ class Answer extends HActiveRecord
 
 	}
 
+
+    /**
+     * Returns URL to the Question
+     *
+     * @param array $parameters
+     * @return string
+     */
+    public function getUrl($parameters = array())
+    {
+    	return Yii::app()->createUrl('//questionanswer/question/view', $parameters);
+    }
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -164,4 +176,53 @@ class Answer extends HActiveRecord
 	{
 		return parent::model($className);
 	}
+
+
+    /**
+     * After Save Addons
+     *
+     * @return type
+     */
+    protected function afterSave()
+    {
+        HSearch::getInstance()->addModel($this);
+        return parent::afterSave();
+    }
+
+    /**
+     * Returns an array of informations used by search subsystem.
+     * Function is defined in interface ISearchable
+     *
+     * @return Array
+     */
+    public function getSearchAttributes()
+    {
+        $attributes = array(
+
+        	// Assignments
+            'belongsToType' => 'Answer',
+            'belongsToId' => $this->id,
+            'belongsToGuid' => $this->user->guid,
+
+            // Information about the record
+            'model' => 'Answer',
+            'pk' => $this->id,
+            'title' => '',
+            'url' => $this->getUrl(array('id' => $this->id)),
+
+            // Extra indexed fields
+            'post_text' => $this->post_text
+        );
+
+
+        return $attributes;
+    }
+
+    /**
+     * Returns the Search Result Output
+     */
+    public function getSearchResult()
+    {
+        return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.AnswerSearchResultWidget', array('question' => Question::model()->findByPk($this->question_id), 'answer' => $this), true);
+    }
 }

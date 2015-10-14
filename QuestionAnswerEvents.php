@@ -32,6 +32,16 @@ class QuestionAnswerEvents{
             HSearch::getInstance()->addModel($obj);
             print "t";
         }
+
+        foreach (Answer::model()->findAll() as $obj) {
+            HSearch::getInstance()->addModel($obj);
+            print "a";
+        }
+
+        foreach (Comment::model()->findAll() as $obj) {
+            HSearch::getInstance()->addModel($obj);
+            print "c";
+        }
     }
 
 
