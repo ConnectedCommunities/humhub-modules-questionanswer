@@ -47,7 +47,7 @@
                             <h3 class="media-heading">
                                 <?php echo CHtml::link(CHtml::encode($model->post_title), Yii::app()->createUrl('//questionanswer/question/view', array('id' => $model->id))); ?>
                             </h3>
-                            <?php echo nl2br(CHtml::encode($model->post_text)); ?>
+                            <?php print HHtml::enrichText($model->post_text); ?>
                             <br /><br />
                             <?php foreach($model->tags as $tag) { ?>
                                 <span class="label label-default"><a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->tag_id)); ?>"><?php echo $tag->tag->tag; ?></a></span>
@@ -59,7 +59,7 @@
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px;\">";
                                 foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
-                                    echo $comment->post_text;
+                                    print HHtml::enrichText($comment->post_text);
                                     echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
                                     
                                     echo "<small>";
@@ -142,7 +142,7 @@
                         ?>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
-                            <?php echo nl2br(CHtml::encode($question_answer['post_text'])); ?>
+                            <?php print HHtml::enrichText($question_answer['post_text']); ?>
                             <br />
                             <br />
                             <?php 
@@ -159,7 +159,7 @@
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
                                 foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
-                                    echo $comment->post_text;
+                                    print HHtml::enrichText($comment->post_text);
                                     echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
                                     
                                     echo "<small>";
