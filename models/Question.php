@@ -14,8 +14,23 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Question extends HActiveRecordContentContainer implements ISearchable
+//class Question extends HActiveRecordContentContainer implements ISearchable
+class Question extends HActiveRecordContent implements ISearchable
 {
+
+	public $autoAddToWall = true;
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return Question the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -23,18 +38,6 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 	{
 		return 'question';
 	}
-
-	/**
-	 * Set default scope so that
-	 * only questions are retrieved 
-	 */
-    public function defaultScope()
-    {
-        return array(
-        	'alias' => $this->tableName(),
-            'condition'=>"question.post_type='question'",
-        );
-    }
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -54,20 +57,6 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 	}
 
 	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-        return array(
-            'user' => array(static::BELONGS_TO, 'User', 'created_by'),
-            'answers' => array(static::HAS_MANY, 'Answer', 'question_id'),
-            'votes' => array(static::HAS_MANY, 'QuestionVotes', 'post_id'),
-            'comments' => array(static::HAS_MANY, 'Comment', 'parent_id'),
-            'tags'=>array(self::HAS_MANY, 'QuestionTag', 'question_id'),
-        );
-	}
-
-	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
@@ -84,6 +73,117 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 			'updated_by' => 'Updated By',
 		);
 	}
+
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		return array(
+			'user' => array(static::BELONGS_TO, 'User', 'created_by'),
+			'answers' => array(static::HAS_MANY, 'Answer', 'question_id'),
+			'votes' => array(static::HAS_MANY, 'QuestionVotes', 'post_id'),
+			'comments' => array(static::HAS_MANY, 'Comment', 'parent_id'),
+			'tags'=>array(self::HAS_MANY, 'QuestionTag', 'question_id'),
+		);
+	}
+
+	/**
+	 * After Save Addons
+	 *
+	 * @return type
+	 */
+	public function afterSave()
+	{
+
+		parent::afterSave();
+
+		if ($this->isNewRecord) {
+			$activity = Activity::CreateForContent($this);
+			$activity->type = "QuestionCreated";
+			$activity->module = "questionanswer";
+			$activity->save();
+			$activity->fire();
+		}
+
+		HSearch::getInstance()->addModel($this);
+
+		return true;
+	}
+
+
+
+
+	/**
+	 * Returns the Wall Output
+	 */
+	public function getWallOut()
+	{
+		return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionWallEntryWidget', array('question' => $this), true);
+//		return "Hello World";
+	}
+
+	/**
+	 * Returns an array of informations used by search subsystem.
+	 * Function is defined in interface ISearchable
+	 *
+	 * @return Array
+	 */
+	public function getSearchAttributes()
+	{
+
+		// THIS WORKS PERFECTLY IF YOU ADD THE QUESTION MODEL TO THE QUERY
+		// See: Line 84, /protected/controllers/SearchController.php
+
+
+		$attributes = array(
+
+			// Assignments
+			'belongsToType' => 'Question',
+			'belongsToId' => $this->id,
+			'belongsToGuid' => $this->user->guid,
+
+			// Information about the record
+			'model' => 'Question',
+			'pk' => $this->id,
+			'title' => $this->post_title,
+			'url' => $this->getUrl(array('id' => $this->id)),
+
+			// Extra indexed fields
+			'post_text' => $this->post_text
+		);
+
+
+		return $attributes;
+	}
+
+
+	/**
+	 * Returns a title/text which identifies this IContent.
+	 *
+	 * e.g. Post: foo bar 123...
+	 *
+	 * @return String
+	 */
+	public function getContentTitle()
+	{
+//		return Yii::t('PostModule.models_Post', 'Post') . " \"" . Helpers::truncateText($this->message, 60) . "\"";
+		return "Hello World Title";
+	}
+
+
+	/**
+	 * Set default scope so that
+	 * only questions are retrieved
+	 */
+	public function defaultScope()
+	{
+		return array(
+			'alias' => $this->tableName(),
+			'condition'=>"question.post_type='question'",
+		);
+	}
+
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
@@ -119,47 +219,36 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 	}
 
 
-	/** 
+	/**
 	 * Filters results by tag_id
 	 * @param $tag_id
 	 */
 	public function tag($tag_id)
 	{
-	    $this->getDbCriteria()->mergeWith(array(
-	        'condition'=>"tag_id=:tag_id", 
-	        'params' => array(':tag_id' => $tag_id)
-	    ));
+		$this->getDbCriteria()->mergeWith(array(
+			'condition'=>"tag_id=:tag_id",
+			'params' => array(':tag_id' => $tag_id)
+		));
 
-	    return $this;
+		return $this;
 	}
 
-    /**
-     * Returns URL to the Question
-     *
-     * @param array $parameters
-     * @return string
-     */
-    public function getUrl($parameters = array())
-    {
-    	return $this->createUrl('//questionanswer/question/view', $parameters);
-    }
+	/**
+	 * Returns URL to the Question
+	 *
+	 * @param array $parameters
+	 * @return string
+	 */
+	public function getUrl($parameters = array())
+	{
+		return Yii::app()->createUrl('//questionanswer/question/view', $parameters);
+	}
 
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Question the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-
-	/** 
 	 * Returns a list of questions with stats
 	 */
-	public static function overview() 
+	public static function overview()
 	{
 
 		// $list= Yii::app()->db->createCommand('select * from post where category=:category')->bindValue('category',$category)->queryAll();
@@ -176,11 +265,11 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 
 	}
 
-	/** 
+	/**
 	 * Get stats on a question
 	 * @param int $question_id
 	 */
-	public static function stats($question_id) 
+	public static function stats($question_id)
 	{
 
 		$sql = "SELECT q.id, q.post_title, q.post_text, q.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes
@@ -198,11 +287,11 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 
 	}
 
-	/** 
+	/**
 	 * Returns a list of questions with stats for a tag
 	 * @parma int $tag_id
 	 */
-	public static function tag_overview($tag_id) 
+	public static function tag_overview($tag_id)
 	{
 
 		// $list= Yii::app()->db->createCommand('select * from post where category=:category')->bindValue('category',$category)->queryAll();
@@ -222,7 +311,7 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 	}
 
 
-	/** 
+	/**
 	 * Returns a series of related questions
 	 */
 	public static function related($question_id) {
@@ -241,57 +330,15 @@ class Question extends HActiveRecordContentContainer implements ISearchable
 	}
 
 
-    /**
-     * After Save Addons
-     *
-     * @return type
-     */
-    protected function afterSave()
-    {
-        HSearch::getInstance()->addModel($this);
-        return parent::afterSave();
-    }
+	/**
+	 * Returns the Search Result Output
+	 */
+	public function getSearchResult()
+	{
+		return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionSearchResultWidget', array('question' => $this), true);
+	}
 
-
-    /**
-     * Returns an array of informations used by search subsystem.
-     * Function is defined in interface ISearchable
-     *
-     * @return Array
-     */
-    public function getSearchAttributes()
-    {
-
-    	// THIS WORKS PERFECTLY IF YOU ADD THE QUESTION MODEL TO THE QUERY 
-    	// See: Line 84, /protected/controllers/SearchController.php
-
-        $attributes = array(
-
-        	// Assignments
-            'belongsToType' => 'Question',
-            'belongsToId' => $this->id,
-            'belongsToGuid' => $this->user->guid,
-
-            // Information about the record
-            'model' => 'Question',
-            'pk' => $this->id,
-            'title' => $this->post_title,
-            'url' => $this->getUrl(array('id' => $this->id)),
-
-            // Extra indexed fields
-            'post_text' => $this->post_text
-        );
-
-
-        return $attributes;
-    }
-
-    /**
-     * Returns the Search Result Output
-     */
-    public function getSearchResult()
-    {
-        return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionSearchResultWidget', array('question' => $this), true);
-    }
-
+	public function canWrite() {
+		return true;
+	}
 }

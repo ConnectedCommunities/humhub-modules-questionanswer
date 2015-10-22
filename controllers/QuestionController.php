@@ -56,55 +56,43 @@ class QuestionController extends Controller
 	public function actionCreate()
 	{
 
+        $question = new Question();
 
-	    $model = new Question;
-        $model->created_by = Yii::app()->user->id;
-        $model->post_type = "question";
-	    
-	    if(isset($_POST['Question'])) {
-	    	
-	        $model->attributes=$_POST['Question'];
-	        if($model->validate()) {
+        if(isset($_POST['Question'])) {
 
-	        	$model->save();
+            $this->forcePostRequest();
+            $_POST = Yii::app()->input->stripClean($_POST);
 
-	        	// Question has been saved, add the tags
-				if(isset($_POST['Tags'])) {
+			$question->attributes=$_POST['Question'];
+            $question->content->populateByForm();
+            $question->post_type = "question";
 
-					// Split tag string into array 
-					$tags = explode(", ", $_POST['Tags']);
-					foreach($tags as $tag) {
-						$tag = Tag::model()->firstOrCreate($tag);
-						$question_tag = new QuestionTag;
-						$question_tag->question_id = $model->id;
-						$question_tag->tag_id = $tag->id;
-						$question_tag->save();
-					}
+            if ($question->validate()) {
 
-				} else {
-					// throw error(?) no tag provided
-				}
-			    
-        	    $this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $model->id)));
-	        }
-	    }
+                $question->save();
 
+                if(isset($_POST['Tags'])) {
+                    // Split tag string into array
+                    $tags = explode(", ", $_POST['Tags']);
+                    foreach($tags as $tag) {
+                        $tag = Tag::model()->firstOrCreate($tag);
+                        $question_tag = new QuestionTag;
+                        $question_tag->question_id = $question->id;
+                        $question_tag->tag_id = $tag->id;
+                        $question_tag->save();
+                    }
+                }
 
+                $this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $question->id)));
 
-		// $model=new Question;
+            } else {
+                $this->renderJson(array('errors' => $question->getErrors()), false);
+            }
 
-		// // Uncomment the following line if AJAX validation is needed
-		// // $this->performAjaxValidation($model);
-
-		// if(isset($_POST['Question']))
-		// {
-		// 	$model->attributes=$_POST['Question'];
-		// 	if($model->save())
-		// 		$this->redirect(array('view','id'=>$model->id));
-		// }
+        }
 
 		$this->render('create',array(
-			'model'=>$model,
+			'model'=>$question,
 		));
 	}
 
