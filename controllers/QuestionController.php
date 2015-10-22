@@ -85,8 +85,6 @@ class QuestionController extends Controller
 
                 $this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $question->id)));
 
-            } else {
-                $this->renderJson(array('errors' => $question->getErrors()), false);
             }
 
         }
