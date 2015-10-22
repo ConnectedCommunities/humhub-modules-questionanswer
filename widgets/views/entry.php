@@ -16,9 +16,36 @@
 
         <?php $this->beginContent('application.modules_core.wall.views.wallLayout', array('object' => $question)); ?>
 
-        <b><?php echo $question->post_title; ?></b><br />
-        <?php echo $question->post_text; ?>
+        <div class="media">
+            <div class="pull-right" style="padding-right:15px">
+
+                <?php
+                $stats = Question::model()->stats($question->id);
+                ?>
+
+                <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
+                    <b><?php echo $stats['score']; ?></b>
+                    <p>votes</p>
+                </div>
+                <div class="pull-left" style="text-align:center; margin-top:5px;">
+                    <b><?php echo $stats['answers']; ?></b>
+                    <p>answers</p>
+                </div>
+
+            </div>
+
+            <div class="media-body" style="padding-top:5px; padding-left:10px;">
+                <h4 class="media-heading">
+                    <?php echo CHtml::link(CHtml::encode($question->post_title), array('view', 'id'=>$question->id)); ?>
+                </h4>
+                <h5><?php echo CHtml::encode(Helpers::truncateText($question->post_text, 200)); ?></h5>
+            </div>
+        </div>
+
         <?php $this->endContent(); ?>
 
     </div>
 </div>
+
+
+
