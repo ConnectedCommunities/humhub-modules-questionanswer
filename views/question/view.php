@@ -53,6 +53,7 @@
                                 <span class="label label-default"><a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->tag_id)); ?>"><?php echo $tag->tag->tag; ?></a></span>
                             <?php } ?>
                             <br /><br />
+                            <?php $this->widget('application.modules_core.file.widgets.ShowFilesWidget', array('object' => $model)); ?>
                             <?php
                             $comments = Answer::model()->findByPk($model->id)->comments;
                             if($comments) {
