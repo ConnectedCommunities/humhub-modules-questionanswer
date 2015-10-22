@@ -14,9 +14,25 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Answer extends HActiveRecord implements ISearchable
+//class Answer extends HActiveRecord implements ISearchable
+class Answer extends HActiveRecordContent implements ISearchable
 {
-	/**
+
+    public $autoAddToWall = true;
+
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return Answer the static model class
+     */
+    public static function model($className=__CLASS__)
+    {
+        return parent::model($className);
+    }
+
+
+    /**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
@@ -43,7 +59,25 @@ class Answer extends HActiveRecord implements ISearchable
 		);
 	}
 
-	/**
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels()
+    {
+        return array(
+            'id' => 'ID',
+            'question_id' => 'Question',
+            'post_title' => 'Post Title',
+            'post_text' => 'Post Text',
+            'post_type' => 'Post Type',
+            'created_at' => 'Created At',
+            'created_by' => 'Created By',
+            'updated_at' => 'Updated At',
+            'updated_by' => 'Updated By',
+        );
+    }
+
+    /**
 	 * @return array relational rules.
 	 */
 	public function relations()
@@ -54,25 +88,69 @@ class Answer extends HActiveRecord implements ISearchable
         );
 	}
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'question_id' => 'Question',
-			'post_title' => 'Post Title',
-			'post_text' => 'Post Text',
-			'post_type' => 'Post Type',
-			'created_at' => 'Created At',
-			'created_by' => 'Created By',
-			'updated_at' => 'Updated At',
-			'updated_by' => 'Updated By',
-		);
-	}
+    /**
+     * After Save Addons
+     *
+     * @return type
+     */
+    public function afterSave()
+    {
 
-	/**
+        parent::afterSave();
+
+        if ($this->isNewRecord) {
+            $activity = Activity::CreateForContent($this);
+            $activity->type = "AnswerCreated";
+            $activity->module = "questionanswer";
+            $activity->save();
+            $activity->fire();
+        }
+
+        HSearch::getInstance()->addModel($this);
+
+        return true;
+
+    }
+
+    /**
+     * Returns the Wall Output
+     */
+    public function getWallOut()
+    {
+        return "Hello World";
+        // return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionWallEntryWidget', array('question' => $this), true);
+    }
+
+    /**
+     * Returns an array of informations used by search subsystem.
+     * Function is defined in interface ISearchable
+     *
+     * @return Array
+     */
+    public function getSearchAttributes()
+    {
+        $attributes = array(
+
+            // Assignments
+            'belongsToType' => 'Answer',
+            'belongsToId' => $this->id,
+            'belongsToGuid' => $this->user->guid,
+
+            // Information about the record
+            'model' => 'Answer',
+            'pk' => $this->id,
+            'title' => '',
+            'url' => $this->getUrl(array('id' => $this->id)),
+
+            // Extra indexed fields
+            'post_text' => $this->post_text
+        );
+
+
+        return $attributes;
+    }
+
+    /**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
 	 * Typical usecase:
@@ -164,58 +242,6 @@ class Answer extends HActiveRecord implements ISearchable
     public function getUrl($parameters = array())
     {
     	return Yii::app()->createUrl('//questionanswer/question/view', $parameters);
-    }
-
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Answer the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-
-
-    /**
-     * After Save Addons
-     *
-     * @return type
-     */
-    protected function afterSave()
-    {
-        HSearch::getInstance()->addModel($this);
-        return parent::afterSave();
-    }
-
-    /**
-     * Returns an array of informations used by search subsystem.
-     * Function is defined in interface ISearchable
-     *
-     * @return Array
-     */
-    public function getSearchAttributes()
-    {
-        $attributes = array(
-
-        	// Assignments
-            'belongsToType' => 'Answer',
-            'belongsToId' => $this->id,
-            'belongsToGuid' => $this->user->guid,
-
-            // Information about the record
-            'model' => 'Answer',
-            'pk' => $this->id,
-            'title' => '',
-            'url' => $this->getUrl(array('id' => $this->id)),
-
-            // Extra indexed fields
-            'post_text' => $this->post_text
-        );
-
-
-        return $attributes;
     }
 
     /**

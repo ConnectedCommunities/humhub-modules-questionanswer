@@ -57,7 +57,30 @@ class AnswerController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Answer;
+		$answer = new Answer();
+
+		if(isset($_POST['Answer'])) {
+
+			$this->forcePostRequest();
+            $_POST = Yii::app()->input->stripClean($_POST);
+
+            $answer->attributes=$_POST['Answer'];
+            $answer->content->populateByForm();
+            $answer->post_type = "answer";
+
+            if ($answer->validate()) {
+
+                $answer->save();
+                $this->redirect(array('//questionanswer/question/view','id'=>$answer->question_id));
+
+            }
+
+        }
+
+
+
+
+        /*$model=new Answer;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -74,7 +97,7 @@ class AnswerController extends Controller
 
 		$this->render('create',array(
 			'model'=>$model,
-		));
+		));*/
 	}
 
 	/**
