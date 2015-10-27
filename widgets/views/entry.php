@@ -34,7 +34,7 @@
             </div>
 
             <div class="media-body" style="padding-top:5px; padding-left:5px;">
-                <h4 class="media-heading">
+                <h4 class="media-heading" style="text-decoration: underline">
                     <?php echo CHtml::link(CHtml::encode($question->post_title), array('view', 'id'=>$question->id)); ?>
                 </h4>
                 <h5>
