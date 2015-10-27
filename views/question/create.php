@@ -31,7 +31,7 @@
                         <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Tags... Specify at least one tag for your question")); ?>
                     </div>
 
-                    <div class="pull-left">
+                    <div class="pull-left" style="margin-top:5px;">
                     <?php
                     // Creates Uploading Button
                     $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
