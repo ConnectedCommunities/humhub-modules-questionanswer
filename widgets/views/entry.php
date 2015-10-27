@@ -31,14 +31,16 @@
                     <b><?php echo $stats['answers']; ?></b>
                     <p>answers</p>
                 </div>
-
             </div>
 
-            <div class="media-body" style="padding-top:5px; padding-left:10px;">
+            <div class="media-body" style="padding-top:5px; padding-left:5px;">
                 <h4 class="media-heading">
                     <?php echo CHtml::link(CHtml::encode($question->post_title), array('view', 'id'=>$question->id)); ?>
                 </h4>
-                <h5><?php echo CHtml::encode(Helpers::truncateText($question->post_text, 200)); ?></h5>
+                <h5>
+                    <?php echo CHtml::encode(Helpers::truncateText($question->post_text, 250)); ?>
+                    <?php echo CHtml::link("read more <i class=\"fa fa-share\"></i>", array('view', 'id'=>$question->id)); ?>
+                </h5>
             </div>
         </div>
 
