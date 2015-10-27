@@ -154,8 +154,13 @@
                                 'accepted_answer' => ($question_answer['answer_status'] ? true : false)
                             ));
                             ?>
+
                             <?php
-                            $comments = Answer::model()->findByPk($question_answer['id'])->comments;
+                            $answerModel = Answer::model()->findByPk($question_answer['id']);
+                            $comments = $answerModel->comments;
+                            
+                            $this->widget('application.modules_core.file.widgets.ShowFilesWidget', array('object' => $answerModel));
+
                             if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
                                 foreach($comments as $comment) {
