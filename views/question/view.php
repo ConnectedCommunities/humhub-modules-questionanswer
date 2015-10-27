@@ -158,7 +158,7 @@
                             <?php
                             $answerModel = Answer::model()->findByPk($question_answer['id']);
                             $comments = $answerModel->comments;
-                            
+
                             $this->widget('application.modules_core.file.widgets.ShowFilesWidget', array('object' => $answerModel));
 
                             if($comments) {

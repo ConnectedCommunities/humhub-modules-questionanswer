@@ -18,7 +18,7 @@
 class Answer extends HActiveRecordContent implements ISearchable
 {
 
-    public $autoAddToWall = true;
+    public $autoAddToWall = false;
 
     /**
      * Returns the static model of the specified AR class.
@@ -117,8 +117,8 @@ class Answer extends HActiveRecordContent implements ISearchable
      */
     public function getWallOut()
     {
-        return "Hello World";
-        // return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionWallEntryWidget', array('question' => $this), true);
+//        return "Hello World";
+         return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.AnswerWallEntryWidget', array('answer' => $this), true);
     }
 
     /**
