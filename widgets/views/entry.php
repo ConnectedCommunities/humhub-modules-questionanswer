@@ -35,9 +35,9 @@
 
             <div class="media-body" style="padding-top:5px; padding-left:5px;">
                 <div class="content">
-                    <b><?php echo CHtml::link(CHtml::encode($question->post_title), array('view', 'id'=>$question->id)); ?></b><br />
+                    <b><?php echo CHtml::link(CHtml::encode($question->post_title), $question::model()->getUrl(array('id'=>$question->id))); ?></b><br />
                     <?php echo CHtml::encode(Helpers::truncateText($question->post_text, 250)); ?>
-                    <?php echo CHtml::link("read more <i class=\"fa fa-share\"></i>", array('view', 'id'=>$question->id)); ?>
+                    <?php echo CHtml::link("read more <i class=\"fa fa-share\"></i>", $question::model()->getUrl(array('id'=>$question->id))); ?>
                 </div>
             </div>
         </div>
