@@ -218,30 +218,36 @@ class QuestionController extends Controller
 	 */
 	public function actionReport()
 	{
-		$this->forcePostRequest();
 
-		$json = array();
-		$json['success'] = false;
+        $this->forcePostRequest();
 
-		$form = new ReportReasonForm();
+        $json = array();
+        $json['success'] = false;
 
-		if (isset($_POST['ReportReasonForm'])) {
-			$_POST['ReportReasonForm'] = Yii::app()->input->stripClean($_POST['ReportReasonForm']);
-			$form->attributes = $_POST['ReportReasonForm'];
+        // Only run if the reportcontent module is available
+        if(isset(Yii::app()->modules['reportcontent'])) {
 
-			if ($form->validate()) {
+            $form = new ReportReasonForm();
 
-				$report = new ReportContent();
-				$report->created_by = Yii::app()->user->id;
-				$report->reason = $form->reason;
-				$report->object_model = 'Question';
-				$report->object_id = $form->object_id;
+            if (isset($_POST['ReportReasonForm'])) {
+                $_POST['ReportReasonForm'] = Yii::app()->input->stripClean($_POST['ReportReasonForm']);
+                $form->attributes = $_POST['ReportReasonForm'];
 
-				$report->save();
+                if ($form->validate() && Question::model()->findByPk($form->object_id)->canReportPost()) {
 
-                $json['success'] = true;
-			}
-		}
+                    $report = new ReportContent();
+                    $report->created_by = Yii::app()->user->id;
+                    $report->reason = $form->reason;
+                    $report->object_model = 'Question';
+                    $report->object_id = $form->object_id;
+
+                    $report->save();
+
+                    $json['success'] = true;
+                }
+            }
+
+        }
 
 		echo CJSON::encode($json);
 		Yii::app()->end();

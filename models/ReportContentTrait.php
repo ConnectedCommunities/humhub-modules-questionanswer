@@ -3,6 +3,13 @@ trait ReportContentTrait
 {
 
     /**
+     * Checks to see if the reportcontent module is enabled
+     */
+    public function reportModuleEnabled()
+    {
+        return isset(Yii::app()->modules['reportcontent']);
+    }
+    /**
      * Checks if the given or current user can report post with given id.
      *
      * @param (optional) Int $userId
@@ -10,6 +17,9 @@ trait ReportContentTrait
      */
     public function canReportPost($userId = "")
     {
+
+        if(!$this->reportModuleEnabled())
+            return false;
 
         if ($userId == "")
             $userId = Yii::app()->user->id;
