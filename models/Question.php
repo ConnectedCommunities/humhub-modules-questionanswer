@@ -20,7 +20,7 @@ class Question extends HActiveRecordContent implements ISearchable
 
 	use ReportContentTrait;
 
-	public $autoAddToWall = true;
+	public $autoAddToWall = false;
 
 	/**
 	 * Returns the static model of the specified AR class.
