@@ -214,6 +214,40 @@ class QuestionController extends Controller
 	}
 
 	/**
+	 * Report content using reportcontent module
+	 */
+	public function actionReport()
+	{
+		$this->forcePostRequest();
+
+		$json = array();
+		$json['success'] = false;
+
+		$form = new ReportReasonForm();
+
+		if (isset($_POST['ReportReasonForm'])) {
+			$_POST['ReportReasonForm'] = Yii::app()->input->stripClean($_POST['ReportReasonForm']);
+			$form->attributes = $_POST['ReportReasonForm'];
+
+			if ($form->validate()) {
+
+				$report = new ReportContent();
+				$report->created_by = Yii::app()->user->id;
+				$report->reason = $form->reason;
+				$report->object_model = 'Question';
+				$report->object_id = $form->object_id;
+
+				$report->save();
+
+                $json['success'] = true;
+			}
+		}
+
+		echo CJSON::encode($json);
+		Yii::app()->end();
+	}
+
+	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
