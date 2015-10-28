@@ -22,10 +22,12 @@ class QAReportContentWidget extends HWidget
      */
     public function run()
     {
-        $this->render('reportSpamLink', array(
-            'object' => $this->content,
-            'model' => new ReportReasonForm()
-        ));
+        if ($this->content->canReportPost()) {
+            $this->render('reportSpamLink', array(
+                'object' => $this->content,
+                'model' => new ReportReasonForm()
+            ));
+        }
     }
 }
 ?>

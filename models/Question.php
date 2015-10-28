@@ -18,6 +18,8 @@
 class Question extends HActiveRecordContent implements ISearchable
 {
 
+	use ReportContentTrait;
+
 	public $autoAddToWall = true;
 
 	/**
