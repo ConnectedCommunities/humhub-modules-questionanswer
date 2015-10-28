@@ -3,7 +3,7 @@
        class="qanda-button pull-left"
        id="reportLinkPost_modal_postreport_<?php echo $object->id ?>"
        data-toggle="modal"
-       data-target="#submitReportContent_<?php echo $object->id ?>"> <?php echo '<i class="fa fa-exclamation-circle"></i> ' . Yii::t('ReportContent.widgets_views_reportSpamLink', 'Report post'); ?>
+       data-target="#submitReportContent_<?php echo $object->id ?>"> <?php echo '<i class="fa fa-exclamation-circle"></i> ' . Yii::t('ReportContent.widgets_views_reportSpamLink', 'Report'); ?>
     </a>
 
     <!-- Modal with reasons of report -->
