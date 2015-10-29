@@ -169,8 +169,7 @@ class Question extends HActiveRecordContent implements ISearchable
 	 */
 	public function getContentTitle()
 	{
-//		return Yii::t('PostModule.models_Post', 'Post') . " \"" . Helpers::truncateText($this->message, 60) . "\"";
-		return "Hello World Title";
+		return Helpers::truncateText($this->post_title, 60);
 	}
 
 
