@@ -1,5 +1,8 @@
 <div class="panel-heading">
     <ul class="nav nav-tabs qanda-header-tabs">
+        <li class="dropdown<?php if(Yii::app()->controller->action->id == "picked") echo ' active'; ?>">
+            <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/picked'); ?>">Picked for you</a>
+        </li>
         <li class="dropdown<?php if(Yii::app()->controller->action->id == "index") echo ' active'; ?>">
             <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/index'); ?>">Questions</a>
         </li>

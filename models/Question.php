@@ -332,6 +332,41 @@ class Question extends HActiveRecordContent implements ISearchable
 
 
 	/**
+	 * Returns a list of questions tailored to the user
+	 */
+	public function pickedForUser($user_id)
+	{
+
+		$criteria->select = "question.id, question.post_title, question.post_text, question.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes";
+
+		$criteria->join = "LEFT JOIN question_votes up ON (question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
+							LEFT JOIN question_votes down ON (question.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
+							LEFT JOIN question answers ON (question.id = answers.question_id AND answers.post_type = 'answer')";
+
+		$criteria->group = "question.id";
+		$criteria->having = "answers = 0";
+		$criteria->order = "score DESC, vote_count DESC, question.created_at DESC";
+
+
+		$sql = "SELECT *, COUNT(*) as tag_count
+				FROM question q LEFT JOIN question_tag qt ON (q.id = qt.question_id)
+				WHERE qt.tag_id IN (
+					SELECT qt.tag_id
+					FROM tag t, question_tag qt LEFT JOIN question q ON (qt.question_id = q.id)
+					WHERE qt.tag_id = t.id
+					AND t.tag != \"\"
+					AND q.created_by = 4
+					GROUP BY qt.tag_id
+					ORDER BY COUNT(qt.tag_id) DESC, created_at DESC
+				)
+				GROUP BY q.id
+				ORDER BY tag_count DESC";
+
+		return Yii::app()->db->createCommand($sql)->bindValue('user_id', $user_id)->queryAll();
+
+	}
+
+	/**
 	 * Returns the Search Result Output
 	 */
 	public function getSearchResult()
