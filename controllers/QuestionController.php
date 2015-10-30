@@ -229,7 +229,7 @@ class QuestionController extends Controller
                                         ORDER BY COUNT(tag_id) DESC, question.created_at DESC
                                     )');
         $criteria->params = array(
-            ':user_id'=> 122
+            ':user_id'=> Yii::app()->user->id
         );
 
 		$criteria->group = "question.id";
