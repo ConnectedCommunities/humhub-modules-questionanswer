@@ -1,4 +1,9 @@
 <?php
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+use humhub\models\Setting;
 
 /**
  * ProfileWidget. 
@@ -8,8 +13,8 @@
  * @since 0.5
  * @author Luke
  */
-class AnswerFormWidget extends HWidget {
-
+class AnswerFormWidget extends \yii\base\Widget
+{
     public $question;
     public $answer;
 

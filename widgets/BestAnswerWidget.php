@@ -1,14 +1,19 @@
 <?php
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+use humhub\models\Setting;
 
 /**
- * VoteWidget. 
- * Displays the vote 
- * 
+ * BestAnswerWidget.
+ *
  * @package application.modules.questionanswer.widgets
  * @since 0.5
  * @author Ben
  */
-class BestAnswerWidget extends HWidget {
+class BestAnswerWidget extends \yii\base\Widget
+{
 
     public $post_id;
     public $author;

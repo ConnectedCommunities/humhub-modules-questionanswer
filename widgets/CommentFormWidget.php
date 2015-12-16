@@ -1,5 +1,10 @@
 <?php
 
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+
 /**
  * CommentFormWidget. 
  * Displays the comment form
@@ -8,8 +13,8 @@
  * @since 0.5
  * @author Luke
  */
-class CommentFormWidget extends HWidget {
-
+class CommentFormWidget extends \yii\base\Widget
+{
     /**
      * The comment model
      *

@@ -1,4 +1,9 @@
 <?php
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+use humhub\models\Setting;
 
 /**
  * VoteWidget. 
@@ -8,8 +13,8 @@
  * @since 0.5
  * @author Ben
  */
-class VoteButtonWidget extends HWidget {
-
+class VoteButtonWidget extends \yii\base\Widget
+{
     public $post_id;
     public $model; 
     public $vote_on;

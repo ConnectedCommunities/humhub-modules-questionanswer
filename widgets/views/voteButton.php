@@ -1,16 +1,15 @@
-<?php $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'question-votes-_vote-form',
-    'enableAjaxValidation'=>false,
-    'action' => Yii::app()->createUrl('//questionanswer/vote/create')
-)); ?>
-<?php
-if(!isset($btnClass)) {
-	$btnClass = "btn btn-default btn-xs";
-}
-?>
-<?php echo $form->hiddenField($model,'should_open_question',array('type'=>"hidden", 'value' => $should_open_question)); ?>
-<?php echo $form->hiddenField($model,'post_id',array('type'=>"hidden", 'value' => $post_id)); ?>
-<?php echo $form->hiddenField($model,'vote_on',array('type'=>"hidden", 'value' => $vote_on)); ?>
-<?php echo $form->hiddenField($model,'vote_type',array('type'=>"hidden", 'value' => $vote_type)); ?>
-<?php echo CHtml::tag('button', array('class'=> $btnClass . " " . $class, 'type'=>'submit', 'style' => 'margin-top:5px;'), '<i class="fa fa-angle-'.$vote_type.'"></i>'); ?>
-<?php $this->endWidget(); ?>
+
+<?php $form = \yii\widgets\ActiveForm::begin([
+    'action' => \yii\helpers\Url::to('create')
+]); ?>
+
+    <?php if(!isset($btnClass)) $btnClass = "btn btn-default btn-xs"; ?>
+    <?php echo \yii\helpers\Html::input('text', 'should_open_question', $should_open_question); ?>
+    <?php echo \yii\helpers\Html::input('text', 'post_id', $post_id); ?>
+    <?php echo \yii\helpers\Html::input('text', 'vote_on', $vote_on); ?>
+    <?php echo \yii\helpers\Html::input('text', 'vote_type', $vote_type); ?>
+    <?php echo \yii\helpers\Html::tag('button', '<i class="fa fa-angle-'.$vote_type.'"></i>', array(
+        'options' => array('class'=> $btnClass . " " . $class, 'type'=>'submit', 'style' => 'margin-top:5px;')
+    )); ?>
+
+<?php \yii\widgets\ActiveForm::end(); ?>
