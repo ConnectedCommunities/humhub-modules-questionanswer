@@ -1,35 +1,49 @@
 <?php
 
+namespace humhub\modules\questionanswer\controllers;
+
+use humhub\modules\questionanswer\models\Answer;
+use humhub\modules\questionanswer\models\QuestionTag;
+use humhub\modules\questionanswer\models\Tag;
+use humhub\modules\questionanswer\models\Question;
+use humhub\modules\questionanswer\models\QuestionSearch;
+use humhub\modules\user\models\User;
+use Yii;
+//use humhub\modules\content\components\ContentContainerController;
+use humhub\components\Controller;
+use yii\helpers\Url;
+
 class QuestionController extends Controller
 {
-	
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-    public function accessRules()
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'acl' => [
+                'class' => \humhub\components\behaviors\AccessControl::className(),
+                'guestAllowedActions' => ['index', 'view']
+            ]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    /*public function actions()
     {
         return array(
-            array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'users' => array('@', (HSetting::Get('allowGuestAccess', 'authentication_internal')) ? "?" : "@"),
-            ),
-            array('deny', // deny all users
-                'users' => array('*'),
+            'stream' => array(
+                'class' => \humhub\modules\content\components\actions\ContentContainerStream::className(),
+                'mode' => \humhub\modules\content\components\actions\ContentContainerStream::MODE_NORMAL,
+                'contentContainer' => $this->getUser()
             ),
         );
-    }
+    }*/
+
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -38,12 +52,12 @@ class QuestionController extends Controller
 	{
 		$model = $this->loadModel($id);
 
-		$this->render('view',array(
+		return $this->render('view',array(
 
     		'author' => $model->user->id,
     		'question' => $model,
-    		'answers' => Answer::model()->overview($model->id),
-    		'related' => Question::model()->related($model->id),
+            'answers' => Answer::overview($model->id),
+    		'related' => Question::related($model->id),
 
 			'model'=> $model,
 		));
@@ -60,12 +74,12 @@ class QuestionController extends Controller
 
         if(isset($_POST['Question'])) {
 
-            $this->forcePostRequest();
-            $_POST = Yii::app()->input->stripClean($_POST);
-
-			$question->attributes=$_POST['Question'];
-            $question->content->populateByForm();
+            $question->load(Yii::$app->request->post());
             $question->post_type = "question";
+
+            $containerClass = User::className();
+            $contentContainer = $containerClass::findOne(['guid' => Yii::$app->getUser()->guid]);
+            $question->content->container = $contentContainer;
 
             if ($question->validate()) {
 
@@ -75,21 +89,23 @@ class QuestionController extends Controller
                     // Split tag string into array
                     $tags = explode(", ", $_POST['Tags']);
                     foreach($tags as $tag) {
-                        $tag = Tag::model()->firstOrCreate($tag);
-                        $question_tag = new QuestionTag;
+
+                        $tag = Tag::firstOrCreate($tag);
+                        $question_tag = new QuestionTag();
                         $question_tag->question_id = $question->id;
                         $question_tag->tag_id = $tag->id;
                         $question_tag->save();
                     }
                 }
 
-                $this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $question->id)));
+
+                $this->redirect(Url::toRoute(['question/view', 'id' => $question->id]));
 
             }
 
         }
 
-		$this->render('create',array(
+		return $this->render('create',array(
 			'model'=>$question,
 		));
 	}
@@ -161,16 +177,35 @@ class QuestionController extends Controller
 		));
 		*/
 
-		$dataProvider=new CActiveDataProvider('Question', array(
+		/*$dataProvider=new CActiveDataProvider('Question', array(
 			'criteria'=>array(
 				'order'=>'created_at DESC',
 			)
 		));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
-		));
-		
-	}
+		));*/
+
+        $searchModel = new QuestionSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setSort([
+            'attributes' => [
+                'id',
+                'created_at' => [
+                    'default' => SORT_DESC
+                ]
+            ]
+        ]);
+
+        return $this->render('index', array(
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'model' => Question::find()
+        ));
+
+
+
+    }
 
 	/** 
 	 * Find unanswered questions
@@ -309,7 +344,7 @@ class QuestionController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Question::model()->findByPk($id);
+		$model=Question::findOne(['id' => $id]);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
