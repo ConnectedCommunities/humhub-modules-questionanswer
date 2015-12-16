@@ -115,23 +115,28 @@ class QuestionController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($id)
+	public function actionUpdate()
 	{
-		$model=$this->loadModel($id);
+		
+		$id = Yii::$app->request->get('id');
+		$model = Question::findOne(['id' => $id]);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$model->content->object_model = Question::class;
+		$model->content->object_id = $model->id;
 
-		if(isset($_POST['Question']))
-		{
-			$model->attributes=$_POST['Question'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+		$containerClass = User::className();
+		$contentContainer = $containerClass::findOne(['guid' => Yii::$app->getUser()->guid]);
+		$model->content->container = $contentContainer;
+
+		if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
+			$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
+
+
 	}
 
 	/**
