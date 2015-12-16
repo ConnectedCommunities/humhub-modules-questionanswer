@@ -79,7 +79,7 @@ class Answer extends ActiveRecord implements Searchable
 
     public function getComments()
     {
-        return $this->hasMany(Comment::class, ['id' => 'created_by']);
+        return $this->hasMany(Comment::class, ['id' => 'parent_id']);
     }
 
 
