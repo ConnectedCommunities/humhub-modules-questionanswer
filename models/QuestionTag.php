@@ -58,7 +58,7 @@ class QuestionTag extends ActiveRecord
 
     public function getTag()
     {
-        return $this->hasOne('Tag', ['tag_id']);
+        return $this->hasOne(Tag::class, ['id' => 'tag_id']);
     }
 
 	/**
