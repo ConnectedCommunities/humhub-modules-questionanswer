@@ -9,6 +9,7 @@ use humhub\modules\user\models\User;
 use Yii;
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\search\interfaces\Searchable;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "question".
@@ -39,7 +40,6 @@ class Question extends ContentActiveRecord implements Searchable
      * @inheritdoc
      */
     public $wallEntryClass = "humhub\modules\questionanswer\widgets\QuestionWallEntryWidget";
-//	public $wallEntryClass = "humhub\modules\post\widgets\WallEntry";
 
     /**
      * @inheritdoc
@@ -56,8 +56,8 @@ class Question extends ContentActiveRecord implements Searchable
 	{
 
         return [
-            [['post_text', 'post_type'], 'required'],
-            [['post_text', 'post_type'], 'string', 'max' => 255],
+            [['post_title', 'post_text', 'post_type'], 'required'],
+            [['post_title', 'post_type'], 'string', 'max' => 255],
             [['created_at', 'updated_at'], 'safe'],
             [['created_by', 'updated_by'], 'integer'],
         ];
@@ -108,32 +108,8 @@ class Question extends ContentActiveRecord implements Searchable
 
 	public function getTags()
 	{
-		return $this->hasMany(Tag::class, ['id' => 'question_id']);
+		return $this->hasMany(QuestionTag::class, ['question_id' => 'id']);
 	}
-
-	/**
-	 * After Save Addons
-	 *
-	 * @return type
-	 */
-	public function afterSave()
-	{
-
-//		parent::afterSave();
-
-		/*if ($this->isNewRecord) {
-			$activity = Activity::CreateForContent($this);
-			$activity->type = "QuestionCreated";
-			$activity->module = "questionanswer";
-			$activity->save();
-			$activity->fire();
-		}
-
-		HSearch::getInstance()->addModel($this);
-
-		return true;*/
-	}
-
 
 
 
@@ -263,7 +239,7 @@ class Question extends ContentActiveRecord implements Searchable
 	 */
 	public function getUrl($parameters = array())
 	{
-		return Yii::app()->createUrl('//questionanswer/question/view', $parameters);
+		return Url::toRoute(['question/view', $parameters]);
 	}
 
 
@@ -304,7 +280,7 @@ class Question extends ContentActiveRecord implements Searchable
 				GROUP BY q.id
 				ORDER BY score DESC, vote_count DESC";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('question_id', $question_id)->queryRow();
+		return Yii::$app->db->createCommand($sql)->bindValue('question_id', $question_id)->queryOne();
 
 
 	}
