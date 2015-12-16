@@ -26,7 +26,7 @@ class VoteButtonWidget extends \yii\base\Widget
      */
     public function run() {
 
-        $this->render('voteButton', array(
+        return $this->render('voteButton', array(
             'post_id' => $this->post_id,
             'model' => $this->model, 
             'vote_on' => $this->vote_on, 

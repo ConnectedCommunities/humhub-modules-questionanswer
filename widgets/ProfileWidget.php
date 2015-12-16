@@ -34,7 +34,7 @@ class ProfileWidget extends \yii\base\Widget
      */
     public function run() {
 
-        $this->render('profile', array(
+        return $this->render('profile', array(
             'user' => $this->user,
             'timestamp' => $this->timestamp
         ));

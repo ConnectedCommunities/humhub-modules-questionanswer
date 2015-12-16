@@ -29,7 +29,9 @@ use yii\widgets\ListView;
                 <?php
                 echo ListView::widget([
                     'dataProvider' => $dataProvider,
-                    'itemView' => '_view'
+                    'itemView' => function($model) {
+                        return $this->render('_view', ['data' => $model]);
+                    },
                 ]);
                 ?>
                 </div>

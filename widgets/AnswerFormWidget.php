@@ -22,8 +22,7 @@ class AnswerFormWidget extends \yii\base\Widget
      * Executes the widget.
      */
     public function run() {
-
-        $this->render('answerForm', array(
+        return $this->render('answerForm', array(
             'question' => $this->question,
             'answer' => $this->answer,
         ));

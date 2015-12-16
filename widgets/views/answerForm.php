@@ -7,7 +7,6 @@
     </div>
     <div class="panel-body">
         <?php echo $form->errorSummary($answer); ?>
-        <?php // echo $form->error($answer,'post_text'); ?>
         <?php
         echo $form->field($answer, 'post_text', array(
             'options' => array(
@@ -20,35 +19,19 @@
         ))->textArea(['rows' => 6]);
         ?>
         <?php
-        echo $form->field($answer, 'post_text', array(
-            'options' => array(
-                'id' => "contentForm_answersText",
-                'style' => 'height: auto !important;',
-                "class" => "form-control",
-                "tabindex" => "2",
-                "placeholder" => "Your answer..."
-            )
-        ))->textarea(['rows' => '5']);
-        ?>
-        <?php
         echo $form->field($answer, 'question_id', array(
             'options' => array(
                 'value' => $question->id
             )
-        ))->hiddenInput();
+        ))->hiddenInput()->label(false);
         ?>
         <div class="pull-left">
             <?php
             // Creates Uploading Button
-            \humhub\modules\file\widgets\FileUploadButton::widget(array(
+            echo \humhub\modules\file\widgets\FileUploadButton::widget(array(
                 'uploaderId' => 'contentFormFiles',
                 'fileListFieldName' => 'fileList',
             ));
-
-//            $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
-//                'uploaderId' => 'contentFormFiles',
-//                'fileListFieldName' => 'fileList',
-//            ));
             ?>
             <script>
                 $('#fileUploaderButton_contentFormFiles').bind('fileuploaddone', function (e, data) {
@@ -68,18 +51,13 @@
             </script>
             <?php
             // Creates a list of already uploaded Files
-            \humhub\modules\file\widgets\FileUploadList::widget(array(
+            echo \humhub\modules\file\widgets\FileUploadList::widget(array(
                 'uploaderId' => 'contentFormFiles'
             ));
-//            $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
-//                'uploaderId' => 'contentFormFiles'
-//            ));
             ?>
         </div>
 
         <?php
-//        echo $form->hiddenField($answer,'containerGuid',array('type'=>"hidden", 'value' => Yii::app()->user->guid));
-//        echo $form->hiddenField($answer,'containerClass',array('type'=>"hidden", 'value' => get_class(new Answer())));
         echo \yii\helpers\Html::hiddenInput("containerGuid", Yii::$app->user->guid);
         echo \yii\helpers\Html::hiddenInput("containerClass",  get_class(new \humhub\modules\user\models\User()));
         ?>

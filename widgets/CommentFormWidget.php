@@ -44,7 +44,7 @@ class CommentFormWidget extends \yii\base\Widget
      */
     public function run() {
 
-        $this->render('commentForm', array(
+        return $this->render('commentForm', array(
             'model' => $this->model,
             'question_id' => $this->question_id,
             'parent_id' => $this->parent_id

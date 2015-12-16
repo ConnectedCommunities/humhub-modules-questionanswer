@@ -105,7 +105,7 @@ use yii\helpers\Html;
                             <br />
                             <br />
                             <?php
-                            \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
+                            echo \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
 //                            $this->widget('application.modules.questionanswer.widgets.CommentFormWidget', array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
                             ?>
                             <?php
@@ -140,7 +140,7 @@ use yii\helpers\Html;
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
-                                $vote = QuestionVotes::model()->post($question_answer['id'])->user(Yii::app()->user->id)->find();
+                                $vote = QuestionVotes::model()->post($question_answer['id'])->user(Yii::$app->user->id)->find();
                                 if($vote) {
                                     if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
@@ -151,21 +151,14 @@ use yii\helpers\Html;
                                     }
                                 }
                                 ?>
-                                <?php
-                                VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));
-                                // $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));
-                                ?>
+                                <?php VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1)); ?>
                                 <div class="text-center"><strong><?php echo $question_answer['score']; ?></strong><br /></div>
-                                <?php
-                                VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 1));
-                                // $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 1));
-                                ?>
+                                <?php VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 1)); ?>
                             </div>
                         </div>
                         <?php $user = User::findOne(['id' => $question_answer['created_by']]); ?>
                         <?php
                         ProfileWidget::widget(array('user' => $user, 'timestamp' => $question_answer['created_at']));
-//                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $user, 'timestamp' => $question_answer['created_at']));
                         ?>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
@@ -173,19 +166,12 @@ use yii\helpers\Html;
                             <br />
                             <br />
                             <?php
-                            \humhub\modules\questionanswer\widgets\BestAnswerWidget::widget(array(
+                            echo \humhub\modules\questionanswer\widgets\BestAnswerWidget::widget(array(
                                 'post_id' => $question_answer['id'],
                                 'author' => $author,
                                 'model' => new QuestionVotes,
                                 'accepted_answer' => ($question_answer['answer_status'] ? true : false)
                             ));
-
-                            /*$this->widget('application.modules.questionanswer.widgets.BestAnswerWidget', array(
-                                'post_id' => $question_answer['id'], 
-                                'author' => $author, 
-                                'model' => new QuestionVotes, 
-                                'accepted_answer' => ($question_answer['answer_status'] ? true : false)
-                            ));*/
                             ?>
 
                             <?php
@@ -193,7 +179,6 @@ use yii\helpers\Html;
                             $comments = $answerModel->comments;
 
                             echo ShowFiles::widget(array('object' => $answerModel));
-                            // $this->widget('application.modules_core.file.widgets.ShowFilesWidget', array('object' => $answerModel));
 
                             if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
@@ -225,8 +210,7 @@ use yii\helpers\Html;
                             ?>
                             <br />
                             <?php
-                            \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
-                            // $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
+                            echo \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
                             ?>
                             <?php 
                             if(Yii::$app->user->isAdmin() || $question_answer['created_by'] == Yii::$app->user->id) {
@@ -254,8 +238,7 @@ use yii\helpers\Html;
 
 
             <?php
-            \humhub\modules\questionanswer\widgets\AnswerFormWidget::widget(array('question' => $model, 'answer' => new Answer));
-            // $this->widget('application.modules.questionanswer.widgets.AnswerFormWidget', array('question' => $model, 'answer' => new Answer));
+            echo \humhub\modules\questionanswer\widgets\AnswerFormWidget::widget(array('question' => $model, 'answer' => new Answer));
             ?>
 
         </div>
