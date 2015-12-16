@@ -1,36 +1,44 @@
+<?php
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\grid\GridView;
+
+use yii\data\ActiveDataProvider;
+?>
 <div class="panel-heading">
     <ul class="nav nav-tabs qanda-header-tabs">
-        <li class="dropdown<?php if(Yii::app()->controller->action->id == "picked") echo ' active'; ?>">
-            <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/picked'); ?>">Picked for you</a>
+
+        <li class="dropdown<?php if(Yii::$app->controller->action->id == "picked") echo ' active'; ?>">
+            <a style="cursor:pointer;" href="<?php echo Url::toRoute('picked'); ?>">Picked for you</a>
         </li>
-        <li class="dropdown<?php if(Yii::app()->controller->action->id == "index") echo ' active'; ?>">
-            <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/index'); ?>">Questions</a>
+        <li class="dropdown<?php if(Yii::$app->controller->action->id == "index") echo ' active'; ?>">
+            <a style="cursor:pointer;" href="<?php echo Url::toRoute('index'); ?>">Questions</a>
         </li>
-        <li class="dropdown<?php if(Yii::app()->controller->action->id == "unanswered") echo ' active'; ?>">
-            <?php echo CHtml::link('Unanswered', Yii::app()->createUrl('//questionanswer/question/unanswered'), array()); ?>
+        <li class="dropdown<?php if(Yii::$app->controller->action->id == "unanswered") echo ' active'; ?>">
+            <?php echo Html::a('Unanswered', Url::toRoute('unanswered'), array()); ?>
         </li>
-        <li class="dropdown<?php if(Yii::app()->controller->action->id == "tag") echo ' active'; ?>">
+        <li class="dropdown<?php if(Yii::$app->controller->action->id == "tag") echo ' active'; ?>">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <?php
-                $tags = Tag::model()->findAll();
+                $tags = \humhub\modules\questionanswer\models\Tag::find()->all();
                 if(!$tags) {
                     echo "<li><a href=\"#\" class=\"wallFilter\">No tags found</a></li>";
                 } else {
                     foreach($tags as $tag) {
-                        echo "<li><a href=\"".Yii::app()->createUrl('//questionanswer/main/tag', array('id' => $tag->id))."\" class=\"wallFilter\">".$tag->tag."</a></li>";
+                        echo "<li><a href=\"".Url::toRoute(['main/tag', array('id' => $tag->id)])."\" class=\"wallFilter\">".$tag->tag."</a></li>";
                     }
                 }
                 ?>
             </ul>
         </li>
-        <?php if(Yii::app()->user->isAdmin()) { ?>
+        <?php if(Yii::$app->user->isAdmin()) { ?>
             <li class="dropdown">
-                <?php echo CHtml::link('Admin', Yii::app()->createUrl('//questionanswer/question/admin'), array()); ?>
+                <?php echo Html::a('Admin', Url::toRoute('admin'), array()); ?>
             </li>
         <?php } ?>
         <li class="dropdown pull-right">
-            <?php echo CHtml::link('<i class="fa fa-plus"></i> Ask Question', Yii::app()->createAbsoluteUrl('//questionanswer/question/create'), array('class'=>'dropdown-toggle btn btn-community', 'style'=>"padding:8px;")); ?>
+            <?php echo Html::a('<i class="fa fa-plus"></i> Ask Question', Url::toRoute('create'), array('class'=>'dropdown-toggle btn btn-community', 'style'=>"padding:8px;")); ?>
         </li>
     </ul>
 </div>
