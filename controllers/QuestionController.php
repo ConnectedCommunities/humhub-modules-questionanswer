@@ -246,47 +246,43 @@ class QuestionController extends Controller
 
 	public function actionPicked()
 	{
-		$criteria=new CDbCriteria;
-        $criteria->select = "question.id, question.post_title, question.post_text, question.post_type, COUNT(*) as tag_count";
-
-		$criteria->join = "LEFT JOIN question_tag ON (question.id = question_tag.question_id)";
-
-        $criteria->addCondition('question_tag.tag_id IN (
-                                        SELECT id as tag_id FROM (
-                                            SELECT tag.id
-                                            FROM tag, question_votes, question
-                                            LEFT JOIN question_tag ON (question.id = question_tag.question_id)
-                                            WHERE question_votes.post_id = question.id
-                                            AND question_tag.tag_id = tag.id
-                                            AND tag.tag != ""
-                                            AND question_votes.vote_on = "question"
-                                            AND question_votes.vote_type = "up"
-                                            AND question_votes.created_by = :user_id
-
-                                            UNION ALL
-
-                                            SELECT tag.id
-                                            FROM tag, question_tag LEFT JOIN question ON (question_tag.question_id = question.id)
-                                            WHERE question_tag.tag_id = tag.id
-                                            AND tag.tag != ""
-                                            AND question.created_by = :user_id
-                                        ) as c
-                                        GROUP BY id
-                                        ORDER BY COUNT(tag_id) DESC, question.created_at DESC
-                                    )');
-        $criteria->params = array(
-            ':user_id'=> Yii::app()->user->id
-        );
-
-		$criteria->group = "question.id";
-		$criteria->order = "tag_count DESC";
-
-		$dataProvider=new CActiveDataProvider('Question', array(
-            'criteria'=>$criteria
-		));
 
 
-		$this->render('index',array(
+		$sql = 'SELECT question.id, question.post_title, question.post_text, question.post_type, COUNT(*) as tag_count
+				FROM question
+				LEFT JOIN question_tag ON (question.id = question_tag.question_id)
+				WHERE question_tag.tag_id IN (
+					SELECT id as tag_id FROM (
+						SELECT tag.id
+						FROM tag, question_votes, question
+						LEFT JOIN question_tag ON (question.id = question_tag.question_id)
+						WHERE question_votes.post_id = question.id
+						AND question_tag.tag_id = tag.id
+						AND tag.tag != ""
+						AND question_votes.vote_on = "question"
+						AND question_votes.vote_type = "up"
+						AND question_votes.created_by = :user_id
+						UNION ALL
+						SELECT tag.id
+						FROM tag, question_tag LEFT JOIN question ON (question_tag.question_id = question.id)
+						WHERE question_tag.tag_id = tag.id
+						AND tag.tag != ""
+						AND question.created_by = :user_id
+					) as c
+					GROUP BY id
+					ORDER BY COUNT(tag_id) DESC, question.created_at DESC
+				)';
+
+
+
+		$foo = Yii::$app->db->createCommand($sql)->bindValue('user_id',  Yii::$app->user->id)->getSql();
+		$bar = Question::findBySql($sql, ['user_id' => Yii::$app->user->id]);
+
+		$dataProvider = new ActiveDataProvider([
+			'query' => $bar,
+		]);
+
+		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
