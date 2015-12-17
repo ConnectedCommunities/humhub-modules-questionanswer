@@ -1,44 +1,70 @@
 <?php
 
+namespace humhub\modules\questionanswer\controllers;
+
+use humhub\modules\questionanswer\models\Answer;
+use humhub\modules\questionanswer\models\QuestionTag;
+use humhub\modules\questionanswer\models\Tag;
+use humhub\modules\questionanswer\models\Question;
+use humhub\modules\questionanswer\models\QuestionSearch;
+use humhub\modules\user\models\User;
+use Yii;
+//use humhub\modules\content\components\ContentContainerController;
+use humhub\components\Controller;
+use yii\helpers\Url;
+
 class AnswerController extends Controller
 {
 
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
+	// /**
+	//  * @return array action filters
+	//  */
+	// public function filters()
+	// {
+	// 	return array(
+	// 		'accessControl', // perform access control for CRUD operations
+	// 		'postOnly + delete', // we only allow deletion via POST request
+	// 	);
+	// }
+
+	// /**
+	//  * Specifies the access control rules.
+	//  * This method is used by the 'accessControl' filter.
+	//  * @return array access control rules
+	//  */
+	// public function accessRules()
+	// {
+	// 	return array(
+	// 		array('allow',  // allow all users to perform 'index' and 'view' actions
+	// 			'actions'=>array('index','view'),
+	// 			'users'=>array('*'),
+	// 		),
+	// 		array('allow', // allow authenticated user to perform 'create' and 'update' actions
+	// 			'actions'=>array('create','update'),
+	// 			'users'=>array('@'),
+	// 		),
+	// 		array('allow', // allow admin user to perform 'admin' and 'delete' actions
+	// 			'actions'=>array('admin','delete'),
+	// 			'users'=>array('admin'),
+	// 		),
+	// 		array('deny',  // deny all users
+	// 			'users'=>array('*'),
+	// 		),
+	// 	);
+	// }
 
 	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'acl' => [
+                'class' => \humhub\components\behaviors\AccessControl::className(),
+                'guestAllowedActions' => ['index', 'view']
+            ]
+        ];
+    }
 
 	/**
 	 * Displays a particular model.
@@ -59,22 +85,37 @@ class AnswerController extends Controller
 	{
 		$answer = new Answer();
 
-		if(isset($_POST['Answer'])) {
+		// if(isset($_POST['Answer'])) {
 
-			$this->forcePostRequest();
-            $_POST = Yii::app()->input->stripClean($_POST);
+		// 	$this->forcePostRequest();
+  //           //$_POST = Yii::$app->input->stripClean($_POST);
 
-            $answer->attributes=$_POST['Answer'];
-            $answer->content->populateByForm();
+  //           $answer->attributes=$_POST['Answer'];
+  //           $answer->content->populateByForm();
+  //           $answer->post_type = "answer";
+
+  //           if ($answer->validate()) {
+
+  //               $answer->save();
+  //               $this->redirect(\yii\helpers\Url::toRoute(['question/view','id'=> $answer->question_id]));
+
+  //           }
+
+  //       }
+
+        if(isset($_POST['Answer'])) {
+
+            $answer->load(Yii::$app->request->post());
             $answer->post_type = "answer";
 
+            $containerClass = User::className();
+            $contentContainer = $containerClass::findOne(['guid' => Yii::$app->getUser()->guid]);
+            $answer->content->container = $contentContainer;
+
             if ($answer->validate()) {
-
                 $answer->save();
-                $this->redirect(array('//questionanswer/question/view','id'=>$answer->question_id));
-
+                $this->redirect(Url::toRoute(['question/view', 'id' => $answer->question_id]));
             }
-
         }
 
 

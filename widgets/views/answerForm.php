@@ -1,5 +1,5 @@
 <?php $form = \yii\widgets\ActiveForm::begin([
-    'action' => \yii\helpers\Url::to('create')
+    'action' => \yii\helpers\Url::toRoute('answer/create')
 ]); ?>
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -19,11 +19,7 @@
         ))->textArea(['rows' => 6]);
         ?>
         <?php
-        echo $form->field($answer, 'question_id', array(
-            'options' => array(
-                'value' => $question->id
-            )
-        ))->hiddenInput()->label(false);
+        echo $form->field($answer, 'question_id')->hiddenInput(['value' => $question->id])->label(false);
         ?>
         <div class="pull-left">
             <?php
