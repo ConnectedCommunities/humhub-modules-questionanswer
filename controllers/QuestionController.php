@@ -11,6 +11,7 @@ use humhub\modules\user\models\User;
 use Yii;
 //use humhub\modules\content\components\ContentContainerController;
 use humhub\components\Controller;
+use yii\data\ActiveDataProvider;
 use yii\helpers\Url;
 
 class QuestionController extends Controller
@@ -28,21 +29,6 @@ class QuestionController extends Controller
             ]
         ];
     }
-
-    /**
-     * @inheritdoc
-     */
-    /*public function actions()
-    {
-        return array(
-            'stream' => array(
-                'class' => \humhub\modules\content\components\actions\ContentContainerStream::className(),
-                'mode' => \humhub\modules\content\components\actions\ContentContainerStream::MODE_NORMAL,
-                'contentContainer' => $this->getUser()
-            ),
-        );
-    }*/
-
 
 	/**
 	 * Displays a particular model.
@@ -218,7 +204,7 @@ class QuestionController extends Controller
 	public function actionUnanswered()
 	{
 
-		$criteria=new CDbCriteria;
+		/*$criteria=new CDbCriteria;
 		$criteria->select = "question.id, question.post_title, question.post_text, question.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes";
 
 		$criteria->join = "LEFT JOIN question_votes up ON (question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
@@ -233,6 +219,26 @@ class QuestionController extends Controller
 			'criteria'=>$criteria
 		));
 		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
+		));
+		*/
+
+
+		$criteria = Question::find();
+		$criteria->select("question.id, question.post_title, question.post_text, question.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes");
+		$criteria->from('question');
+		$criteria->join('LEFT JOIN', 'question_votes up', "question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type='up'");
+		$criteria->join('LEFT JOIN', 'question_votes down', "question.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down'");
+		$criteria->join('LEFT JOIN', 'question answers', "question.id = answers.question_id AND answers.post_type = 'answer'");
+		$criteria->groupBy("question.id");
+		$criteria->having("answers = 0");
+		$criteria->orderBy("score DESC, vote_count DESC, question.created_at DESC");
+
+		$dataProvider = new ActiveDataProvider([
+			'query' => $criteria,
+		]);
+
+		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 
