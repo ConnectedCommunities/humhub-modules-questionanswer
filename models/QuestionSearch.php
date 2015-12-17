@@ -23,6 +23,7 @@ class QuestionSearch extends Question
     public function search($params)
     {
         $query = Question::find();
+        $query->andFilterWhere(['post_type' => 'question']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -35,9 +36,6 @@ class QuestionSearch extends Question
 
         // adjust the query by adding the filters
         $query->andFilterWhere(['id' => $this->id]);
-//        $query->andFilterWhere(['points' => $this->points]);
-//        $query->andFilterWhere(['like', 'name', $this->name])
-//            ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }
