@@ -22,7 +22,7 @@ use humhub\modules\search\interfaces\Searchable;
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Answer extends ActiveRecord implements Searchable
+class Answer extends ContentActiveRecord implements Searchable
 {
 
     public $autoAddToWall = false;
@@ -44,7 +44,7 @@ class Answer extends ActiveRecord implements Searchable
             [['post_text', 'post_type'], 'required'],
             [['post_text', 'post_type'], 'string', 'max' => 255],
             [['created_at', 'updated_at'], 'safe'],
-            [['created_by', 'updated_by'], 'integer'],
+            [['question_id', 'created_by', 'updated_by'], 'integer'],
         ];
 	}
 
