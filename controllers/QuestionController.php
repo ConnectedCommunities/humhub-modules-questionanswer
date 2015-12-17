@@ -29,21 +29,6 @@ class QuestionController extends Controller
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    /*public function actions()
-    {
-        return array(
-            'stream' => array(
-                'class' => \humhub\modules\content\components\actions\ContentContainerStream::className(),
-                'mode' => \humhub\modules\content\components\actions\ContentContainerStream::MODE_NORMAL,
-                'contentContainer' => $this->getUser()
-            ),
-        );
-    }*/
-
-
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
