@@ -79,9 +79,8 @@ class Answer extends ContentActiveRecord implements Searchable
 
     public function getComments()
     {
-        return $this->hasMany(Comment::class, ['id' => 'parent_id']);
+        return $this->hasMany(Comment::class, ['parent_id' => 'id']);
     }
-
 
     /**
      * After Save Addons

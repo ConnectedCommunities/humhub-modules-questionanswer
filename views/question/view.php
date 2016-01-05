@@ -72,9 +72,7 @@ use yii\helpers\Html;
                             <br /><br />
                             <?php
                             echo ShowFiles::widget(array('object' => $model));
-//                            $this->widget('application.modules_core.file.widgets.ShowFilesWidget', array('object' => $model));
                             $comments = Answer::findOne(['id' => $model->id])->comments;
-//                            $comments = Answer::model()->findByPk($model->id)->comments;
                             if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px;\">";
                                 foreach($comments as $comment) {
@@ -107,7 +105,6 @@ use yii\helpers\Html;
                             <br />
                             <?php
                             echo \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
-//                            $this->widget('application.modules.questionanswer.widgets.CommentFormWidget', array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
                             ?>
                             <?php
                             if(Yii::$app->user->isAdmin() || $model->created_by == Yii::$app->user->id) {
@@ -194,7 +191,8 @@ use yii\helpers\Html;
                                 foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     print Html::encode($comment->post_text);
-                                    echo " &bull; <a href=\"". $this->createUrl('//user/profile', array('uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
+
+                                    echo " &bull; <a href=\"". \yii\helpers\Url::toRoute('user/profile',['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
                                     
                                     echo "<small>";
                                     if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
