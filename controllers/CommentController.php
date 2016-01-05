@@ -94,6 +94,21 @@ class CommentController extends Controller
 	}
 
 	/**
+	 * Manages all models
+	 */
+	public function actionAdmin()
+	{
+		$searchModel = new QuestionSearch();
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+		return $this->render('../question/admin', array(
+			'dataProvider'  => $dataProvider,
+			'searchModel'   => $searchModel,
+			'model'         => Comment::find()
+		));
+	}
+
+	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
