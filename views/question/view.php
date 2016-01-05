@@ -1,5 +1,6 @@
 <?php
 use humhub\modules\questionanswer\models\QuestionVotes;
+use humhub\modules\user\models\User;
 use \humhub\modules\questionanswer\models\Answer;
 use \humhub\modules\questionanswer\models\Comment;
 use humhub\modules\questionanswer\widgets\VoteButtonWidget;
@@ -109,7 +110,7 @@ use yii\helpers\Html;
 //                            $this->widget('application.modules.questionanswer.widgets.CommentFormWidget', array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
                             ?>
                             <?php
-                            if(Yii::$app->user->isAdmin() || $model->created_by == Yii::app()->user->id) {
+                            if(Yii::$app->user->isAdmin() || $model->created_by == Yii::$app->user->id) {
                             	echo Html::a("Edit", array('update', 'id'=>$model->id));
                             }
                             ?>
@@ -147,7 +148,8 @@ use yii\helpers\Html;
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
-                                $vote = QuestionVotes::model()->post($question_answer['id'])->user(Yii::$app->user->id)->find();
+                                //$vote = QuestionVotes::post($question_answer['id'])->user(Yii::$app->user->id)->find();
+                                $vote = QuestionVotes::findOne(['post_id' => $question_answer['id'], 'id' => Yii::$app->user->id]);
                                 if($vote) {
                                     if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
@@ -185,7 +187,7 @@ use yii\helpers\Html;
                             $answerModel = Answer::findOne(['id' => $question_answer['id']]);
                             $comments = $answerModel->comments;
 
-                            echo ShowFiles::widget(array('object' => $answerModel));
+                            echo ShowFiles::widget(array('object' => $model));
 
                             if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
@@ -203,10 +205,10 @@ use yii\helpers\Html;
                                     if(Yii::$app->user->isAdmin()) {
                                         echo " &bull; ";
                                         echo Html::button('Delete',array(
-                                        'submit'=>$this->createUrl('//questionanswer/comment/delete',array('id'=>$comment->id)),
+                                        'submit'=>\yii\helpers\Url::toRoute('comment/delete',array('id'=>$comment->id)),
                                         'confirm'=>"Are you sure want to delete?",
                                         'csrf'=>true,
-                                        'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+                                        'params'=> array('YII_CSRF_TOKEN' => Yii::$app->request->csrfToken)));
                                     }
                                     echo "</small>";
 
@@ -228,10 +230,10 @@ use yii\helpers\Html;
                             <?php
                             if(Yii::$app->user->isAdmin()) {
                                 echo Html::button('Delete',array(
-                                'submit'=>$this->createUrl('//questionanswer/answer/delete',array('id'=>$question_answer['id'])),
+                                'submit'=>\yii\helpers\Url::toRoute('answer/delete',array('id'=>$question_answer['id'])),
                                 'confirm'=>"Are you sure want to delete?",
                                 'csrf'=>true,
-                                'params'=> array('YII_CSRF_TOKEN' => Yii::app()->request->csrfToken)));
+                                'params'=> array('YII_CSRF_TOKEN' => Yii::$app->request->csrfToken)));
                             }
 
                             ?>

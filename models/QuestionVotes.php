@@ -121,6 +121,7 @@ class QuestionVotes extends ActiveRecord
 	 * Filters results by post_id
 	 * @param $user_id
 	 */
+	//TODO: DELETE
 	public function post($post_id)
 	{
 	    $this->getDbCriteria()->mergeWith(array(
@@ -135,6 +136,7 @@ class QuestionVotes extends ActiveRecord
 	 * Filters results by user_id
 	 * @param $user_id
 	 */
+	//TODO: DELETE
 	public function user($user_id)
 	{
 	    $this->getDbCriteria()->mergeWith(array(
