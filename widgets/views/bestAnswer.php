@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Html;
+
 if($accepted_answer) {
 	$btnClass = "btn-info";
 	$text = "Accepted Answer";
@@ -7,26 +9,28 @@ if($accepted_answer) {
 	$text = "Mark as Accepted Answer";
 } 
 
-if(Yii::app()->user->id == $author) {
-	$form=$this->beginWidget('CActiveForm', array(
+if(Yii::$app->user->id == $author) {
+	$form = \yii\widgets\ActiveForm::begin($config = array(
 		'id'=>'question-votes-vote_best_answer-form',
 		'enableAjaxValidation'=>false,
-		'action' => Yii::app()->createUrl('//questionanswer/vote/create')
+		'action' => \yii\helpers\Url::toRoute('vote/create')
 	)); 
 
-	echo $form->hiddenField($model,'should_open_question',array('type'=>"hidden", 'value' => $should_open_question)); 
-	echo $form->hiddenField($model,'post_id',array('type'=>"hidden", 'value' => $post_id)); 
-	echo $form->hiddenField($model,'vote_on',array('type'=>"hidden", 'value' => "answer"));
-	echo $form->hiddenField($model,'vote_type',array('type'=>"hidden", 'value' => "accepted_answer")); 
+	echo Html::hiddenInput('should_open_question', $should_open_question); 
+	echo Html::hiddenInput('post_id', $post_id); 
+	echo Html::hiddenInput('vote_on', "answer");
+	echo Html::hiddenInput('vote_type', "accepted_answer"); 
 
-	echo CHtml::tag('button', array('class'=> "btn {$btnClass} btn-sm", 'type'=>'submit', 'style' => 'margin-top:5px;'), '<i class="fa fa-check"></i> ' . $text); 
+	//**kane
+	//echo Html::tag('button', array('class'=> "btn {$btnClass} btn-sm", 'type'=>'submit', 'style' => 'margin-top:5px;'), '<i class="fa fa-check"></i> ' . $text); 
+	echo Html::tag('button', '<i class="fa fa-check"></i> ' . $text, array('class'=> "btn {$btnClass} btn-sm", 'type'=>'submit', 'style' => 'margin-top:5px;')); 
 } else if($accepted_answer) {
 	echo "<span class=\"label label-success\" style=\"padding:5px;\"><i class=\"fa fa-check\"></i> $text</span>"; 
 	echo "<br />";
 }
 
 
-if(Yii::app()->user->id == $author) {
-	$this->endWidget(); 
+if(Yii::$app->user->id == $author) {
+	\yii\widgets\ActiveForm::end();
 }
 ?>
