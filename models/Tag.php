@@ -126,11 +126,11 @@ class Tag extends ActiveRecord implements Searchable
      *
      * @return type
      */
-    public function afterSave()
-    {
+//    public function afterSave()
+//    {
 //        HSearch::getInstance()->addModel($this);
 //        return parent::afterSave();
-    }
+//    }
 
 
     /**

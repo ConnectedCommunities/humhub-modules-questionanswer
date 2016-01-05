@@ -116,7 +116,7 @@ class Question extends ContentActiveRecord implements Searchable
 	/**
 	 * Returns the Wall Output
 	 */
-	public function getWallOut()
+	public function getWallOut($params = [])
 	{
 		return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionWallEntryWidget', array('question' => $this), true);
 //		return "Hello World";
@@ -304,7 +304,7 @@ class Question extends ContentActiveRecord implements Searchable
 				GROUP BY q.id
 				ORDER BY score DESC, vote_count DESC, q.created_at DESC";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('tag_id', $tag_id)->queryAll();
+		return Yii::$app->db->createCommand($sql)->bindValue('tag_id', $tag_id)->queryAll();
 
 	}
 
