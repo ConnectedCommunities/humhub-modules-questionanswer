@@ -2,8 +2,9 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
-/* @var $this QuestionController */
-/* @var $model Question */
+
+// Current active controller
+$controller = Yii::$app->controller;
 
 $breadcrumbs=array(
 	'Questions'=>array('index'),
@@ -51,7 +52,7 @@ $('.search-form form').submit(function(){
 	        <div class="panel qanda-panel">
 	        	<div class="panel-heading">
 	        		<?php echo $this->render('../partials/admin_menu_links'); ?>
-	        		<strong>Manage</strong> questions
+	        		<strong>Manage</strong> <?php echo $controller->id ?>s
 	        	</div>
 
 	            <div class="panel-body">
