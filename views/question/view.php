@@ -149,7 +149,7 @@ use yii\helpers\Html;
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
                                 //$vote = QuestionVotes::post($question_answer['id'])->user(Yii::$app->user->id)->find();
-                                $vote = QuestionVotes::findOne(['post_id' => $question_answer['id'], 'id' => Yii::$app->user->id]);
+                                $vote = QuestionVotes::findOne(['post_id' => $question_answer['id'], 'created_by' => Yii::$app->user->id]);
                                 if($vote) {
                                     if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
@@ -160,9 +160,9 @@ use yii\helpers\Html;
                                     }
                                 }
                                 ?>
-                                <?php VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1)); ?>
+                                <?php echo \humhub\modules\questionanswer\widgets\VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 0));?>
                                 <div class="text-center"><strong><?php echo $question_answer['score']; ?></strong><br /></div>
-                                <?php VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 1)); ?>
+                                <?php echo \humhub\modules\questionanswer\widgets\VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0));?>
                             </div>
                         </div>
                         <?php $user = User::findOne(['id' => $question_answer['created_by']]); ?>
@@ -187,7 +187,7 @@ use yii\helpers\Html;
                             $answerModel = Answer::findOne(['id' => $question_answer['id']]);
                             $comments = $answerModel->comments;
 
-                            echo ShowFiles::widget(array('object' => $model));
+                            echo ShowFiles::widget(array('object' => $model)); //**kane changed to $model from $answerModel
 
                             if($comments) {
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
