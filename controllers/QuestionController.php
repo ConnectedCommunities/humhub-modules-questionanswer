@@ -230,6 +230,7 @@ class QuestionController extends Controller
 		$criteria->join('LEFT JOIN', 'question_votes up', "question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type='up'");
 		$criteria->join('LEFT JOIN', 'question_votes down', "question.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down'");
 		$criteria->join('LEFT JOIN', 'question answers', "question.id = answers.question_id AND answers.post_type = 'answer'");
+		$criteria->where(['question.post_type' => 'question']);
 		$criteria->groupBy("question.id");
 		$criteria->having("answers = 0");
 		$criteria->orderBy("score DESC, vote_count DESC, question.created_at DESC");
