@@ -11,7 +11,7 @@ $menu=array(
 	array('label'=>'List Question', 'url'=>array('index')),
 	array('label'=>'Create Question', 'url'=>array('create')),
 );
-
+/* todo: repair clientScript
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
@@ -24,6 +24,7 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+*/
 ?>
 
 <style>
