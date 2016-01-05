@@ -1,5 +1,5 @@
 <?php $form = \yii\widgets\ActiveForm::begin([
-    'action' => \yii\helpers\Url::to('comment/create')
+    'action' => \yii\helpers\Url::toRoute(['comment/create'])
 ]); ?>
 
 <?php echo $form->errorSummary($model); ?>
@@ -13,17 +13,8 @@
 ))->textArea(['rows' => 2, 'placeholder' => 'Add comment...'])->label(false);
 ?>
 <?php
-$form->field($model, 'question_id', array(
-    'options' => [
-        'value' => $question_id
-    ]
-))->hiddenInput();
-
-$form->field($model, 'parent_id', array(
-    'options' => [
-        'value' => $parent_id
-    ]
-))->hiddenInput();
+echo $form->field($model, 'question_id', [])->hiddenInput(['value' => $question_id])->label(false);
+echo $form->field($model, 'parent_id', [])->hiddenInput(['value' => $parent_id])->label(false);
 ?>
 
 
