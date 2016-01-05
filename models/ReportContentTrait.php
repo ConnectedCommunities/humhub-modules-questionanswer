@@ -1,4 +1,7 @@
 <?php
+namespace humhub\modules\questionanswer\models;
+
+
 trait ReportContentTrait
 {
 

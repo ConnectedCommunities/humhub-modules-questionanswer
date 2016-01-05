@@ -1,4 +1,9 @@
 <?php
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+
 
 /**
  * ProfileWidget. 
@@ -8,8 +13,8 @@
  * @since 0.5
  * @author Luke
  */
-class ProfileWidget extends HWidget {
-
+class ProfileWidget extends \yii\base\Widget
+{
     /**
      * The user object
      *
@@ -29,7 +34,7 @@ class ProfileWidget extends HWidget {
      */
     public function run() {
 
-        $this->render('profile', array(
+        return $this->render('profile', array(
             'user' => $this->user,
             'timestamp' => $this->timestamp
         ));

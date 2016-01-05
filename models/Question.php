@@ -1,5 +1,16 @@
 <?php
 
+
+namespace humhub\modules\questionanswer\models;
+
+use humhub\components\ActiveRecord;
+use humhub\modules\content\components\ContentContainerActiveRecord;
+use humhub\modules\user\models\User;
+use Yii;
+use humhub\modules\content\components\ContentActiveRecord;
+use humhub\modules\search\interfaces\Searchable;
+use yii\helpers\Url;
+
 /**
  * This is the model class for table "question".
  *
@@ -15,47 +26,42 @@
  * @property integer $updated_by
  */
 //class Question extends HActiveRecordContentContainer implements ISearchable
-class Question extends HActiveRecordContent implements ISearchable
+class Question extends ContentActiveRecord implements Searchable
 {
 
 	use ReportContentTrait;
 
+    /**
+     * @inheritdoc
+     */
 	public $autoAddToWall = false;
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Question the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    /**
+     * @inheritdoc
+     */
+    public $wallEntryClass = "humhub\modules\questionanswer\widgets\QuestionWallEntryWidget";
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
+    /**
+     * @inheritdoc
+     */
+	public static function tableName()
 	{
 		return 'question';
 	}
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
+    /**
+     * @inheritdoc
+     */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('post_text, post_type, created_by, updated_by', 'required'),
-			array('question_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
-			array('post_title, post_type', 'length', 'max'=>255),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, question_id, post_title, post_text, post_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
-		);
+
+        return [
+            [['post_title', 'post_text', 'post_type'], 'required'],
+            [['post_title', 'post_type'], 'string', 'max' => 255],
+            [['created_at', 'updated_at'], 'safe'],
+            [['created_by', 'updated_by'], 'integer'],
+        ];
+
 	}
 
 	/**
@@ -90,36 +96,27 @@ class Question extends HActiveRecordContent implements ISearchable
 		);
 	}
 
-	/**
-	 * After Save Addons
-	 *
-	 * @return type
-	 */
-	public function afterSave()
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+
+    public function getAnswers()
+    {
+//        return $this->hasMany(Answer)
+    }
+
+	public function getTags()
 	{
-
-		parent::afterSave();
-
-		if ($this->isNewRecord) {
-			$activity = Activity::CreateForContent($this);
-			$activity->type = "QuestionCreated";
-			$activity->module = "questionanswer";
-			$activity->save();
-			$activity->fire();
-		}
-
-		HSearch::getInstance()->addModel($this);
-
-		return true;
+		return $this->hasMany(QuestionTag::class, ['question_id' => 'id']);
 	}
-
 
 
 
 	/**
 	 * Returns the Wall Output
 	 */
-	public function getWallOut()
+	public function getWallOut($params = [])
 	{
 		return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionWallEntryWidget', array('question' => $this), true);
 //		return "Hello World";
@@ -242,7 +239,7 @@ class Question extends HActiveRecordContent implements ISearchable
 	 */
 	public function getUrl($parameters = array())
 	{
-		return Yii::app()->createUrl('//questionanswer/question/view', $parameters);
+		return Url::toRoute(['question/view', $parameters]);
 	}
 
 
@@ -283,7 +280,7 @@ class Question extends HActiveRecordContent implements ISearchable
 				GROUP BY q.id
 				ORDER BY score DESC, vote_count DESC";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('question_id', $question_id)->queryRow();
+		return Yii::$app->db->createCommand($sql)->bindValue('question_id', $question_id)->queryOne();
 
 
 	}
@@ -307,7 +304,7 @@ class Question extends HActiveRecordContent implements ISearchable
 				GROUP BY q.id
 				ORDER BY score DESC, vote_count DESC, q.created_at DESC";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('tag_id', $tag_id)->queryAll();
+		return Yii::$app->db->createCommand($sql)->bindValue('tag_id', $tag_id)->queryAll();
 
 	}
 
@@ -326,7 +323,7 @@ class Question extends HActiveRecordContent implements ISearchable
 				ORDER BY COUNT(*) DESC
 				LIMIT 0, 5";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('question_id', $question_id)->queryAll();
+		return Yii::$app->db->createCommand($sql)->bindValue('question_id', $question_id)->queryAll();
 
 	}
 

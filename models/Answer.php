@@ -1,5 +1,13 @@
 <?php
 
+namespace humhub\modules\questionanswer\models;
+
+use humhub\modules\questionanswer\models\Comment;
+use humhub\components\ActiveRecord;
+use Yii;
+use humhub\modules\content\components\ContentActiveRecord;
+use humhub\modules\search\interfaces\Searchable;
+
 /**
  * This is the model class for table "question".
  *
@@ -14,28 +22,15 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-//class Answer extends HActiveRecord implements ISearchable
-class Answer extends HActiveRecordContent implements ISearchable
+class Answer extends ContentActiveRecord implements Searchable
 {
 
     public $autoAddToWall = false;
 
     /**
-     * Returns the static model of the specified AR class.
-     * Please note that you should have this exact method in all your CActiveRecord descendants!
-     * @param string $className active record class name.
-     * @return Answer the static model class
-     */
-    public static function model($className=__CLASS__)
-    {
-        return parent::model($className);
-    }
-
-
-    /**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+	public static function tableName()
 	{
 		return 'question';
 	}
@@ -45,18 +40,12 @@ class Answer extends HActiveRecordContent implements ISearchable
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('post_text, post_type, created_by', 'required'),
-			array('question_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
-			array('post_title', 'length', 'max'=>255),
-			array('post_type', 'length', 'max'=>8),
-			array('created_at, updated_at', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, question_id, post_title, post_text, post_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
-		);
+        return [
+            [['post_text', 'post_type'], 'required'],
+            [['post_text', 'post_type'], 'string', 'max' => 255],
+            [['created_at', 'updated_at'], 'safe'],
+            [['question_id', 'created_by', 'updated_by'], 'integer'],
+        ];
 	}
 
     /**
@@ -88,6 +77,12 @@ class Answer extends HActiveRecordContent implements ISearchable
         );
 	}
 
+    public function getComments()
+    {
+        return $this->hasMany(Comment::class, ['id' => 'parent_id']);
+    }
+
+
     /**
      * After Save Addons
      *
@@ -96,7 +91,7 @@ class Answer extends HActiveRecordContent implements ISearchable
     public function afterSave()
     {
 
-        parent::afterSave();
+        /*parent::afterSave();
 
         if ($this->isNewRecord) {
             $activity = Activity::CreateForContent($this);
@@ -108,7 +103,7 @@ class Answer extends HActiveRecordContent implements ISearchable
 
         HSearch::getInstance()->addModel($this);
 
-        return true;
+        return true;*/
 
     }
 
@@ -228,7 +223,7 @@ class Answer extends HActiveRecordContent implements ISearchable
 				GROUP BY q.id
 				ORDER BY score DESC, vote_count DESC";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('parent_id', $question_id)->queryAll();
+		return Yii::$app->db->createCommand($sql)->bindValue('parent_id', $question_id)->queryAll();
 
 	}
 

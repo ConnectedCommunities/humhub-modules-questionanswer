@@ -1,5 +1,14 @@
 <?php
 
+namespace humhub\modules\questionanswer\models;
+
+use humhub\modules\user\models\User;
+use humhub\modules\karma\models\Karma;
+use Yii;
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
+use humhub\components\ActiveRecord;
+
 /**
  * This is the model class for table "question_votes".
  *
@@ -13,12 +22,12 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class QuestionVotes extends HActiveRecord
+class QuestionVotes extends ActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+	public static function tableName()
 	{
 		return 'question_votes';
 	}
@@ -28,17 +37,12 @@ class QuestionVotes extends HActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('post_id, created_by', 'required'),
-			array('post_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
-			array('vote_on, vote_type', 'length', 'max'=>255),
-			array('created_at, updated_at', 'safe'),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, post_id, vote_on, vote_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
-		);
+        return [
+            [['post_id', 'created_by'], 'required'],
+            [['vote_on', 'vote_type'], 'string', 'max' => 255],
+            [['post_id', 'created_by', 'updated_by'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+        ];
 	}
 
 	/**
@@ -117,6 +121,7 @@ class QuestionVotes extends HActiveRecord
 	 * Filters results by post_id
 	 * @param $user_id
 	 */
+	//TODO: DELETE
 	public function post($post_id)
 	{
 	    $this->getDbCriteria()->mergeWith(array(
@@ -131,6 +136,7 @@ class QuestionVotes extends HActiveRecord
 	 * Filters results by user_id
 	 * @param $user_id
 	 */
+	//TODO: DELETE
 	public function user($user_id)
 	{
 	    $this->getDbCriteria()->mergeWith(array(
@@ -158,11 +164,11 @@ class QuestionVotes extends HActiveRecord
 	/** 
 	 * Returns the score of a post
 	 */
-	public function score($post_id) {
+	public static function score($post_id) {
 
 		// Calculate the "score" (up votes minus down votes)
 		$sql = "SELECT ((SELECT COUNT(*) FROM question_votes WHERE vote_type = 'up' AND post_id=:post_id) - (SELECT COUNT(*) FROM question_votes WHERE vote_type = 'down' AND post_id=:post_id))";
-		return Yii::app()->db->createCommand($sql)->bindValue('post_id', $post_id)->queryScalar();
+		return Yii::$app->db->createCommand($sql)->bindValue('post_id', $post_id)->queryScalar();
 
 	}
 
@@ -183,17 +189,6 @@ class QuestionVotes extends HActiveRecord
 	}
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return QuestionVotes the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-
-	/** 
 	 * Cast a vote
 	 * @param QuestionVote 
 	 * @param int question_id (optional)

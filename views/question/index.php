@@ -1,6 +1,8 @@
 <?php
 /* @var $this QuestionController */
 /* @var $dataProvider CActiveDataProvider */
+
+use yii\widgets\ListView;
 ?>
 
 <style>
@@ -21,14 +23,16 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default qanda-panel">
-                <?php $this->renderPartial('../partials/top_menu_bar'); ?>
+                <?php echo $this->render('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
 
-                <?php 
-                $this->widget('zii.widgets.CListView', array(
-                    'dataProvider'=>$dataProvider,
-                    'itemView'=>'_view',
-                )); 
+                <?php
+                echo ListView::widget([
+                    'dataProvider' => $dataProvider,
+                    'itemView' => function($model) {
+                        return $this->render('_view', ['data' => $model]);
+                    },
+                ]);
                 ?>
                 </div>
             </div>
