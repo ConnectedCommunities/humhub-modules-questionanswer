@@ -9,13 +9,13 @@ use yii\data\ActiveDataProvider;
     <ul class="nav nav-tabs qanda-header-tabs">
 
         <li class="dropdown<?php if(Yii::$app->controller->action->id == "picked") echo ' active'; ?>">
-            <a style="cursor:pointer;" href="<?php echo Url::toRoute('picked'); ?>">Picked for you</a>
+            <a style="cursor:pointer;" href="<?php echo Url::toRoute('question/picked'); ?>">Picked for you</a>
         </li>
         <li class="dropdown<?php if(Yii::$app->controller->action->id == "index") echo ' active'; ?>">
-            <a style="cursor:pointer;" href="<?php echo Url::toRoute('index'); ?>">Questions</a>
+            <a style="cursor:pointer;" href="<?php echo Url::toRoute('question/index'); ?>">Questions</a>
         </li>
         <li class="dropdown<?php if(Yii::$app->controller->action->id == "unanswered") echo ' active'; ?>">
-            <?php echo Html::a('Unanswered', Url::toRoute('unanswered'), array()); ?>
+            <?php echo Html::a('Unanswered', Url::toRoute('question/unanswered'), array()); ?>
         </li>
         <li class="dropdown<?php if(Yii::$app->controller->action->id == "tag") echo ' active'; ?>">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags <b class="caret"></b></a>
@@ -26,7 +26,7 @@ use yii\data\ActiveDataProvider;
                     echo "<li><a href=\"#\" class=\"wallFilter\">No tags found</a></li>";
                 } else {
                     foreach($tags as $tag) {
-                        echo "<li><a href=\"".Url::toRoute(['main/tag', array('id' => $tag->id)])."\" class=\"wallFilter\">".$tag->tag."</a></li>";
+                        echo "<li><a href=\"".Url::toRoute(['main/tag', 'id' => $tag->id], 'http')."\" class=\"wallFilter\">".$tag->tag."</a></li>";
                     }
                 }
                 ?>
