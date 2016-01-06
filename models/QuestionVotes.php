@@ -184,7 +184,7 @@ class QuestionVotes extends ActiveRecord
 				AND vote_on = 'answer' 
 				AND vote_type = 'accepted_answer'";
 
-		return QuestionVotes::model()->findBySql($sql, array(':question_id' => $question_id));
+		return QuestionVotes::findBySql($sql, array(':question_id' => $question_id));
 
 	}
 
@@ -196,8 +196,8 @@ class QuestionVotes extends ActiveRecord
 	public static function castVote($questionVotesModel, $question_id) 
 	{
 		
-		$question = Question::model()->findByPk($question_id);
-		$questionVotesModel->created_by = Yii::app()->user->id;	
+		$question = Question::findOne(array('question_id', $question_id));
+		$questionVotesModel->created_by = Yii::$app->user->id;	
     
         if($questionVotesModel->validate())
         {
@@ -206,19 +206,43 @@ class QuestionVotes extends ActiveRecord
         	if($question->created_by == $questionVotesModel->created_by && $questionVotesModel->vote_type == "accepted_answer") {
 
 	        	// If the user has previously selected a best answer, drop the old one
-	        	$previousAccepted = QuestionVotes::model()->findAcceptedAnswer($question->id);
-	        	if($previousAccepted && $previousAccepted->post_id != $question->id) $previousAccepted->delete();
+	        	$previousAccepted = QuestionVotes::findAcceptedAnswer($question->id);
+				// If the user has already voted
+				if($previousAccepted) {
+					// Delete the previous vote if the post id and question id are different
+					if($previousAccepted->post_id != $question_id) $previousAccepted->delete();
 
-        	} else { // no, just a normal up/down vote then
+					// Do not save the new vote if there existed a previous vote with the same vote_type as the new vote
+					// I.e. if you vote up, then up again, the second vote should be deleted
+					// but no new vote should be saved in order to achieve a vote contribution of 0.
+					if($questionVotesModel->vote_type != $previousAccepted->vote_type) $questionVotesModel->save();
+				} else {
+					//If there is no previous vote, then we definitely want to save the new vote
+					$questionVotesModel->save();
+				}
 
-	        	// If the user has previously voted on this, drop it 
-	        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::app()->user->id));
-	        	if($previousVote) $previousVote->delete();
+			} else { // no, just a normal up/down vote then
 
-        	}
+				// If the user has previously voted on this, drop it
+				//$previousVote = QuestionVotes::find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::$app->user->id))->one();
+				$previousVote = QuestionVotes::findOne(['post_id' => $questionVotesModel->post_id, 'created_by' => Yii::$app->user->id]);
 
-            $questionVotesModel->save();
-            return true;
+				// If the user has already voted
+				if($previousVote) {
+					// Delete the previous vote
+					$previousVote->delete();
+
+					// Do not save the new vote if there existed a previous vote with the same vote_type as the new vote
+					// I.e. if you vote up, then up again, the second vote should be deleted
+					// but no new vote should be saved in order to achieve a vote contribution of 0.
+					if($questionVotesModel->vote_type != $previousVote->vote_type) $questionVotesModel->save();
+				} else {
+					//If there is no previous vote, then we definitely want to save the new vote
+					$questionVotesModel->save();
+				}
+
+			}
+			return true;
         } else {
         	return false;
         }

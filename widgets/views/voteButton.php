@@ -1,13 +1,13 @@
 
 <?php $form = \yii\widgets\ActiveForm::begin([
-    'action' => \yii\helpers\Url::to('create')
+    'action' => \yii\helpers\Url::toRoute('vote/create')
 ]); ?>
 
     <?php if(!isset($btnClass)) $btnClass = "btn btn-default btn-xs"; ?>
-    <?php echo \yii\helpers\Html::hiddenInput('should_open_question', $should_open_question); ?>
-    <?php echo \yii\helpers\Html::hiddenInput('post_id', $post_id); ?>
-    <?php echo \yii\helpers\Html::hiddenInput('vote_on', $vote_on); ?>
-    <?php echo \yii\helpers\Html::hiddenInput('vote_type', $vote_type); ?>
+    <?php echo $form->field($model, 'should_open_question')->hiddenInput(['value' => $should_open_question])->label(false); ?>
+    <?php echo $form->field($model, 'post_id')->hiddenInput(['value' => $post_id])->label(false); ?>
+    <?php echo $form->field($model, 'vote_on')->hiddenInput(['value' => $vote_on])->label(false); ?>
+    <?php echo $form->field($model, 'vote_type')->hiddenInput(['value' => $vote_type])->label(false); ?>
     <?php echo \yii\helpers\Html::tag('button', '<i class="fa fa-angle-'.$vote_type.'"></i>', array(
         'options' => array('class'=> $btnClass . " " . $class, 'type'=>'submit', 'style' => 'margin-top:5px;')
     )); ?>
