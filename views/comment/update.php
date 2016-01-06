@@ -5,7 +5,7 @@
 				<div class="panel-body">
 					<div class="media">
 						<div class="media-body" style="padding-top:5px; ">
-							<h3 class="media-heading">Test Question</h3>
+							<h3 class="media-heading">Edit Comment #<?php echo $model->id ?></h3>
 							<?php echo $this->render('_form', array('model'=>$model)); ?>
 						</div>
 					</div>
