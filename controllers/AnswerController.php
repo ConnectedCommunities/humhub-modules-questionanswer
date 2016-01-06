@@ -3,6 +3,7 @@
 namespace humhub\modules\questionanswer\controllers;
 
 use humhub\modules\questionanswer\models\Answer;
+use humhub\modules\questionanswer\models\AnswerSearch;
 use humhub\modules\questionanswer\models\QuestionTag;
 use humhub\modules\questionanswer\models\Tag;
 use humhub\modules\questionanswer\models\Question;
@@ -155,7 +156,7 @@ class AnswerController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$searchModel = new QuestionSearch();
+		$searchModel = new AnswerSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		return $this->render('../question/admin', array(

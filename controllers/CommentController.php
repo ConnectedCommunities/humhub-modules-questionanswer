@@ -7,7 +7,7 @@ use humhub\modules\questionanswer\models\Comment;
 use humhub\modules\questionanswer\models\QuestionTag;
 use humhub\modules\questionanswer\models\Tag;
 use humhub\modules\questionanswer\models\Question;
-use humhub\modules\questionanswer\models\QuestionSearch;
+use humhub\modules\questionanswer\models\CommentSearch;
 use humhub\modules\user\models\User;
 use Yii;
 //use humhub\modules\content\components\ContentContainerController;
@@ -98,7 +98,7 @@ class CommentController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$searchModel = new QuestionSearch();
+		$searchModel = new CommentSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		return $this->render('../question/admin', array(
