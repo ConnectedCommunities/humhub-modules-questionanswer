@@ -39,17 +39,14 @@ use yii\helpers\Html;
 
                                 <?php
                                 echo VoteButtonWidget::widget(array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));
-                                // $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));
                                 ?>
                                 <div class="text-center"><strong>
                                 <?php
                                 echo QuestionVotes::score($model->id);
-                                // echo QuestionVotes::model()->score($model->id);
                                 ?>
                                 </strong><br /></div>
 								<?php
                                 echo VoteButtonWidget::widget(array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass,  'should_open_question' => 1));
-                                // $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass,  'should_open_question' => 1));
                                 ?>
                             </div>
                             
@@ -57,7 +54,6 @@ use yii\helpers\Html;
                         
                         <?php
                         echo ProfileWidget::widget(array('user' => $model->user, 'timestamp' => $model->created_at));
-//                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $model->user, 'timestamp' => $model->created_at));
                         ?>
 
                         <div class="media-body" style="padding-top:5px; ">
@@ -88,11 +84,12 @@ use yii\helpers\Html;
                                     
                                     if(Yii::$app->user->isAdmin()) {
                                         echo " &bull; ";
-                                        echo Html::button('Delete',array(
-                                        'submit'=> Url::toRoute(['comment/delete', array('id'=>$comment->id)]),
-                                        'confirm'=>"Are you sure want to delete?",
-                                        'csrf'=>true,
-                                        'params'=> array('YII_CSRF_TOKEN' => Yii::$app->request->csrfToken)));
+                                        echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                            'id' => $model->id,
+                                            'deleteRoute' => URL::toRoute(['comment/delete', 'id' => $comment->id]),
+                                            'title' => '<strong>Confirm</strong> delete comment',
+                                            'message' => 'Do you really want to delete this comment?',
+                                        ]);
                                     }
                                     echo "</small>";
                                     
@@ -139,7 +136,6 @@ use yii\helpers\Html;
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
-                                //$vote = QuestionVotes::post($question_answer['id'])->user(Yii::$app->user->id)->find();
                                 $vote = QuestionVotes::findOne(['post_id' => $question_answer['id'], 'created_by' => Yii::$app->user->id]);
                                 if($vote) {
                                     if($vote->vote_type == "up") {
