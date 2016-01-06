@@ -109,19 +109,21 @@ class AnswerController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$id = Yii::$app->request->get('id');
+		$model = Answer::findOne(['id' => $id]);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$model->content->object_model = Answer::class;
+		$model->content->object_id = $model->id;
 
-		if(isset($_POST['Answer']))
-		{
-			$model->attributes=$_POST['Answer'];
-			if($model->save())
-				$this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $model->question_id)));
+		$containerClass = User::className();
+		$contentContainer = $containerClass::findOne(['guid' => Yii::$app->getUser()->guid]);
+		$model->content->container = $contentContainer;
+
+		if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
+			$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
