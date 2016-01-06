@@ -114,25 +114,12 @@ use yii\helpers\Html;
                             &bull;
 							<?php
 						    if(Yii::$app->user->isAdmin()) {
-                                //todo: refactor into a nice widget
                                 echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
                                     'id' => $model->id,
                                     'deleteRoute' => URL::toRoute(['question/delete', 'id' => $model->id]),
-                                    'title' => '<strong>Confirm</strong> question deleting',
+                                    'title' => '<strong>Confirm</strong> delete question',
                                     'message' => 'Do you really want to delete this question? All answers will be lost!',
                                 ]);
-
-//                                echo humhub\widgets\ModalConfirm::widget(array(
-//                                    'uniqueID' => 'modal_postdelete_' . $model->id,
-//                                    'linkOutput' => 'a',
-//                                    'title' => Yii::t('ContentModule.widgets_views_deleteLink', '<strong>Confirm</strong> question deleting'),
-//                                    'message' => Yii::t('ContentModule.widgets_views_deleteLink', 'Do you really want to delete this question? All answers will be lost!'),
-//                                    'buttonTrue' => Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
-//                                    'buttonFalse' => Yii::t('ContentModule.widgets_views_deleteLink', 'Cancel'),
-//                                    'linkContent' => '<i class="fa fa-trash-o"></i> ' . Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
-//                                    'linkHref' => URL::toRoute(['delete', 'id' => $model->id]),
-//                                    'confirmJS' => 'function(json) { $(".wall_"+json.uniqueId).remove(); }'
-//                                ));
                             }
 
 							?>
@@ -209,11 +196,12 @@ use yii\helpers\Html;
                                     
                                     if(Yii::$app->user->isAdmin()) {
                                         echo " &bull; ";
-                                        echo Html::button('Delete',array(
-                                        'submit'=>\yii\helpers\Url::toRoute('comment/delete',array('id'=>$comment->id)),
-                                        'confirm'=>"Are you sure want to delete?",
-                                        'csrf'=>true,
-                                        'params'=> array('YII_CSRF_TOKEN' => Yii::$app->request->csrfToken)));
+                                        echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                            'id' => 'comment_'.$comment->id,
+                                            'deleteRoute' => URL::toRoute(['comment/delete', 'id' => $comment->id]),
+                                            'title' => '<strong>Confirm</strong> delete comment',
+                                            'message' => 'Are you sure want to delete this comment?',
+                                        ]);
                                     }
                                     echo "</small>";
 
@@ -234,11 +222,12 @@ use yii\helpers\Html;
                             &bull;
                             <?php
                             if(Yii::$app->user->isAdmin()) {
-                                echo Html::button('Delete',array(
-                                'submit'=>\yii\helpers\Url::toRoute('answer/delete',array('id'=>$question_answer['id'])),
-                                'confirm'=>"Are you sure want to delete?",
-                                'csrf'=>true,
-                                'params'=> array('YII_CSRF_TOKEN' => Yii::$app->request->csrfToken)));
+                                echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                    'id' => 'comment_'.$comment->id,
+                                    'deleteRoute' => URL::toRoute(['answer/delete', 'id' => $question_answer['id']]),
+                                    'title' => '<strong>Confirm</strong> delete answer',
+                                    'message' => 'Are you sure want to delete this answer?',
+                                ]);
                             }
 
                             ?>
