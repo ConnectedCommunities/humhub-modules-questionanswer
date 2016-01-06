@@ -1,13 +1,15 @@
-<?php
-/* @var $this AnswerController */
-/* @var $model Answer */
-?>
 <div class="container">
     <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h1>Update Answer <?php echo $model->id; ?></h1>
-                <?php echo $this->render('_form', array('model'=>$model)); ?>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default qanda-panel">
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-body" style="padding-top:5px; ">
+                            <h3 class="media-heading">Edit Answer #<?php echo $model->id ?></h3>
+                            <?php echo $this->render('_form', array('model'=>$model)); ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
