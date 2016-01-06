@@ -74,7 +74,7 @@ class CommentController extends Controller
 				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
@@ -117,11 +117,13 @@ class CommentController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Comment::model()->findByPk($id);
+		$model=Comment::findOne(['id' => $id]);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
+
+
 
 	/**
 	 * Performs the AJAX validation.
