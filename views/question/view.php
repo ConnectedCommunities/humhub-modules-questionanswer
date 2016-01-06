@@ -85,7 +85,7 @@ use yii\helpers\Html;
                                     if(Yii::$app->user->isAdmin()) {
                                         echo " &bull; ";
                                         echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
-                                            'id' => $model->id,
+                                            'id' => 'comment_'.$comment->id,
                                             'deleteRoute' => URL::toRoute(['comment/delete', 'id' => $comment->id]),
                                             'title' => '<strong>Confirm</strong> delete comment',
                                             'message' => 'Do you really want to delete this comment?',
@@ -112,7 +112,7 @@ use yii\helpers\Html;
 							<?php
 						    if(Yii::$app->user->isAdmin()) {
                                 echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
-                                    'id' => $model->id,
+                                    'id' => 'question_'.$model->id,
                                     'deleteRoute' => URL::toRoute(['question/delete', 'id' => $model->id]),
                                     'title' => '<strong>Confirm</strong> delete question',
                                     'message' => 'Do you really want to delete this question? All answers will be lost!',
@@ -219,7 +219,7 @@ use yii\helpers\Html;
                             <?php
                             if(Yii::$app->user->isAdmin()) {
                                 echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
-                                    'id' => 'comment_'.$comment->id,
+                                    'id' => 'answer_'.$question_answer['id'],
                                     'deleteRoute' => URL::toRoute(['answer/delete', 'id' => $question_answer['id']]),
                                     'title' => '<strong>Confirm</strong> delete answer',
                                     'message' => 'Are you sure want to delete this answer?',
