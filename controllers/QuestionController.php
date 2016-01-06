@@ -293,14 +293,14 @@ class QuestionController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Question('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Question']))
-			$model->attributes=$_GET['Question'];
+        $searchModel = new QuestionSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+        return $this->render('admin', array(
+            'dataProvider'  => $dataProvider,
+            'searchModel'   => $searchModel,
+            'model'         => Question::find()
+        ));
 	}
 
 	/**

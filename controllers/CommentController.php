@@ -7,7 +7,7 @@ use humhub\modules\questionanswer\models\Comment;
 use humhub\modules\questionanswer\models\QuestionTag;
 use humhub\modules\questionanswer\models\Tag;
 use humhub\modules\questionanswer\models\Question;
-use humhub\modules\questionanswer\models\QuestionSearch;
+use humhub\modules\questionanswer\models\CommentSearch;
 use humhub\modules\user\models\User;
 use Yii;
 //use humhub\modules\content\components\ContentContainerController;
@@ -91,6 +91,21 @@ class CommentController extends Controller
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+	}
+
+	/**
+	 * Manages all models
+	 */
+	public function actionAdmin()
+	{
+		$searchModel = new CommentSearch();
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+		return $this->render('../question/admin', array(
+			'dataProvider'  => $dataProvider,
+			'searchModel'   => $searchModel,
+			'model'         => Comment::find()
+		));
 	}
 
 	/**
