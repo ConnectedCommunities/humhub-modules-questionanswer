@@ -31,6 +31,17 @@ class CommentController extends Controller
 	}
 
 	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id)
+	{
+		return $this->render('view',array(
+			'model'=>$this->loadModel($id),
+		));
+	}
+
+	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
@@ -62,16 +73,17 @@ class CommentController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$id = Yii::$app->request->get('id');
+		$model = Comment::findOne(['id' => $id]);
+		//$model->content->object_model = Comment::class;
+		//$model->content->object_id = $model->id;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$containerClass = User::className();
+		$contentContainer = $containerClass::findOne(['guid' => Yii::$app->getUser()->guid]);
+		//$model->content->container = $contentContainer;
 
-		if(isset($_POST['Comment']))
-		{
-			$model->attributes=$_POST['Comment'];
-			if($model->save())
-				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
+		if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
+			$this->redirect(array('view','id'=>$model->id));
 		}
 
 		return $this->render('update',array(
