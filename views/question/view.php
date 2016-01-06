@@ -115,17 +115,24 @@ use yii\helpers\Html;
 							<?php
 						    if(Yii::$app->user->isAdmin()) {
                                 //todo: refactor into a nice widget
-                                echo humhub\widgets\ModalConfirm::widget(array(
-                                    'uniqueID' => 'modal_postdelete_' . $model->id,
-                                    'linkOutput' => 'a',
-                                    'title' => Yii::t('ContentModule.widgets_views_deleteLink', '<strong>Confirm</strong> question deleting'),
-                                    'message' => Yii::t('ContentModule.widgets_views_deleteLink', 'Do you really want to delete this question? All answers will be lost!'),
-                                    'buttonTrue' => Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
-                                    'buttonFalse' => Yii::t('ContentModule.widgets_views_deleteLink', 'Cancel'),
-                                    'linkContent' => '<i class="fa fa-trash-o"></i> ' . Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
-                                    'linkHref' => URL::toRoute(['delete', 'id' => $model->id]),
-                                    'confirmJS' => 'function(json) { $(".wall_"+json.uniqueId).remove(); }'
-                                ));
+                                echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                    'id' => $model->id,
+                                    'deleteRoute' => URL::toRoute(['question/delete', 'id' => $model->id]),
+                                    'title' => '<strong>Confirm</strong> question deleting',
+                                    'message' => 'Do you really want to delete this question? All answers will be lost!',
+                                ]);
+
+//                                echo humhub\widgets\ModalConfirm::widget(array(
+//                                    'uniqueID' => 'modal_postdelete_' . $model->id,
+//                                    'linkOutput' => 'a',
+//                                    'title' => Yii::t('ContentModule.widgets_views_deleteLink', '<strong>Confirm</strong> question deleting'),
+//                                    'message' => Yii::t('ContentModule.widgets_views_deleteLink', 'Do you really want to delete this question? All answers will be lost!'),
+//                                    'buttonTrue' => Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
+//                                    'buttonFalse' => Yii::t('ContentModule.widgets_views_deleteLink', 'Cancel'),
+//                                    'linkContent' => '<i class="fa fa-trash-o"></i> ' . Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
+//                                    'linkHref' => URL::toRoute(['delete', 'id' => $model->id]),
+//                                    'confirmJS' => 'function(json) { $(".wall_"+json.uniqueId).remove(); }'
+//                                ));
                             }
 
 							?>
