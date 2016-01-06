@@ -58,7 +58,7 @@ use yii\helpers\Html;
 
                         <div class="media-body" style="padding-top:5px; ">
                             <h3 class="media-heading">
-                                <?php echo Html::a(Html::encode($model->post_title), Url::toRoute(['question/view', array('id' => $model->id)])); ?>
+                                <?php echo Html::a(Html::encode($model->post_title), Url::toRoute(['question/view', 'id' => $model->id])); ?>
                             </h3>
                             <?php print Html::encode($model->post_text); ?>
                             <br /><br />
@@ -74,7 +74,7 @@ use yii\helpers\Html;
                                 foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     print Html::encode($comment->post_text);
-                                    echo " &bull; <a href=\"". Url::toRoute(['user/profile', array('uguid' => $comment->user->guid)]) . "\">" . $comment->user->displayName . "</a>";
+                                    echo " &bull; <a href=\"". Url::toRoute(['/user/profile', 'uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
                                     
                                     echo "<small>";
                                     if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
@@ -152,9 +152,9 @@ use yii\helpers\Html;
                                 <?php echo \humhub\modules\questionanswer\widgets\VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0));?>
                             </div>
                         </div>
-                        <?php $user = User::findOne(['id' => $question_answer['created_by']]); ?>
                         <?php
-                        ProfileWidget::widget(array('user' => $user, 'timestamp' => $question_answer['created_at']));
+                        $user = User::findOne(['id' => $question_answer['created_by']]);
+                        echo ProfileWidget::widget(array('user' => $user, 'timestamp' => $question_answer['created_at']));
                         ?>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
@@ -182,7 +182,7 @@ use yii\helpers\Html;
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     print Html::encode($comment->post_text);
 
-                                    echo " &bull; <a href=\"". \yii\helpers\Url::toRoute('user/profile',['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
+                                    echo " &bull; <a href=\"". \yii\helpers\Url::toRoute(['/user/profile', 'uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
                                     
                                     echo "<small>";
                                     if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
@@ -249,7 +249,7 @@ use yii\helpers\Html;
                 <?php if(count($related) > 0) { ?>
                     <div class="list-group">
                         <?php foreach ($related as $question) { ?>
-                            <a class="list-group-item" href="<?php echo Url::toRoute(['question/view', array('id' => $question['id'])]); ?>"><?php echo Html::encode($question['post_title']); ?></a>
+                            <a class="list-group-item" href="<?php echo Url::toRoute(['question/view', 'id' => $question['id']]); ?>"><?php echo Html::encode($question['post_title']); ?></a>
                         <?php } ?>
                     </div>
                     <br>
