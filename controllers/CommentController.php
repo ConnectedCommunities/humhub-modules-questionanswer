@@ -135,6 +135,8 @@ class CommentController extends Controller
 		return $model;
 	}
 
+
+
 	/**
 	 * Performs the AJAX validation.
 	 * @param Comment $model the model to be validated

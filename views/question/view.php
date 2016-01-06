@@ -39,17 +39,14 @@ use yii\helpers\Html;
 
                                 <?php
                                 echo VoteButtonWidget::widget(array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));
-                                // $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));
                                 ?>
                                 <div class="text-center"><strong>
                                 <?php
                                 echo QuestionVotes::score($model->id);
-                                // echo QuestionVotes::model()->score($model->id);
                                 ?>
                                 </strong><br /></div>
 								<?php
                                 echo VoteButtonWidget::widget(array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass,  'should_open_question' => 1));
-                                // $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass,  'should_open_question' => 1));
                                 ?>
                             </div>
                             
@@ -57,7 +54,6 @@ use yii\helpers\Html;
                         
                         <?php
                         echo ProfileWidget::widget(array('user' => $model->user, 'timestamp' => $model->created_at));
-//                        $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $model->user, 'timestamp' => $model->created_at));
                         ?>
 
                         <div class="media-body" style="padding-top:5px; ">
@@ -88,11 +84,12 @@ use yii\helpers\Html;
                                     
                                     if(Yii::$app->user->isAdmin()) {
                                         echo " &bull; ";
-                                        echo Html::button('Delete',array(
-                                        'submit'=> Url::toRoute(['comment/delete', array('id'=>$comment->id)]),
-                                        'confirm'=>"Are you sure want to delete?",
-                                        'csrf'=>true,
-                                        'params'=> array('YII_CSRF_TOKEN' => Yii::$app->request->csrfToken)));
+                                        echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                            'id' => 'comment_'.$comment->id,
+                                            'deleteRoute' => URL::toRoute(['comment/delete', 'id' => $comment->id]),
+                                            'title' => '<strong>Confirm</strong> delete comment',
+                                            'message' => 'Do you really want to delete this comment?',
+                                        ]);
                                     }
                                     echo "</small>";
                                     
@@ -114,18 +111,12 @@ use yii\helpers\Html;
                             &bull;
 							<?php
 						    if(Yii::$app->user->isAdmin()) {
-                                //todo: refactor into a nice widget
-                                echo humhub\widgets\ModalConfirm::widget(array(
-                                    'uniqueID' => 'modal_postdelete_' . $model->id,
-                                    'linkOutput' => 'a',
-                                    'title' => Yii::t('ContentModule.widgets_views_deleteLink', '<strong>Confirm</strong> question deleting'),
-                                    'message' => Yii::t('ContentModule.widgets_views_deleteLink', 'Do you really want to delete this question? All answers will be lost!'),
-                                    'buttonTrue' => Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
-                                    'buttonFalse' => Yii::t('ContentModule.widgets_views_deleteLink', 'Cancel'),
-                                    'linkContent' => '<i class="fa fa-trash-o"></i> ' . Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
-                                    'linkHref' => URL::toRoute(['delete', 'id' => $model->id]),
-                                    'confirmJS' => 'function(json) { $(".wall_"+json.uniqueId).remove(); }'
-                                ));
+                                echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                    'id' => 'question_'.$model->id,
+                                    'deleteRoute' => URL::toRoute(['question/delete', 'id' => $model->id]),
+                                    'title' => '<strong>Confirm</strong> delete question',
+                                    'message' => 'Do you really want to delete this question? All answers will be lost!',
+                                ]);
                             }
 
 							?>
@@ -145,7 +136,6 @@ use yii\helpers\Html;
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
-                                //$vote = QuestionVotes::post($question_answer['id'])->user(Yii::$app->user->id)->find();
                                 $vote = QuestionVotes::findOne(['post_id' => $question_answer['id'], 'created_by' => Yii::$app->user->id]);
                                 if($vote) {
                                     if($vote->vote_type == "up") {
@@ -202,11 +192,12 @@ use yii\helpers\Html;
                                     
                                     if(Yii::$app->user->isAdmin()) {
                                         echo " &bull; ";
-                                        echo Html::button('Delete',array(
-                                        'submit'=>\yii\helpers\Url::toRoute('comment/delete',array('id'=>$comment->id)),
-                                        'confirm'=>"Are you sure want to delete?",
-                                        'csrf'=>true,
-                                        'params'=> array('YII_CSRF_TOKEN' => Yii::$app->request->csrfToken)));
+                                        echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                            'id' => 'comment_'.$comment->id,
+                                            'deleteRoute' => URL::toRoute(['comment/delete', 'id' => $comment->id]),
+                                            'title' => '<strong>Confirm</strong> delete comment',
+                                            'message' => 'Are you sure want to delete this comment?',
+                                        ]);
                                     }
                                     echo "</small>";
 
@@ -227,11 +218,12 @@ use yii\helpers\Html;
                             &bull;
                             <?php
                             if(Yii::$app->user->isAdmin()) {
-                                echo Html::button('Delete',array(
-                                'submit'=>\yii\helpers\Url::toRoute('answer/delete',array('id'=>$question_answer['id'])),
-                                'confirm'=>"Are you sure want to delete?",
-                                'csrf'=>true,
-                                'params'=> array('YII_CSRF_TOKEN' => Yii::$app->request->csrfToken)));
+                                echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                    'id' => 'answer_'.$question_answer['id'],
+                                    'deleteRoute' => URL::toRoute(['answer/delete', 'id' => $question_answer['id']]),
+                                    'title' => '<strong>Confirm</strong> delete answer',
+                                    'message' => 'Are you sure want to delete this answer?',
+                                ]);
                             }
 
                             ?>
