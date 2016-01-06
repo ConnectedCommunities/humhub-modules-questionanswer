@@ -152,9 +152,9 @@ use yii\helpers\Html;
                                 <?php echo \humhub\modules\questionanswer\widgets\VoteButtonWidget::widget(array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0));?>
                             </div>
                         </div>
-                        <?php $user = User::findOne(['id' => $question_answer['created_by']]); ?>
                         <?php
-                        ProfileWidget::widget(array('user' => $user, 'timestamp' => $question_answer['created_at']));
+                        $user = User::findOne(['id' => $question_answer['created_by']]);
+                        echo ProfileWidget::widget(array('user' => $user, 'timestamp' => $question_answer['created_at']));
                         ?>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
