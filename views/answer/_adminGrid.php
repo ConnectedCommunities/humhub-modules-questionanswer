@@ -24,7 +24,7 @@ echo GridView::widget([
             'options' => ['width' => '80px'],
             'buttons' => [
                 'view' => function($url, $model) {
-                    return Html::a('<i class="fa fa-search"></i>', Url::toRoute(['view', 'id' => $model->id]), ['class' => 'btn btn-primary btn-xs tt']);
+                    return Html::a('<i class="fa fa-search"></i>', Url::toRoute(['question/view', 'id' => $model->question_id]), ['class' => 'btn btn-primary btn-xs tt']);
                 },
                 'update' => function($url, $model) {
                     return Html::a('<i class="fa fa-pencil"></i>', Url::toRoute(['update', 'id' => $model->id]), ['class' => 'btn btn-primary btn-xs tt']);
