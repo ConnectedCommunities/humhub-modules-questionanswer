@@ -117,7 +117,7 @@ class CommentController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Comment::model()->findByPk($id);
+		$model=Comment::findOne(['id' => $id]);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
