@@ -4,56 +4,23 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
-	<div class="panel-body">
-		<?php $form = \yii\widgets\ActiveForm::begin([
+<?php $form = \yii\widgets\ActiveForm::begin([
 //			'action' => \yii\helpers\Url::to(['question/update'])
-		]); ?>
+]); ?>
 
-		<p class="note">Fields with <span class="required">*</span> are required.</p>
+<p class="note">Fields with <span class="required">*</span> are required.</p>
 
-		<?php echo $form->errorSummary($model); ?>
+<?php echo $form->errorSummary($model); ?>
 
-		<div class="row">
-			<?php echo $form->field($model, 'question_id'); ?>
-		</div>
+<?php echo $form->field($model, 'question_id'); ?>
+<?php echo $form->field($model, 'parent_id'); ?>
+<?php echo $form->field($model, 'post_title'); ?>
+<?php echo $form->field($model, 'post_text')->textArea(['rows' => 6]); ?>
+<?php echo $form->field($model, 'post_type'); ?>
+<?php echo $form->field($model, 'created_at'); ?>
+<?php echo $form->field($model, 'created_by'); ?>
+<?php echo $form->field($model, 'updated_at'); ?>
+<?php echo $form->field($model, 'updated_by'); ?>
+<?php echo \yii\helpers\Html::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 
-		<div class="row">
-			<?php echo $form->field($model, 'parent_id'); ?>
-		</div>
-
-		<div class="row">
-			<?php echo $form->field($model, 'post_title'); ?>
-		</div>
-
-		<div class="row">
-			<?php echo $form->field($model, 'post_text')->textArea(['rows' => 6]); ?>
-		</div>
-
-		<div class="row">
-			<?php echo $form->field($model, 'post_type'); ?>
-		</div>
-
-		<div class="row">
-			<?php echo $form->field($model, 'created_at'); ?>
-		</div>
-
-		<div class="row">
-			<?php echo $form->field($model, 'created_by'); ?>
-		</div>
-
-		<div class="row">
-			<?php echo $form->field($model, 'updated_at'); ?>
-		</div>
-
-		<div class="row">
-			<?php echo $form->field($model, 'updated_by'); ?>
-		</div>
-
-		<div class="row buttons">
-			<?php echo \yii\helpers\Html::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-		</div>
-
-		<?php \yii\widgets\ActiveForm::end(); ?>
-	</div>
-</div><!-- form -->
+<?php \yii\widgets\ActiveForm::end(); ?>
