@@ -26,7 +26,7 @@ use yii\data\ActiveDataProvider;
                     echo "<li><a href=\"#\" class=\"wallFilter\">No tags found</a></li>";
                 } else {
                     foreach($tags as $tag) {
-                        echo "<li><a href=\"".Url::toRoute(['main/tag', 'id' => $tag->id], 'http')."\" class=\"wallFilter\">".$tag->tag."</a></li>";
+                        echo "<li><a href=\"".Url::toRoute(['question/tag', 'id' => $tag->id])."\" class=\"wallFilter\">".$tag->tag."</a></li>";
                     }
                 }
                 ?>

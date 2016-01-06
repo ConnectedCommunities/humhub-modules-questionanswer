@@ -63,7 +63,7 @@ use yii\helpers\Html;
                             <?php print Html::encode($model->post_text); ?>
                             <br /><br />
                             <?php foreach($model->tags as $tag) { ?>
-                                <span class="label label-default"><a href="<?php echo Url::toRoute(['/questionanswer/main/tag', 'id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
+                                <span class="label label-default"><a href="<?php echo Url::toRoute(['question/tag', 'id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
                             <?php } ?>
                             <br /><br />
                             <?php
@@ -79,7 +79,7 @@ use yii\helpers\Html;
                                     echo "<small>";
                                     if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
                                         echo " &#8212; ";
-                                        echo Html::a("Edit", array('//questionanswer/comment/update', 'id'=>$comment->id));
+                                        echo Html::a("Edit", array('comment/update', 'id'=>$comment->id));
                                     }
                                     
                                     if(Yii::$app->user->isAdmin()) {

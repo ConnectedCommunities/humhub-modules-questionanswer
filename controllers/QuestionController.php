@@ -343,6 +343,23 @@ class QuestionController extends Controller
 		Yii::app()->end();
 	}
 
+
+	/**
+	 * Controller for viewing a
+	 * tag and loading up all questions
+	 * from within that tag
+	 */
+	public function actionTag() {
+
+		$tag = Tag::findOne(['id' => Yii::$app->request->get('id')]);
+
+		return $this->render('tags', array(
+			'tag' => $tag,
+			'questions' => Question::tag_overview($tag->id)
+		));
+
+	}
+
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
