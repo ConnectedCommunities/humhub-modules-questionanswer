@@ -7,23 +7,22 @@ if($accepted_answer) {
 } else {
 	$btnClass = "btn-default";
 	$text = "Mark as Accepted Answer";
-} 
+}
 
 if(Yii::$app->user->id == $author) {
 	$form = \yii\widgets\ActiveForm::begin($config = array(
 		'id'=>'question-votes-vote_best_answer-form',
 		'enableAjaxValidation'=>false,
 		'action' => \yii\helpers\Url::toRoute('vote/create')
-	)); 
+	));
 
-	echo Html::hiddenInput('should_open_question', $should_open_question); 
-	echo Html::hiddenInput('post_id', $post_id); 
-	echo Html::hiddenInput('vote_on', "answer");
-	echo Html::hiddenInput('vote_type', "accepted_answer"); 
+	echo $form->field($model, 'should_open_question')->hiddenInput(['value' => $should_open_question])->label(false);
+	echo $form->field($model, 'post_id')->hiddenInput(['value' => $post_id])->label(false);
+	echo $form->field($model, 'vote_on')->hiddenInput(['value' => 'answer'])->label(false);
+	echo $form->field($model, 'vote_type')->hiddenInput(['value' => 'accepted_answer'])->label(false);
 
-	//**kane
-	//echo Html::tag('button', array('class'=> "btn {$btnClass} btn-sm", 'type'=>'submit', 'style' => 'margin-top:5px;'), '<i class="fa fa-check"></i> ' . $text); 
-	echo Html::tag('button', '<i class="fa fa-check"></i> ' . $text, array('class'=> "btn {$btnClass} btn-sm", 'type'=>'submit', 'style' => 'margin-top:5px;')); 
+	echo Html::tag('button', '<i class="fa fa-check"></i> ' . $text, array('class'=> "btn {$btnClass} btn-sm", 'type'=>'submit', 'style' => 'margin-top:5px;'));
+
 } else if($accepted_answer) {
 	echo "<span class=\"label label-success\" style=\"padding:5px;\"><i class=\"fa fa-check\"></i> $text</span>"; 
 	echo "<br />";
