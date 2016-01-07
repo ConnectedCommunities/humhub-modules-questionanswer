@@ -25,7 +25,7 @@ class BestAnswerWidget extends \yii\base\Widget
      */
     public function run() {
 
-        $this->render('bestAnswer', array(
+        return $this->render('bestAnswer', array(
             'post_id' => $this->post_id, 
             'author' => $this->author, 
             'model' => $this->model,
