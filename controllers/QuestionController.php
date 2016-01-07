@@ -66,6 +66,8 @@ class QuestionController extends Controller
             $containerClass = User::className();
             $contentContainer = $containerClass::findOne(['guid' => Yii::$app->getUser()->guid]);
             $question->content->container = $contentContainer;
+			
+			$question->content->attachFileGuidsAfterSave = Yii::$app->request->post('fileList');
 
             if ($question->validate()) {
 
