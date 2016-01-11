@@ -21,6 +21,20 @@
 <?php echo $form->field($model, 'created_by'); ?>
 <?php echo $form->field($model, 'updated_at'); ?>
 <?php echo $form->field($model, 'updated_by'); ?>
+<hr>
+<?php
+echo humhub\modules\file\widgets\FileUploadButton::widget(array(
+    'uploaderId' => 'contentFormFiles',
+    'fileListFieldName' => 'fileList',
+    'object' => $model,
+));
+
+echo \humhub\modules\file\widgets\FileUploadList::widget(array(
+    'object' => $model,
+    'uploaderId' => 'contentFormFiles',
+));
+?>
+<hr>
 <?php echo \yii\helpers\Html::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 
 <?php \yii\widgets\ActiveForm::end(); ?>
