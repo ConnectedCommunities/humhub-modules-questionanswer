@@ -17,7 +17,6 @@ use yii\helpers\Url;
 class AnswerController extends Controller
 {
 
-
 	/**
      * @inheritdoc
      */
@@ -55,12 +54,14 @@ class AnswerController extends Controller
             $answer->load(Yii::$app->request->post());
             $answer->post_type = "answer";
 
+
             $containerClass = User::className();
             $contentContainer = $containerClass::findOne(['guid' => Yii::$app->getUser()->guid]);
             $answer->content->container = $contentContainer;
+            $answer->content->attachFileGuidsAfterSave = Yii::$app->request->post('fileList');
 
-            if ($answer->validate()) {
-                $answer->save();
+
+			if ($answer->validate() && $answer->save()) {
                 $this->redirect(Url::toRoute(['question/view', 'id' => $answer->question_id]));
             }
         }
