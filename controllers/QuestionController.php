@@ -182,11 +182,8 @@ class QuestionController extends Controller
         $searchModel = new QuestionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setSort([
-            'attributes' => [
-                'id',
-                'created_at' => [
-                    'default' => SORT_DESC
-                ]
+            'defaultOrder' => [
+                'created_at'=>SORT_DESC
             ]
         ]);
 
@@ -195,6 +192,7 @@ class QuestionController extends Controller
             'searchModel' => $searchModel,
             'model' => Question::find()
         ));
+
 
 
 
