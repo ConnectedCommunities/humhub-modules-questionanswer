@@ -162,7 +162,7 @@ class Question extends ContentActiveRecord implements Searchable
 	 */
 	public function getUrl($parameters = array())
 	{
-		return Url::toRoute(['question/view', $parameters]);
+		return Url::toRoute(['questionanswer/question/view', $parameters]);
 	}
 
 
@@ -307,6 +307,12 @@ class Question extends ContentActiveRecord implements Searchable
 
 		return $attributes;
 	}
+
+	public function getContentName()
+	{
+		return "Question";
+	}
+
 
 	/**
 	 * Returns the Search Result Output
