@@ -5,6 +5,7 @@ namespace humhub\modules\questionanswer\models;
 
 use humhub\components\ActiveRecord;
 use humhub\modules\content\components\ContentContainerActiveRecord;
+use humhub\modules\questionanswer\widgets\QuestionWallEntryWidget;
 use humhub\modules\user\models\User;
 use Yii;
 use humhub\modules\content\components\ContentActiveRecord;
@@ -34,12 +35,12 @@ class Question extends ContentActiveRecord implements Searchable
     /**
      * @inheritdoc
      */
-	public $autoAddToWall = false;
+	public $autoAddToWall = true;
 
     /**
      * @inheritdoc
      */
-    public $wallEntryClass = "humhub\modules\questionanswer\widgets\QuestionWallEntryWidget";
+	public $wallEntryClass = "humhub\modules\questionanswer\widgets\QuestionWallEntryWidget";
 
     /**
      * @inheritdoc
@@ -112,51 +113,6 @@ class Question extends ContentActiveRecord implements Searchable
 	}
 
 
-
-	/**
-	 * Returns the Wall Output
-	 */
-	public function getWallOut($params = [])
-	{
-		return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionWallEntryWidget', array('question' => $this), true);
-//		return "Hello World";
-	}
-
-	/**
-	 * Returns an array of informations used by search subsystem.
-	 * Function is defined in interface ISearchable
-	 *
-	 * @return Array
-	 */
-	public function getSearchAttributes()
-	{
-
-		// THIS WORKS PERFECTLY IF YOU ADD THE QUESTION MODEL TO THE QUERY
-		// See: Line 84, /protected/controllers/SearchController.php
-
-
-		$attributes = array(
-
-			// Assignments
-			'belongsToType' => 'Question',
-			'belongsToId' => $this->id,
-			'belongsToGuid' => $this->user->guid,
-
-			// Information about the record
-			'model' => 'Question',
-			'pk' => $this->id,
-			'title' => $this->post_title,
-			'url' => $this->getUrl(array('id' => $this->id)),
-
-			// Extra indexed fields
-			'post_text' => $this->post_text
-		);
-
-
-		return $attributes;
-	}
-
-
 	/**
 	 * Returns a title/text which identifies this IContent.
 	 *
@@ -182,39 +138,6 @@ class Question extends ContentActiveRecord implements Searchable
 		);
 	}
 
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('id',$this->id);
-		$criteria->compare('question_id',$this->question_id);
-		$criteria->compare('post_title',$this->post_title,true);
-		$criteria->compare('post_text',$this->post_text,true);
-		$criteria->compare('post_type',$this->post_type,true);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('created_by',$this->created_by);
-		$criteria->compare('updated_at',$this->updated_at,true);
-		$criteria->compare('updated_by',$this->updated_by);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
 
 
 	/**
@@ -363,13 +286,36 @@ class Question extends ContentActiveRecord implements Searchable
 
 	}
 
+
+	/**
+	 * Returns an array of informations used by search subsystem.
+	 * Function is defined in interface ISearchable
+	 *
+	 * @return Array
+	 */
+	public function getSearchAttributes()
+	{
+		// THIS WORKS PERFECTLY IF YOU ADD THE QUESTION MODEL TO THE QUERY
+		// See: Line 84, /protected/controllers/SearchController.php
+
+		$attributes = [
+			'title' => $this->post_title,
+			'text' => $this->post_text,
+		];
+
+		$this->trigger(self::EVENT_SEARCH_ADD, new \humhub\modules\search\events\SearchAddEvent($attributes));
+
+		return $attributes;
+	}
+
 	/**
 	 * Returns the Search Result Output
 	 */
 	public function getSearchResult()
 	{
-		return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionSearchResultWidget', array('question' => $this), true);
+		return Yii::$app->getController()->widget('application.modules_core.space.widgets.QuestionSearchResultWidget', array('question' => $this), true);
 	}
+
 
 	public function canWrite() {
 		return true;

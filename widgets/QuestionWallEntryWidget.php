@@ -18,13 +18,13 @@ use humhub\models\Setting;
 class QuestionWallEntryWidget extends \humhub\modules\content\widgets\WallEntry
 {
 
-    public $question;
+//    public $question;
 
     public function run() {
 
-        $this->render('entry', array('question' => $this->question,
-            'user' => $this->question->content->user,
-            'contentContainer' => $this->question->content->container));
+        return $this->render('entry', array('question' => $this->contentObject,
+            'user' => $this->contentObject->content->user,
+            'contentContainer' => $this->contentObject->content->container));
     }
 
 }

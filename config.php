@@ -19,6 +19,11 @@ return [
             'callback' => ['humhub\modules\questionanswer\Events', 'onActiveRecordAfterSave'],
 
         ],
+        [
+            'class' => \humhub\modules\search\engine\Search::className(),
+            'event' => \humhub\modules\search\engine\Search::EVENT_ON_REBUILD,
+            'callback' => ['humhub\modules\questionanswer\Events', 'onSearchRebuild'],
+        ]
     ],
 ];
 ?>

@@ -2,6 +2,7 @@
 
 namespace humhub\modules\questionanswer;
 
+use humhub\modules\content\models\Content;
 use humhub\modules\karma\models\Karma;
 use humhub\modules\questionanswer\models\Answer;
 use humhub\modules\questionanswer\models\Question;
@@ -60,7 +61,19 @@ class Events extends \yii\base\Object
      */
     public static function onQuestionAfterSave($event)
     {
-        Karma::addKarma('asked', $event->sender->user->id);
+
+
+//        foreach (Content::find()->all() as $content) {
+//            $contentObject = $content->getPolymorphicRelation();
+//            if ($contentObject instanceof \humhub\modules\search\interfaces\Searchable) {
+//                Yii::$app->search->add($contentObject);
+//            }
+//        }
+
+//        Karma::addKarma('asked', $event->sender->user->id);
+//        foreach (Question::find()->all() as $obj) {
+//            \Yii::$app->search->add($obj);
+//        }
     }
 
     /**
@@ -110,6 +123,5 @@ class Events extends \yii\base\Object
         }
 
     }
-
 
 }
