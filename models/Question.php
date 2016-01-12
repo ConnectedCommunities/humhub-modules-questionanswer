@@ -35,7 +35,7 @@ class Question extends ContentActiveRecord implements Searchable
     /**
      * @inheritdoc
      */
-	public $autoAddToWall = true;
+	public $autoAddToWall = false;
 
     /**
      * @inheritdoc
@@ -313,16 +313,7 @@ class Question extends ContentActiveRecord implements Searchable
 		return "Question";
 	}
 
-
-	/**
-	 * Returns the Search Result Output
-	 */
-	public function getSearchResult()
-	{
-		return Yii::$app->getController()->widget('application.modules_core.space.widgets.QuestionSearchResultWidget', array('question' => $this), true);
-	}
-
-
+	
 	public function canWrite() {
 		return true;
 	}
