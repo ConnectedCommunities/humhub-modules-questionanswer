@@ -60,7 +60,9 @@ class AnswerController extends Controller
             $answer->content->container = $contentContainer;
 
             if ($answer->validate()) {
-                $answer->save();
+
+				$data = \humhub\modules\content\widgets\WallCreateContentForm::create($answer, $contentContainer);
+				$answer->save();
                 $this->redirect(Url::toRoute(['question/view', 'id' => $answer->question_id]));
             }
         }

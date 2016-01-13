@@ -70,7 +70,7 @@ class Events extends \yii\base\Object
 //            }
 //        }
 
-//        Karma::addKarma('asked', $event->sender->user->id);
+        Karma::addKarma('asked', $event->sender->user->id);
 //        foreach (Question::find()->all() as $obj) {
 //            \Yii::$app->search->add($obj);
 //        }

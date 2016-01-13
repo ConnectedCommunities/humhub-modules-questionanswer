@@ -313,7 +313,7 @@ class Question extends ContentActiveRecord implements Searchable
 		return "Question";
 	}
 
-	
+
 	public function canWrite() {
 		return true;
 	}

@@ -1,5 +1,12 @@
 <?php
 
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+use humhub\models\Setting;
+
+
 /**
  * QuestionWallEntryWidget is used to display a question inside the stream.
  *
@@ -9,19 +16,15 @@
  * @since 0.5
  * @author Luke
  */
-class AnswerWallEntryWidget extends HWidget {
-
+class AnswerWallEntryWidget extends \humhub\modules\content\widgets\WallEntry
+{
     public $answer;
 
     public function run() {
-
-        $this->render('answerWallEntry', array(
-            'question' => Question::model()->findByPk($this->answer->question_id),
-            'answer' => $this->answer,
-            'user' => $this->answer->content->user,
-            'contentContainer' => $this->answer->content->container));
+        return $this->render('searchResult_answer', array(
+            'answer' => $this->contentObject,
+        ));
     }
-
 }
 
 ?>
