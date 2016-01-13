@@ -86,6 +86,11 @@ class Answer extends ContentActiveRecord implements Searchable
         );
 	}
 
+	public function getQuestion()
+	{
+		return $this->hasOne(Question::class, ['id' => 'question_id']);
+	}
+
 	public function getUser()
 	{
 		return $this->hasOne(User::class, ['id' => 'created_by']);
@@ -164,8 +169,9 @@ class Answer extends ContentActiveRecord implements Searchable
 	 */
 	public function getSearchAttributes()
 	{
+
 		$attributes = [
-			'post_text' => $this->post_title,
+			'post_text' => $this->post_text,
 		];
 
 		return $attributes;
@@ -174,11 +180,6 @@ class Answer extends ContentActiveRecord implements Searchable
 	public function getContentName()
 	{
 		return "Answer";
-	}
-
-	public function getWallOut()
-	{
-		return "hello";
 	}
 
 }
