@@ -82,8 +82,8 @@ class QuestionController extends Controller
                     $tags = explode(", ", $_POST['Tags']);
                     foreach($tags as $tag) {
 
-                        $tag = Tag::firstOrCreate($tag);
-                        $question_tag = new QuestionTag();
+                        $tag = Tag::firstOrCreate($tag, $contentContainer);
+						$question_tag = new QuestionTag();
                         $question_tag->question_id = $question->id;
                         $question_tag->tag_id = $tag->id;
                         $question_tag->save();

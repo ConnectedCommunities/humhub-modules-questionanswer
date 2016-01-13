@@ -1,20 +1,8 @@
 <?php
-/**
- * This View shows a post inside the search
- *
- * @property Post $post is the post object
- *
- * @package humhub.modules.post
- * @since 0.5
- */
+use yii\helpers\Url;
+use yii\helpers\Html;
+use humhub\libs\Helpers;
 ?>
-
-<li>
-    <a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->id)); ?>">
-        <div class="media">
-            <div class="media-body">
-                TAG: <strong><?php echo CHtml::encode($tag->tag); ?> </strong><br>
-            </div>
-        </div>
-    </a>
-</li>
+<p>
+    <a href=""><b>TAG: <?php echo Html::a(Html::encode($tag->tag), Url::toRoute(['/questionanswer/question/tag', 'id' => $tag->id])); ?></b></a>
+</p>

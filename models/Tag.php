@@ -2,6 +2,7 @@
 
 namespace humhub\modules\questionanswer\models;
 
+use humhub\modules\content\components\ContentActiveRecord;
 use Yii;
 use humhub\components\ActiveRecord;
 use humhub\modules\search\interfaces\Searchable;
@@ -14,8 +15,20 @@ use humhub\modules\search\interfaces\Searchable;
  * @property string $tag
  * @property string $description
  */
-class Tag extends ActiveRecord implements Searchable
+class Tag extends ContentActiveRecord implements Searchable
 {
+
+	/**
+	 * @inheritdoc
+	 */
+	public $autoAddToWall = true;
+
+	/**
+	 * @inheritdoc
+	 */
+	public $wallEntryClass = "humhub\modules\questionanswer\widgets\TagWallEntryWidget";
+
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -92,8 +105,9 @@ class Tag extends ActiveRecord implements Searchable
 	 * @param  String  $tag
      * @return Tag|\yii\db\ActiveQuery
 	 */
-	public static function firstOrCreate($tag)
+	public static function firstOrCreate($tag, $contentContainer)
 	{
+
 
 		$foundTag = Tag::find()->where('tag=:tag', array('tag'=>$tag))->one();
 
@@ -102,6 +116,7 @@ class Tag extends ActiveRecord implements Searchable
 		} else {
 			$tagModel = new Tag;
 			$tagModel->tag = $tag;
+			\humhub\modules\content\widgets\WallCreateContentForm::create($tagModel, $contentContainer);
 			$tagModel->save();
 			return $tagModel;
 		}
@@ -121,61 +136,27 @@ class Tag extends ActiveRecord implements Searchable
     }
 
 
-    /**
-     * After Save Addons
-     *
-     * @return type
-     */
-//    public function afterSave()
-//    {
-//        HSearch::getInstance()->addModel($this);
-//        return parent::afterSave();
-//    }
+	/**
+	 * Returns an array of informations used by search subsystem.
+	 * Function is defined in interface ISearchable
+	 *
+	 * @return Array
+	 */
+	public function getSearchAttributes()
+	{
 
+		$attributes = [
+			'tag' => $this->tag,
+			'description' => $this->description
+		];
 
-    /**
-     * Returns an array of informations used by search subsystem.
-     * Function is defined in interface ISearchable
-     *
-     * @return Array
-     */
-    public function getSearchAttributes()
-    {
+		return $attributes;
+	}
 
-        $attributes = array(
-
-        	// Assignments
-            'belongsToType' => 'Tag',
-            'belongsToId' => $this->id,
-            'belongsToGuid' => null,
-
-            // Information about the record
-            'model' => 'Tag',
-            'pk' => $this->id,
-            'title' => $this->tag,
-            'url' => $this->getUrl(array('id' => $this->id)),
-
-            // Extra indexed fields
-            'post_text' => $this->tag
-        );
-
-
-        return $attributes;
-    }
-
-    /**
-     * Returns the Search Result Output
-     */
-    public function getSearchResult()
-    {
-        return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.TagSearchResultWidget', array('tag' => $this), true);
-    }
-
-
-    public function getWallOut()
-    {
-//        return \humhub\modules\space\widgets\Wall::widget(['space' => $this]);
-    }
+	public function getContentName()
+	{
+		return "Tag";
+	}
 
 
 }
