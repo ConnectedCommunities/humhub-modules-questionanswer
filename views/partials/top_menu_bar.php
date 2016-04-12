@@ -29,7 +29,7 @@
                 <?php echo CHtml::link('Admin', Yii::app()->createUrl('//questionanswer/question/admin'), array()); ?>
             </li>
         <?php } ?>
-        <li class="dropdown pull-right">
+        <li class="dropdown pull-right" style="display:none;">
             <?php echo CHtml::link('<i class="fa fa-plus"></i> Ask Question', Yii::app()->createAbsoluteUrl('//questionanswer/question/create'), array('class'=>'dropdown-toggle btn btn-community', 'style'=>"padding:8px;")); ?>
         </li>
     </ul>
