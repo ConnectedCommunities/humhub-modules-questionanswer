@@ -21,7 +21,7 @@ $menu=array(
     <div class="row">
 
 
-        <div class="panel panel-default">
+        <div class="panel panel-default qanda-form">
 
             <div class="panel-body">
 			<h1>Update Question <?php echo $model->id; ?></h1>

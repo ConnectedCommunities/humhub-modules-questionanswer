@@ -9,15 +9,27 @@
  */
 ?>
 
-<div class="media-body" style="position:absolute;top:0;right:0; padding:10px; width:200px; background-color:#708FA0; color:#fff;">
-    <a href="<?php echo $this->createUrl('//user/profile', array('uguid' => $user->guid)); ?>" style="color:#fff;">
-        <img id="user-account-image" class="img-rounded pull-left"
-             src="<?php echo $user->getProfileImage()->getUrl(); ?>"
-             height="32" width="32" alt="32x32" data-src="holder.js/32x32"
-             style="width: 32px; height: 32px; margin-right:10px;"/>
+<div class="media-body qanda-profile">
 
-        <div class="user-title pull-left hidden-xs">
-            <strong><?php echo CHtml::encode($user->displayName); ?> <?php echo "(".KarmaUser::model()->score($user->id).")"; ?></strong><br/><span class="truncate"><?php echo CHtml::encode($user->profile->title); ?></span>
+    <div class="row">
+        <div class="col-xs-12 qanda-profile-timestamp">
+            <small>posted <?php echo HHtml::timeago($timestamp); ?></small>
         </div>
-    </a>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="<?php echo $this->createUrl('//user/profile', array('uguid' => $user->guid)); ?>">
+                <span class="pull-left profile-size-sm">
+                    <img class="media-object img-rounded profile-size-sm"
+                     src="<?php echo $user->getProfileImage()->getUrl(); ?>"
+                     height="32" width="32" alt="32x32" data-src="holder.js/32x32"/>
+                    <div class="profile-overlay-img profile-overlay-img-sm"></div>
+                </span>
+            </a>
+            <div class="user-title pull-left">
+                <strong><?php echo CHtml::encode($user->displayName); ?> <?php echo "(".KarmaUser::model()->score($user->id).")"; ?></strong><br/><span class="truncate"><?php echo CHtml::encode($user->profile->title); ?></span>
+            </div>
+        </div>
+    </div>
+    
 </div>

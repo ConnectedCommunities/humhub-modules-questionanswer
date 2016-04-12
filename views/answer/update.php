@@ -3,6 +3,21 @@
 /* @var $model Answer */
 ?>
 
-<h1>Update Answer <?php echo $model->id; ?></h1>
+<div class="container">
+    <div class="row">
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+
+        <div class="panel panel-default qanda-form">
+
+            <div class="panel-body">
+            <h1>Update Answer <?php echo $model->id; ?></h1>
+			<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+
+

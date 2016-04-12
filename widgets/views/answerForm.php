@@ -8,9 +8,9 @@
     'enableAjaxValidation'=>false,
     'action' => Yii::app()->createUrl('//questionanswer/answer/create')
 )); ?>
-<div class="panel panel-default">
+<div class="panel panel-default panel-answer">
     <div class="panel-heading">
-        <strong>Answer</strong> this question
+        <strong>Your</strong> answer
     </div>
     <div class="panel-body">
         <?php echo $form->errorSummary($answer); ?>
@@ -50,8 +50,6 @@
         </div>
 
         <?php
-//        echo $form->hiddenField($answer,'containerGuid',array('type'=>"hidden", 'value' => Yii::app()->user->guid));
-//        echo $form->hiddenField($answer,'containerClass',array('type'=>"hidden", 'value' => get_class(new Answer())));
         echo CHtml::hiddenField("containerGuid", Yii::app()->user->guid);
         echo CHtml::hiddenField("containerClass",  get_class(new User()));
         ?>

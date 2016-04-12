@@ -58,9 +58,17 @@ $('.search-form form').submit(function(){
 
 					<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
 					<div class="search-form" style="display:none">
-					<?php $this->renderPartial('_search',array(
-						'model'=>$model,
-					)); ?>
+                    	<div class="panel panel-default qanda-form">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <?php $this->renderPartial('_search',array(
+                                            'model'=>$model,
+                                        )); ?>
+                                	</div>
+                            	</div>
+                        	</div>
+                    	</div>
 					</div><!-- search-form -->
 
 					<?php $this->widget('zii.widgets.grid.CGridView', array(
