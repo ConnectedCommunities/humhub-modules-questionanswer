@@ -60,38 +60,37 @@ class QuestionController extends Controller
 
         if(isset($_POST['Question'])) {
 
-            $this->forcePostRequest();
-            $_POST = Yii::app()->input->stripClean($_POST);
+			$this->forcePostRequest();
+			$_POST = Yii::app()->input->stripClean($_POST);
 
-			$question->attributes=$_POST['Question'];
-            $question->content->populateByForm();
-            $question->post_type = "question";
+			$question->attributes = $_POST['Question'];
+			$question->content->populateByForm();
+			$question->post_type = "question";
 
-            if ($question->validate()) {
+			if (isset($_POST['ajax']) && $_POST['ajax'] === 'question-new_question-form') {
+				$error = CActiveForm::validate($question);
+			}
 
-                $question->save();
+			if (!empty($error)) {
+				echo $error;
+			} else {
+				$question->save();
 
-                if(isset($_POST['Tags'])) {
-                    // Split tag string into array
-                    $tags = explode(", ", $_POST['Tags']);
-                    foreach($tags as $tag) {
-                        $tag = Tag::model()->firstOrCreate($tag);
-                        $question_tag = new QuestionTag;
-                        $question_tag->question_id = $question->id;
-                        $question_tag->tag_id = $tag->id;
-                        $question_tag->save();
-                    }
-                }
+				if (isset($_POST['Tags'])) {
+					// Split tag string into array
+					$tags = explode(", ", $_POST['Tags']);
+					foreach ($tags as $tag) {
+						$tag = Tag::model()->firstOrCreate($tag);
+						$question_tag = new QuestionTag;
+						$question_tag->question_id = $question->id;
+						$question_tag->tag_id = $tag->id;
+						$question_tag->save();
+					}
+				}
 
-                $this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $question->id)));
-
-            }
-
-        }
-
-		$this->render('create',array(
-			'model'=>$question,
-		));
+				$this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $question->id)));
+			}
+		}
 	}
 
 	/**
@@ -160,14 +159,22 @@ class QuestionController extends Controller
 			'dataProvider'=>$dataProvider,
 		));
 		*/
-
+		$limit = 10;
+		$question = new Question;
 		$dataProvider=new CActiveDataProvider('Question', array(
+			'pagination'=>array(
+				'pageSize'=>$limit,
+			),
 			'criteria'=>array(
 				'order'=>'created_at DESC',
 			)
 		));
+
+		$resultSearchData = CHtml::listData($dataProvider->getData(),"id", "post_title");
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
+			'question' => $question,
+			'resultSearchData' => json_encode($resultSearchData),
 		));
 		
 	}
@@ -188,12 +195,20 @@ class QuestionController extends Controller
 		$criteria->group = "question.id";
 		$criteria->having = "answers = 0";
 		$criteria->order = "score DESC, vote_count DESC, question.created_at DESC";
-
+		$limit = 10;
 		$dataProvider=new CActiveDataProvider('Question', array(
+			'pagination'=>array(
+				'pageSize'=>$limit,
+			),
 			'criteria'=>$criteria
 		));
+
+		$question = new Question;
+		$resultSearchData = CHtml::listData($dataProvider->getData(),"id", "post_title");
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
+			'question' => $question,
+			'resultSearchData' => json_encode($resultSearchData),
 		));
 
 	}
@@ -234,14 +249,20 @@ class QuestionController extends Controller
 
 		$criteria->group = "question.id";
 		$criteria->order = "tag_count DESC";
-
+		$limit = 10;
 		$dataProvider=new CActiveDataProvider('Question', array(
+			'pagination'=>array(
+				'pageSize'=>$limit,
+			),
             'criteria'=>$criteria
 		));
 
-
+		$question = new Question;
+		$resultSearchData = CHtml::listData($dataProvider->getData(),"id", "post_title");
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
+			'question' => $question,
+			'resultSearchData' => json_encode($resultSearchData),
 		));
 	}
 
@@ -326,5 +347,28 @@ class QuestionController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public function actionGetSearch()
+	{
+		$findData = CHtml::listData(Question::model()->findAll('post_type="question"'),"id", "post_title");
+		echo json_encode($findData);
+	}
+
+	public function actionGetSearchOneSelectItem()
+	{
+		$text = $_POST['text'];
+
+		$criteria=new CDbCriteria;
+		$criteria->condition = 'post_title="' . $text . '"';
+
+		$dataProvider=new CActiveDataProvider('Question', array(
+			'criteria'=>$criteria
+		));
+
+		return $this->renderPartial('_view', array(
+			'dataProvider'=>$dataProvider,
+			'data' => $dataProvider->getData()[0],
+		));
 	}
 }

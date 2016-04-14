@@ -49,7 +49,7 @@ class Question extends HActiveRecordContent implements ISearchable
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('post_text, post_type, created_by, updated_by', 'required'),
+			array('post_text, post_title, post_type, created_by, updated_by', 'required'),
 			array('question_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
 			array('post_title, post_type', 'length', 'max'=>255),
 			// The following rule is used by search().

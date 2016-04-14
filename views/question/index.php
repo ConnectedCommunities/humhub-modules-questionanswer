@@ -43,14 +43,14 @@
             <div class="panel panel-default qanda-panel">
                 <?php $this->renderPartial('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
-
-				<?php 
-				$this->widget('zii.widgets.CListView', array(
-					'dataProvider'=>$dataProvider,
-					'itemView'=>'_view',
-				)); 
-				?>
-
+                    <?php
+                        $this->widget('zii.widgets.CListView', array(
+                            'dataProvider'=>$dataProvider,
+                            'id'=>'customDataList',
+                            'ajaxUpdate'=>true,
+                            'itemView'=>'_view',
+                        ));
+                    ?>
                 </div>
             </div>
         </div>
@@ -70,34 +70,58 @@
                         aria-hidden="true">&times;</span></button>
 	            </div>
 	            <div class="panel-body">
-	                <textarea id="contentForm_question" class="form-control autosize contentForm" rows="1" placeholder="Ask something..." name="Question[post_title]"></textarea>
-	                <input value="Space" name="Question[containerClass]" id="Question_containerClass" type="hidden">
-	                <input value="204a13c6-db8e-4cd9-9e81-66055e1b1a50" name="Question[containerGuid]" id="Question_containerGuid" type="hidden">
+                    <?php $form=$this->beginWidget('CActiveForm', array(
+                        'action' => Yii::app()->createUrl("/questionanswer/question/create"),
+                        'id'=>'question-new_question-form',
+                        'enableAjaxValidation'=>true,
+                    )); ?>
+                        <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm', 'rows' => '1', "placeholder" => "Ask something...")); ?>
+                        <?php echo $form->error($question,'post_title'); ?>
+
                         <div class="contentForm_options">
-                    	    <textarea id="contentForm_answersText" rows="5" class="form-control contentForm" placeholder="Question details..." name="Question[post_text]"></textarea><br>
-                            <input class="form-control autosize contentForm" placeholder="Tags... Specify at least one tag for your question" name="Tags" id="Tags" type="text">
+                            <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Question details...")); ?>
+                            <?php echo $form->error($question,'post_text'); ?>
+                            <br />
+                            <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Tags... Specify at least one tag for your question")); ?>
                         </div>
-                        <div class="modal-file-upload pull-left">
-                            <input id="fileUploaderHiddenField_contentFormFiles" value="" name="fileList" type="hidden">
-                            <span class="btn btn-info fileinput-button tt" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Upload files">
-                                <i class="icon icon-paperclip"></i>
-                                <input id="fileUploaderButton_contentFormFiles" name="files[]" data-url="/teachconnect/humhub/index.php?r=file/file/upload&amp;objectModel=&amp;objectId=" multiple="" type="file">
-                            </span>
+                        <div class="pull-left" style="margin-top:5px;">
+                            <?php
+                            // Creates Uploading Button
+                            $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
+                                'uploaderId' => 'contentFormFiles',
+                                'fileListFieldName' => 'fileList',
+                            ));
+                            ?>
+                            <script>
+                                $('#fileUploaderButton_contentFormFiles').bind('fileuploaddone', function (e, data) {
+                                    $('.btn_container').show();
+                                });
 
+                                $('#fileUploaderButton_contentFormFiles').bind('fileuploadprogressall', function (e, data) {
+                                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                                    if (progress != 100) {
+                                        // Fix: remove focus from upload button to hide tooltip
+                                        $('#post_submit_button').focus();
 
-                            <div class="progress" id="fileUploaderProgressbar_contentFormFiles" style="display:none">
-                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                </div>
-                             </div>
-
-                            <div id="fileUploaderList_contentFormFiles">
-                                <ul style="list-style: none; margin: 0;" class="contentForm-upload-list" id="fileUploaderListUl_contentFormFiles"></ul>
-                            </div>
+                                        // hide form buttons
+                                        $('.btn_container').hide();
+                                    }
+                                });
+                            </script>
+                            <?php
+                            // Creates a list of already uploaded Files
+                            $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
+                                'uploaderId' => 'contentFormFiles'
+                            ));
+                            ?>
                         </div>
 
-                        <input value="ac45f956-9307-4718-84b9-14ce4852c8f8" name="containerGuid" id="containerGuid" type="hidden"><input value="User" name="containerClass" id="containerClass" type="hidden">
-                        <input class=" btn btn-info pull-right" name="yt0" value="Submit" type="submit">
-                    </div>
+                        <?php
+                        echo CHtml::hiddenField("containerGuid", Yii::app()->user->guid);
+                        echo CHtml::hiddenField("containerClass",  get_class(new User()));
+                        ?>
+                        <?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
+                    <?php $this->endWidget(); ?>
                 </div>
 
             </div>
@@ -112,13 +136,10 @@
 	var substringMatcher = function(strs) {
           return function findMatches(q, cb) {
             var matches, substringRegex;
-
             // an array that will be populated with substring matches
             matches = [];
-
             // regex used to determine if a string contains the substring `q`
             substrRegex = new RegExp(q, 'i');
-
             // iterate through the pool of strings and for any string that
             // contains the substring `q`, add it to the `matches` array
             $.each(strs, function(i, str) {
@@ -131,22 +152,52 @@
           };
         };
 
-        var questions = ['When should my registration be finalised?', 'How do I ensure my registration is processed quickly?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?', 'When should I submit my registration?'
-        ];
-
+        var questions = '<?= $resultSearchData ?>';
         $('#qanda-search .typeahead').typeahead({
-          hint: true,
-          highlight: true,
-          minLength: 1
+            hint: true,
+            highlight: true,
+            minLength: 1
         },
         {
-          name: 'questions',
-          source: substringMatcher(questions),
-          templates: {
+            name: 'questions',
+            source: substringMatcher(JSON.parse(questions)),
+            templates: {
                 footer: '<btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>',
                 empty: '<p>No results found matching your query.</p><btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>'
             }
         });
+//        $.ajax({
+//            url: '<?//= Yii::app()->createUrl("/questionanswer/question/getSearch") ?>//',
+//            type: "POST",
+//            success: function (data) {
+//                questions = JSON.parse(data);
+//                $('#qanda-search .typeahead').typeahead({
+//                        hint: true,
+//                        highlight: true,
+//                        minLength: 1
+//                    },
+//                    {
+//                        name: 'questions',
+//                        source: substringMatcher(questions),
+//                        templates: {
+//                            footer: '<btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>',
+//                            empty: '<p>No results found matching your query.</p><btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>'
+//                        }
+//                    });
+//            }
+//        })
 
+        $('.tt-suggestion').live("click", function() {
+            var text = $(this).text();
+            $.fn.yiiListView.update('customDataList', {
+                    data: {text:text},
+                    type:"POST",
+                    url: '<?= Yii::app()->createUrl("/questionanswer/question/getSearchOneSelectItem") ?>',
+                    success: function (data) {
+                        $("#customDataList .items").html(data);
+                    }
+                }
+            );
+        });
     });
 </script>
