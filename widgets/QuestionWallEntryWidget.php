@@ -14,7 +14,6 @@ class QuestionWallEntryWidget extends HWidget {
     public $question;
 
     public function run() {
-
         $this->render('entry', array('question' => $this->question,
             'user' => $this->question->content->user,
             'contentContainer' => $this->question->content->container));
