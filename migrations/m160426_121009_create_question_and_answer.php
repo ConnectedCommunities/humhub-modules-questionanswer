@@ -44,8 +44,10 @@ class m160426_121009_create_question_and_answer extends EDbMigration
 
 	public function down()
 	{
-		echo "m160426_121009_create_question_and_answer does not support migration down.\n";
-		return false;
+		$this->dropTable("question");
+		$this->dropTable("question_votes");
+		$this->dropTable("tag");
+		$this->dropTable("question_tag");
 	}
 
 	/*
