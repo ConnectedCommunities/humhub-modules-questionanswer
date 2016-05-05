@@ -72,9 +72,10 @@
 	            <div class="panel-body">
                     <?php $form=$this->beginWidget('CActiveForm', array(
                         'action' => Yii::app()->createUrl("/questionanswer/question/create"),
-                        'id'=>'question-new_question-form',
-                        'enableAjaxValidation'=>true,
+                        'id'=>'question-form_create',
+
                     )); ?>
+                    <div class="logErrors"></div>
                         <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm', 'rows' => '1', "placeholder" => "Ask something...")); ?>
                         <?php echo $form->error($question,'post_title'); ?>
 
@@ -166,38 +167,39 @@
                 empty: '<p>No results found matching your query.</p><btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>'
             }
         });
-//        $.ajax({
-//            url: '<?//= Yii::app()->createUrl("/questionanswer/question/getSearch") ?>//',
-//            type: "POST",
-//            success: function (data) {
-//                questions = JSON.parse(data);
-//                $('#qanda-search .typeahead').typeahead({
-//                        hint: true,
-//                        highlight: true,
-//                        minLength: 1
-//                    },
-//                    {
-//                        name: 'questions',
-//                        source: substringMatcher(questions),
-//                        templates: {
-//                            footer: '<btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>',
-//                            empty: '<p>No results found matching your query.</p><btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>'
-//                        }
-//                    });
-//            }
-//        })
 
         $('.tt-suggestion').live("click", function() {
             var text = $(this).text();
-            $.fn.yiiListView.update('customDataList', {
+            $.ajax({
                     data: {text:text},
-                    type:"POST",
-                    url: '<?= Yii::app()->createUrl("/questionanswer/question/getSearchOneSelectItem") ?>',
+                    type: "POST",
+                    url: '<?= Yii::app()->createUrl("/questionanswer/question/getLocationOneSelectItem") ?>',
                     success: function (data) {
-                        $("#customDataList .items").html(data);
+                        if(data) {
+                            window.location.href = data;
+                        }
                     }
                 }
             );
+        });
+
+        $("#question-form_create").submit(function() {
+                $.ajax({
+                    data: $(this).serialize(),
+                    type: "POST",
+                    url: '<?= Yii::app()->createUrl("/questionanswer/question/create") ?>',
+                    success: function (data) {
+                        var res = JSON.parse(data);
+                        if(res.flag) {
+                            $(".logErrors").html(res.errors);
+                        } else {
+                            $(".logErrors").empty();
+                            window.location.href = res.location;
+                        }
+                    }
+                });
+
+            return false;
         });
     });
 </script>

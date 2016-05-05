@@ -359,3 +359,9 @@ ul.yiiPager .selected a {
 #modalAskNewQuestion .modal-file-upload {
   margin-top: 5px;
 }
+
+.logErrors {
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
+}

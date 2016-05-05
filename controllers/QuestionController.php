@@ -55,9 +55,7 @@ class QuestionController extends Controller
 	 */
 	public function actionCreate()
 	{
-
         $question = new Question();
-
         if(isset($_POST['Question'])) {
 
 			$this->forcePostRequest();
@@ -67,30 +65,54 @@ class QuestionController extends Controller
 			$question->content->populateByForm();
 			$question->post_type = "question";
 
-			if (isset($_POST['ajax']) && $_POST['ajax'] === 'question-new_question-form') {
-				$error = CActiveForm::validate($question);
+			if($question->validate()) {
+				$question->save();
+			}else{
+				echo json_encode(
+					[
+						'flag' => true,
+						'errors' => $this->implodeAssocArray($question->getErrors()),
+					]
+				);
+				Yii::app()->end();
 			}
 
-			if (!empty($error)) {
-				echo $error;
-			} else {
-				$question->save();
 
-				if (isset($_POST['Tags'])) {
-					// Split tag string into array
-					$tags = explode(", ", $_POST['Tags']);
-					foreach ($tags as $tag) {
-						$tag = Tag::model()->firstOrCreate($tag);
-						$question_tag = new QuestionTag;
-						$question_tag->question_id = $question->id;
-						$question_tag->tag_id = $tag->id;
-						$question_tag->save();
+			if (isset($_POST['Tags'])) {
+				// Split tag string into array
+				$tags = explode(", ", $_POST['Tags']);
+				foreach ($tags as $tag) {
+					$tag = Tag::model()->firstOrCreate($tag);
+					$question_tag = new QuestionTag;
+					$question_tag->question_id = $question->id;
+					$question_tag->tag_id = $tag->id;
+					$question_tag->save();
+				}
+			}
+
+			echo json_encode(
+				[
+					'flag' => false,
+					'location' => $this->createUrl('//questionanswer/question/view', array('id' => $question->id)),
+				]
+			);
+			Yii::app()->end();
+		}
+	}
+
+	protected function implodeAssocArray($array)
+	{
+		$string = "<div class='errorsQuestion'>";
+			if(is_array($array) && !empty(array_filter($array))) {
+				foreach ($array as $key => $value) {
+					foreach ($value as $item) {
+						$string.=  $item . "<br />";
 					}
 				}
-
-				$this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $question->id)));
 			}
-		}
+		$string.="</div>";
+
+		return $string;
 	}
 
 	/**
@@ -355,20 +377,13 @@ class QuestionController extends Controller
 		echo json_encode($findData);
 	}
 
-	public function actionGetSearchOneSelectItem()
+	public function actionGetLocationOneSelectItem()
 	{
 		$text = $_POST['text'];
 
-		$criteria=new CDbCriteria;
-		$criteria->condition = 'post_title="' . $text . '"';
-
-		$dataProvider=new CActiveDataProvider('Question', array(
-			'criteria'=>$criteria
-		));
-
-		return $this->renderPartial('_view', array(
-			'dataProvider'=>$dataProvider,
-			'data' => $dataProvider->getData()[0],
-		));
+		$question = Question::model()->find("post_title='" . $text ."'");
+		if(!empty($question)) {
+			echo $this->createUrl('//questionanswer/question/view', array('id' => $question->id));
+		}
 	}
 }
