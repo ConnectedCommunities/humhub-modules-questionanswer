@@ -365,3 +365,13 @@ ul.yiiPager .selected a {
   text-align: center;
   margin-bottom: 15px;
 }
+
+.panel.panel-default.panel-activities {
+  width: 371px;
+}
+
+.qanda-activity {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+}

@@ -57,7 +57,13 @@
     </div>
 </div>
 <!-- end: show content -->
-
+<div class="qanda-activity">
+    <?php
+        $this->widget('application.modules_core.activity.widgets.ActivityStreamWidget', array(
+            'streamAction' => '//dashboard/dashboard/stream',
+        ));
+    ?>
+</div>
 <!-- Ask Question Modal -->
 <div class="modal" id="modalAskNewQuestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -124,7 +130,6 @@
                         <?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
                     <?php $this->endWidget(); ?>
                 </div>
-
             </div>
         </div>
     </div>
