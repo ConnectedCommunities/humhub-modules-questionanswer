@@ -7,7 +7,7 @@
             <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/index'); ?>">Questions</a>
         </li>
         <li class="dropdown<?php if(Yii::app()->controller->action->id == "unanswered") echo ' active'; ?>">
-            <?php echo CHtml::link('Unanswered', Yii::app()->createUrl('//questionanswer/question/unanswered'), array()); ?>
+            <?php echo CHtml::link('Unresponsed', Yii::app()->createUrl('//questionanswer/question/unanswered'), array()); ?>
         </li>
         <li class="dropdown<?php if(Yii::app()->controller->action->id == "tag") echo ' active'; ?>">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags <b class="caret"></b></a>

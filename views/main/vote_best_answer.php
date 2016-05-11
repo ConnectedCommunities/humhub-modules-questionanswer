@@ -1,10 +1,10 @@
 <?php
 if($accepted_answer) {
 	$btnClass = "btn-info";
-	$text = "Accepted Answer";
+	$text = "Accepted respons";
 } else {
 	$btnClass = "btn-default";
-	$text = "Mark as Accepted Answer";
+	$text = "Mark as Accepted respons";
 } 
 
 if(Yii::app()->user->id == $author) {

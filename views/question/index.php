@@ -35,7 +35,7 @@
     </div>
     
     <div id="qanda-search" class="text-center">
-      <span class="tt-input-span"><input class="form-control typeahead fullwidth" type="text" placeholder="Search or Ask a Question"></span>
+      <span class="tt-input-span"><input class="form-control typeahead fullwidth" type="text" placeholder="Search, Ask a Question or Share Something"></span>
     </div>
 
     <div class="row">
@@ -82,10 +82,12 @@
 
                     )); ?>
                     <div class="logErrors"></div>
+                    <?= $form->label($question, 'post_title'); ?>
                         <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm', 'rows' => '1', "placeholder" => "Ask something...")); ?>
                         <?php echo $form->error($question,'post_title'); ?>
 
                         <div class="contentForm_options">
+                            <?= $form->label($question, 'post_text'); ?>
                             <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Question details...")); ?>
                             <?php echo $form->error($question,'post_text'); ?>
                             <br />

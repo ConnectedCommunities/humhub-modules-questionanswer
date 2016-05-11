@@ -46,7 +46,7 @@ $('.search-form form').submit(function(){
 	        <div class="panel qanda-panel">
 	        	<div class="panel-heading">
 	        		<?php $this->renderPartial('../partials/admin_menu_links'); ?>
-	        		<strong>Manage</strong> answers
+	        		<strong>Manage</strong> responses
 	        	</div>
 
 	            <div class="panel-body">

@@ -175,7 +175,7 @@
                 </div>
             </div>
             
-            <h4><?php echo count($answers) ?> Answers</h4>
+            <h4><?php echo count($answers) ?> Responses</h4>
             <hr>
 
             <?php foreach($answers as $question_answer) { ?>

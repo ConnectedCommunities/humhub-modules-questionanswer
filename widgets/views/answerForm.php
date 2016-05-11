@@ -10,12 +10,12 @@
 )); ?>
 <div class="panel panel-default panel-answer">
     <div class="panel-heading">
-        <strong>Your</strong> answer
+        <strong>Your</strong> response
     </div>
     <div class="panel-body">
         <?php echo $form->errorSummary($answer); ?>
         <?php echo $form->error($answer,'post_text'); ?>
-        <?php echo $form->textArea($answer,'post_text',array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => "Your answer...")); ?>
+        <?php echo $form->textArea($answer,'post_text',array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => "Your response...")); ?>
         <?php echo $form->hiddenField($answer,'question_id',array('type'=>"hidden", 'value' => $question->id)); ?>
         <div class="pull-left">
             <?php
