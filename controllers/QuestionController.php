@@ -38,6 +38,10 @@ class QuestionController extends Controller
 	{
 		$model = $this->loadModel($id);
 
+		if(empty($model->user)) {
+			$this->redirect(Yii::app()->request->getUrlReferrer());
+		}
+
 		$this->render('view',array(
 
     		'author' => $model->user->id,
