@@ -8,10 +8,10 @@
     ?>
 	<ul class="nav nav-tabs qanda-header-tabs" id="filter">
         <li class="dropdown <?php echo ($isQuestion ? "active" : ""); ?>">
-			<?php echo CHtml::link('Questions', Yii::app()->createUrl('//questionanswer/question/admin'), array('style' => 'cursor: pointer;')); ?>
+			<?php echo CHtml::link('Posts', Yii::app()->createUrl('//questionanswer/question/admin'), array('style' => 'cursor: pointer;')); ?>
         </li>
 		<li class="dropdown <?php echo ($isAnswer ? "active" : ""); ?>">
-			<?php echo CHtml::link('Answers', Yii::app()->createUrl('//questionanswer/answer/admin'), array('style' => 'cursor: pointer;')); ?>
+			<?php echo CHtml::link('Responses', Yii::app()->createUrl('//questionanswer/answer/admin'), array('style' => 'cursor: pointer;')); ?>
         </li>
         <li class="dropdown <?php echo ($isComment ? "active" : ""); ?>">
 			<?php echo CHtml::link('Comments', Yii::app()->createUrl('//questionanswer/comment/admin'), array('style' => 'cursor: pointer;')); ?>

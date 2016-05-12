@@ -14,7 +14,7 @@
                         <img class="img-profile-header-background img-profile-header-background-qanda" id="space-banner-image" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tc-qanda-banner.png" style="width: 100%;" width="100%">
             
                         <div class="img-profile-data">
-                            <h1 class="space">Community Knowledge Q&amp;A</h1>
+                            <h1 class="space">Community Knowledge</h1>
                             <h2 class="space">A searchable repository of teaching knowledge.</h2>
                         </div>
                     </div>
@@ -323,7 +323,7 @@
 
         <div class="col-md-3">
             <div class="panel panel-default">
-                <div class="panel-heading"><strong>Related</strong> Questions</div>
+                <div class="panel-heading"><strong>Related</strong> Posts</div>
                 <?php if(count($related) > 0) { ?>
                     <div class="list-group">
                         <?php foreach ($related as $question) { ?>
@@ -332,7 +332,7 @@
                     </div>
                     <br>
                 <?php } else { ?>
-                    <div class="panel-body"><p>No related questions</p></div>
+                    <div class="panel-body"><p>No related posts</p></div>
                 <?php } ?>
             </div>
         </div>

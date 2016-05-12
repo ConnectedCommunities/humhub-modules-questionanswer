@@ -20,7 +20,7 @@
             			<img class="img-profile-header-background img-profile-header-background-qanda" id="space-banner-image" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tc-qanda-banner.png" width="100%">
             
                         <div class="img-profile-data">
-                            <h1 class="space">Community Knowledge Q&amp;A</h1>
+                            <h1 class="space">Community Knowledge</h1>
                             <h2 class="space">A searchable repository of teaching knowledge.</h2>
                         </div>
         			</div>
@@ -71,7 +71,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                	<strong>Ask</strong> a new question
+                	<strong>Ask</strong> a new post
                 	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
 	            </div>
@@ -88,10 +88,10 @@
 
                         <div class="contentForm_options">
                             <?= $form->label($question, 'post_text'); ?>
-                            <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Question details...")); ?>
+                            <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Post details...")); ?>
                             <?php echo $form->error($question,'post_text'); ?>
                             <br />
-                            <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Tags... Specify at least one tag for your question")); ?>
+                            <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Tags... Specify at least one tag for your post")); ?>
                         </div>
                         <div class="pull-left" style="margin-top:5px;">
                             <?php

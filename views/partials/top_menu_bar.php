@@ -4,7 +4,7 @@
             <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/picked'); ?>">Picked for you</a>
         </li>
         <li class="dropdown<?php if(Yii::app()->controller->action->id == "index") echo ' active'; ?>">
-            <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/index'); ?>">Questions</a>
+            <a style="cursor:pointer;" href="<?php echo Yii::app()->createUrl('//questionanswer/question/index'); ?>">Posts</a>
         </li>
         <li class="dropdown<?php if(Yii::app()->controller->action->id == "unanswered") echo ' active'; ?>">
             <?php echo CHtml::link('Unresponsed', Yii::app()->createUrl('//questionanswer/question/unanswered'), array()); ?>
