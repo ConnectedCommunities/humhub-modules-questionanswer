@@ -92,6 +92,7 @@
                             <?php echo $form->error($question,'post_text'); ?>
                             <br />
                             <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Tags... Specify at least one tag for your post")); ?>
+                            <p class="help-block">Example: PC, phone, video..</p>
                         </div>
                         <div class="pull-left" style="margin-top:5px;">
                             <?php
