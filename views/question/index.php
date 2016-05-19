@@ -35,7 +35,7 @@
     </div>
     
     <div id="qanda-search" class="text-center">
-      <span class="tt-input-span"><input class="form-control typeahead fullwidth" type="text" placeholder="Search, Ask a Question or Share Something"></span>
+      <span class="tt-input-span"><input class="form-control typeahead searchInput fullwidth" type="text" placeholder="Search, Ask a Question or Share Something"></span>
     </div>
 
     <div class="row">
@@ -83,7 +83,7 @@
                     )); ?>
                     <div class="logErrors"></div>
                     <?= $form->label($question, 'post_title'); ?>
-                        <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm', 'rows' => '1', "placeholder" => "Ask something...")); ?>
+                        <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask something...")); ?>
                         <?php echo $form->error($question,'post_title'); ?>
 
                         <div class="contentForm_options">
@@ -171,8 +171,8 @@
             name: 'questions',
             source: substringMatcher(JSON.parse(questions)),
             templates: {
-                footer: '<btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>',
-                empty: '<p>No results found matching your query.</p><btn class="btn btn-info" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>'
+                footer: '<btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>',
+                empty: '<p>No results found matching your query.</p><btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>'
             }
         });
 
@@ -209,5 +209,11 @@
 
             return false;
         });
+
+        $("body").on("click",".btn-new-post",function() {
+            var text = $(".searchInput[value!='']").val();
+            $(".post_title").val(text);
+        });
+
     });
 </script>
