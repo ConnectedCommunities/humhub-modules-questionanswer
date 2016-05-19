@@ -93,11 +93,11 @@ class QuestionController extends Controller
 					$question_tag->save();
 				}
 			}
-
+			
 			echo json_encode(
 				[
 					'flag' => false,
-					'location' => $this->createUrl('//questionanswer/question/view', array('id' => $question->id)),
+					'location' => $this->createUrl('//questionanswer/question/view', array('id' => $question->getPrimaryKey())),
 				]
 			);
 			Yii::app()->end();
