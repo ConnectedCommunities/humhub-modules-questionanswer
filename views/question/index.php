@@ -71,67 +71,75 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                	<strong>Ask</strong> a new post
-                	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
+                	<h3 class="text-center" style="margin-bottom:0px;"><strong>Create</strong> a new Community Knowledge post</h3>
 	            </div>
 	            <div class="panel-body">
-                    <?php $form=$this->beginWidget('CActiveForm', array(
-                        'action' => Yii::app()->createUrl("/questionanswer/question/create"),
-                        'id'=>'question-form_create',
+	                <div class="col-xs-12">
+                        <?php $form=$this->beginWidget('CActiveForm', array(
+                            'action' => Yii::app()->createUrl("/questionanswer/question/create"),
+                            'id'=>'question-form_create',
 
-                    )); ?>
-                    <div class="logErrors"></div>
-                    <?= $form->label($question, 'post_title'); ?>
-                        <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask something...")); ?>
-                        <?php echo $form->error($question,'post_title'); ?>
+                        )); ?>
+                        <div class="logErrors"></div>
+                        <?= $form->label($question, 'post_title'); ?>
+                            <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask something...")); ?>
+                            <?php echo $form->error($question,'post_title'); ?>
 
-                        <div class="contentForm_options">
-                            <?= $form->label($question, 'post_text'); ?>
-                            <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Post details...")); ?>
-                            <?php echo $form->error($question,'post_text'); ?>
-                            <br />
-                            <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Tags... Specify at least one tag for your post")); ?>
-                            <p class="help-block">Example: PC, phone, video..</p>
+                            <div class="contentForm_options">
+                                <?= $form->label($question, 'post_text'); ?>
+                                <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Post details...")); ?>
+                                <?php echo $form->error($question,'post_text'); ?>
+                                <br />
+                                <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Enter comma separated tags here...")); ?>
+                                <p class="help-block">Example: teaching, students, lesson planning ...</p>
+                            </div>
+
+                            <div class="row" style="padding-bottom:20px;">
+                                <div class="col-xs-12">
+                                <div class="pull-left">
+                                    <?php
+                                    // Creates Uploading Button
+                                    $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
+                                        'uploaderId' => 'contentFormFiles',
+                                        'fileListFieldName' => 'fileList',
+                                    ));
+                                    ?>
+                                    <script>
+                                        $('#fileUploaderButton_contentFormFiles').bind('fileuploaddone', function (e, data) {
+                                            $('.btn_container').show();
+                                        });
+
+                                        $('#fileUploaderButton_contentFormFiles').bind('fileuploadprogressall', function (e, data) {
+                                            var progress = parseInt(data.loaded / data.total * 100, 10);
+                                            if (progress != 100) {
+                                                // Fix: remove focus from upload button to hide tooltip
+                                                $('#post_submit_button').focus();
+
+                                                // hide form buttons
+                                                $('.btn_container').hide();
+                                            }
+                                        });
+                                    </script>
+                                    <?php
+                                    // Creates a list of already uploaded Files
+                                    $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
+                                        'uploaderId' => 'contentFormFiles'
+                                    ));
+                                    ?>
+                                </div>
+
+                                <?php
+                                echo CHtml::hiddenField("containerGuid", Yii::app()->user->guid);
+                                echo CHtml::hiddenField("containerClass",  get_class(new User()));
+                                ?>
+
+                                <?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right')); ?>
+                            </div>
                         </div>
-                        <div class="pull-left" style="margin-top:5px;">
-                            <?php
-                            // Creates Uploading Button
-                            $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
-                                'uploaderId' => 'contentFormFiles',
-                                'fileListFieldName' => 'fileList',
-                            ));
-                            ?>
-                            <script>
-                                $('#fileUploaderButton_contentFormFiles').bind('fileuploaddone', function (e, data) {
-                                    $('.btn_container').show();
-                                });
-
-                                $('#fileUploaderButton_contentFormFiles').bind('fileuploadprogressall', function (e, data) {
-                                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                                    if (progress != 100) {
-                                        // Fix: remove focus from upload button to hide tooltip
-                                        $('#post_submit_button').focus();
-
-                                        // hide form buttons
-                                        $('.btn_container').hide();
-                                    }
-                                });
-                            </script>
-                            <?php
-                            // Creates a list of already uploaded Files
-                            $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
-                                'uploaderId' => 'contentFormFiles'
-                            ));
-                            ?>
-                        </div>
-
-                        <?php
-                        echo CHtml::hiddenField("containerGuid", Yii::app()->user->guid);
-                        echo CHtml::hiddenField("containerClass",  get_class(new User()));
-                        ?>
-                        <?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
-                    <?php $this->endWidget(); ?>
+                        <?php $this->endWidget(); ?>
+                    </div>
                 </div>
             </div>
         </div>
