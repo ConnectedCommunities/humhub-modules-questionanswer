@@ -4,11 +4,13 @@ Question and Answer
 
 A Stack Exchange inspired Question and Answer system for Humhub. 
 
-Add code to config/local/_settings.php in Components array to urlManager rules
+Add code to config/_defaults.php and add code only to Rules
 
-'/' => '/questionanswer/question/picked',
+  '/' => '/questionanswer/question/picked',
 
-If you disable module you need to delete the line below: '/' => '/questionanswer/question/picked',
+If you disable module you need to delete the line below: 
+
+  '/' => '/questionanswer/question/picked',
 
 instruction about how to restart the module if migrations were updated
 0) disable module
