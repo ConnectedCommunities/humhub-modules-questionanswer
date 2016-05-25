@@ -84,12 +84,12 @@
                         )); ?>
                         <div class="logErrors"></div>
                         <?= $form->label($question, 'post_title'); ?>
-                            <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask something...")); ?>
+                            <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask or share anything!")); ?>
                             <?php echo $form->error($question,'post_title'); ?>
 
                             <div class="contentForm_options">
                                 <?= $form->label($question, 'post_text'); ?>
-                                <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Post details...")); ?>
+                                <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "What is it about teaching that is confusing or exciting you today?")); ?>
                                 <?php echo $form->error($question,'post_text'); ?>
                                 <br />
                                 <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Enter comma separated tags here...")); ?>
