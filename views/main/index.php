@@ -6,18 +6,18 @@
                 <div class="panel-body">
 
                 <?php
-                // $this->widget('application.modules.reportcontent.widgets.ReportContentWidget', array('object' => Post::model()->findByPk(1))); 
+                // $this->widget('application.modules.reportcontent.widgets.ReportContentWidget', array('object' => Post::model()->findByPk(1)));
                 // $this->widget('application.modules_core.file.widgets.FileUploadListWidget',[
                 //     'uploaderId' => 'cover_uploader'
-                // ]); 
-                // $this->widget('application.modules_core.admin.widgets.AdminMenuWidget', array()); 
+                // ]);
+                // $this->widget('application.modules_core.admin.widgets.AdminMenuWidget', array());
                 ?>
 
                 <?php foreach ($questions as $question) { ?>
                     <div class="media" >
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
-                                <?php 
+                                <?php
                                 $upBtnClass = ""; $downBtnClass = ""; $vote = "";
 
                                 // Change the button class to 'active' if the user has voted

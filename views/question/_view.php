@@ -21,7 +21,7 @@
             }
             
             $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 0)); 
-            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0)); 
+            /* $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0)); */
 
             ?>
         </div>

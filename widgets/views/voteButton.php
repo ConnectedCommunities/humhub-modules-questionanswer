@@ -12,5 +12,11 @@ if(!isset($btnClass)) {
 <?php echo $form->hiddenField($model,'post_id',array('type'=>"hidden", 'value' => $post_id)); ?>
 <?php echo $form->hiddenField($model,'vote_on',array('type'=>"hidden", 'value' => $vote_on)); ?>
 <?php echo $form->hiddenField($model,'vote_type',array('type'=>"hidden", 'value' => $vote_type)); ?>
-<?php echo CHtml::tag('button', array('class'=> $btnClass . " " . $class, 'type'=>'submit', 'style' => 'margin-top:5px;'), '<i class="fa fa-angle-'.$vote_type.'"></i>'); ?>
+<?php
+    if ($vote_type='up'){
+        echo CHtml::tag('button', array('class'=> $btnClass . " btn-like " . $class, 'type'=>'submit', 'title' => 'like'), '<i class="fa fa-thumbs-o-'.$vote_type.'"></i>');
+    }else{
+        echo CHtml::tag('button', array('class'=> $btnClass . " btn-like " . $class, 'type'=>'submit', 'title' => 'dislike'), '<i class="fa fa-thumbs-o-'.$vote_type.'"></i>');
+    }
+?>
 <?php $this->endWidget(); ?>

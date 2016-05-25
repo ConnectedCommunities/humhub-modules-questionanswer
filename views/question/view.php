@@ -3,6 +3,9 @@
 /* @var $model Question */
 ?>
 
+<link rel="stylesheet" type="text/css"
+         href="<?php echo $this->module->assetsUrl; ?>/css/questionanswer.css"/>
+
 <div class="container">
 
 	<!-- Top Banner -->
@@ -55,10 +58,13 @@
                                 ?>
 
                                 <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));  ?>
-                                <div class="text-center"><strong>
-                                <?php echo QuestionVotes::model()->score($model->id); ?>
-                                </strong><br /></div>
-								<?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass,  'should_open_question' => 1)); ?>
+                                <div class="text-center" style="line-height:1;">
+                                    <strong>
+                                        <?php echo QuestionVotes::model()->score($model->id); ?><br>
+                                        <small>likes</small>
+                                    </strong><br />
+                                </div>
+								<!-- <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass,  'should_open_question' => 1)); ?> -->
                             </div>
                             
                         </div>
@@ -197,9 +203,15 @@
                                     }
                                 }
                                 ?>
+
                                 <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 1));  ?>
-                                <div class="text-center"><strong><?php echo $question_answer['score']; ?></strong><br /></div>
-                                <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 1)); ?>
+                                <div class="text-center" style="line-height:1;">
+                                    <strong>
+                                        <?php echo $question_answer['score']; ?><br>
+                                        <small>likes</small>
+                                    </strong><br />
+                                </div>
+                                <!-- <?php $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 1)); ?> -->
                             </div>
                         </div>
                         <?php $user = User::model()->findByPk($question_answer['created_by']); ?>                        
