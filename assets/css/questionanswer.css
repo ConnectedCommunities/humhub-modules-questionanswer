@@ -387,11 +387,17 @@ ul.yiiPager .selected a {
 }
 
 .panel.panel-default.panel-activities {
-  width: 371px;
+  margin-top:58px;
 }
 
-.qanda-activity {
-  position: fixed;
-  bottom: 0px;
-  right: 0px;
+@media(max-width: 768px) {
+	typeahead{
+		font-size:18px;
+	}
+}
+
+@media(max-width: 558px) {
+	typeahead{
+		font-size:14px;
+	}
 }

@@ -39,7 +39,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
             <div class="panel panel-default qanda-panel">
                 <?php $this->renderPartial('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
@@ -54,16 +54,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3 layout-sidebar-container">
+			<?php
+                $this->widget('application.modules_core.activity.widgets.ActivityStreamWidget', array(
+                    'streamAction' => '//dashboard/dashboard/stream',
+                ));
+            ?>
+        </div>
     </div>
 </div>
 <!-- end: show content -->
-<div class="qanda-activity">
-    <?php
-        $this->widget('application.modules_core.activity.widgets.ActivityStreamWidget', array(
-            'streamAction' => '//dashboard/dashboard/stream',
-        ));
-    ?>
-</div>
+
 <!-- Ask Question Modal -->
 <div class="modal" id="modalAskNewQuestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
