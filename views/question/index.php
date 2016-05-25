@@ -73,7 +73,7 @@
                 <div class="panel-heading">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                	<h3 class="text-center" style="margin-bottom:0px;"><strong>Create</strong> a new Community Knowledge post</h3>
+                	<h3 class="text-center" style="margin-bottom:0px;"><strong>Ask</strong> a new question or share something</h3>
 	            </div>
 	            <div class="panel-body">
 	                <div class="col-xs-12">
@@ -180,7 +180,7 @@
             source: substringMatcher(JSON.parse(questions)),
             templates: {
                 footer: '<btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>',
-                empty: '<p>No results found matching your query.</p><btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>'
+                empty: '<p>No results found matching your query.</p><btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask a new question or share something</button>'
             }
         });
 

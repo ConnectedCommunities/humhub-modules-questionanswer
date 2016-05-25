@@ -37,7 +37,7 @@
         </div>
         <div class="col-md-3">
             <div class="panel panel-default">
-                <div class="panel-heading"><strong>Related</strong> Questions</div>
+                <div class="panel-heading"><strong>Related</strong> Posts</div>
                 <div class="list-group">
                     <a class="list-group-item" href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
                     <a class="list-group-item" href="#">Nunc pharetra blandit sapien, et tempor nisi.</a>

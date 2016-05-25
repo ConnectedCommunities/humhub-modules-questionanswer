@@ -29,7 +29,7 @@
                 </div>
                 <div class="pull-left" style="text-align:center; margin-top:5px;">
                     <b><?php echo $stats['answers']; ?></b>
-                    <p>answers</p>
+                    <p>responses</p>
                 </div>
             </div>
 
