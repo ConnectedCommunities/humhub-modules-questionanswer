@@ -15,7 +15,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="text-center">Questions Tagged: <?php echo $tag->tag; ?></h3>
+            <h3 class="text-center">Posts Tagged: <?php echo $tag->tag; ?></h3>
         </div>
         <div class="row">
         <div class="col-md-9">
@@ -50,11 +50,11 @@
                             </a>-->
                             <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
                                 <b><?php echo $question['vote_count']; ?></b>
-                                <p>votes</p>
+                                <p>likes</p>
                             </div>
                             <div class="pull-left" style="text-align:center; margin-top:5px;">
                                 <b><?php echo $question['answers']; ?></b>
-                                <p>answers</p>
+                                <p>responses</p>
                             </div>
 
                         </div>
@@ -74,7 +74,7 @@
 
         <div class="col-md-3">
             <div class="panel panel-default">
-                <div class="panel-heading"><strong>Related</strong> Questions</div>
+                <div class="panel-heading"><strong>Related</strong> Posts</div>
                 <div class="list-group">
                     <a class="list-group-item" href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
                     <a class="list-group-item" href="#">Nunc pharetra blandit sapien, et tempor nisi.</a>

@@ -16,5 +16,3 @@ if(!isset($btnClass)) {
 <?php echo $form->hiddenField($model,'vote_type',array('type'=>"hidden", 'value' => $vote_type)); ?>
 <?php echo CHtml::tag('button', array('class'=> $btnClass . " " . $class, 'type'=>'submit', 'style' => 'margin-top:5px;'), '<i class="fa fa-angle-'.$vote_type.'"></i>'); ?>
 <?php $this->endWidget(); ?>
-
-

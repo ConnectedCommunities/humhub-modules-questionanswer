@@ -67,8 +67,8 @@ class Question extends HActiveRecordContent implements ISearchable
 		return array(
 			'id' => 'ID',
 			'question_id' => 'Question',
-			'post_title' => 'Ask or share anything!',
-			'post_text' => 'What is it about teaching that is confusing or exciting you today?',
+			'post_title' => 'Post title',
+			'post_text' => 'Post text',
 			'post_type' => 'Post Type',
 			'created_at' => 'Created At',
 			'created_by' => 'Created By',

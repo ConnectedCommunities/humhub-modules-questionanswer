@@ -39,7 +39,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
             <div class="panel panel-default qanda-panel">
                 <?php $this->renderPartial('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
@@ -54,16 +54,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3 layout-sidebar-container">
+			<?php
+                $this->widget('application.modules_core.activity.widgets.ActivityStreamWidget', array(
+                    'streamAction' => '//dashboard/dashboard/stream',
+                ));
+            ?>
+        </div>
     </div>
 </div>
 <!-- end: show content -->
-<div class="qanda-activity">
-    <?php
-        $this->widget('application.modules_core.activity.widgets.ActivityStreamWidget', array(
-            'streamAction' => '//dashboard/dashboard/stream',
-        ));
-    ?>
-</div>
+
 <!-- Ask Question Modal -->
 <div class="modal" id="modalAskNewQuestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -73,7 +74,7 @@
                 <div class="panel-heading">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                	<h3 class="text-center" style="margin-bottom:0px;"><strong>Create</strong> a new Community Knowledge post</h3>
+                	<h3 class="text-center" style="margin-bottom:0px;"><strong>Ask</strong> a new question or share something</h3>
 	            </div>
 	            <div class="panel-body">
 	                <div class="col-xs-12">
@@ -84,12 +85,12 @@
                         )); ?>
                         <div class="logErrors"></div>
                         <?= $form->label($question, 'post_title'); ?>
-                            <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask something...")); ?>
+                            <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask or share anything!")); ?>
                             <?php echo $form->error($question,'post_title'); ?>
 
                             <div class="contentForm_options">
                                 <?= $form->label($question, 'post_text'); ?>
-                                <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Post details...")); ?>
+                                <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "What is it about teaching that is confusing or exciting you today?")); ?>
                                 <?php echo $form->error($question,'post_text'); ?>
                                 <br />
                                 <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Enter comma separated tags here...")); ?>
@@ -181,7 +182,7 @@
             source: substringMatcher(JSON.parse(questions)),
             templates: {
                 footer: '<btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>',
-                empty: '<p>No results found matching your query.</p><btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>'
+                empty: '<p>No results found matching your query.</p><btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask a new question or share something</button>'
             }
         });
 
