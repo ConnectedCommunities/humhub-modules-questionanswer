@@ -50,7 +50,7 @@
                             </a>-->
                             <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
                                 <b><?php echo $question['vote_count']; ?></b>
-                                <p>votes</p>
+                                <p>likes</p>
                             </div>
                             <div class="pull-left" style="text-align:center; margin-top:5px;">
                                 <b><?php echo $question['answers']; ?></b>
