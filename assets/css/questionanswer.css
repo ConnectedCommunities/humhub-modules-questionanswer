@@ -386,10 +386,6 @@ ul.yiiPager .selected a {
   margin-bottom: 15px;
 }
 
-.panel.panel-default.panel-activities {
-  margin-top:58px;
-}
-
 @media(max-width: 768px) {
 	typeahead{
 		font-size:18px;
