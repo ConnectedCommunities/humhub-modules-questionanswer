@@ -195,8 +195,8 @@ class QuestionController extends Controller
 				'order'=>'created_at DESC',
 			)
 		));
-
-		$resultSearchData = CHtml::listData($dataProvider->getData(),"id", "post_title");
+		$getAllQuestion = Question::model()->findAll();
+		$resultSearchData = CHtml::listData($getAllQuestion,"id", "post_title");
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 			'question' => $question,

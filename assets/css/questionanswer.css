@@ -401,3 +401,8 @@ ul.yiiPager .selected a {
 		font-size:14px;
 	}
 }
+
+.scrollSearchData {
+  max-height: 200px;
+  overflow-y: auto;
+}

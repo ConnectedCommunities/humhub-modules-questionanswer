@@ -35,7 +35,11 @@
     </div>
     
     <div id="qanda-search" class="text-center">
-      <span class="tt-input-span"><input class="form-control typeahead searchInput fullwidth" type="text" placeholder="Search, Ask a Question or Share Something"></span>
+      <span class="tt-input-span">
+          <div id="scrollable-dropdown-menu">
+              <input class="form-control typeahead searchInput fullwidth" type="text" placeholder="Search, Ask a Question or Share Something">
+          </div>
+      </span>
     </div>
 
     <div class="row">
@@ -166,7 +170,6 @@
                 matches.push(str);
               }
             });
-
             cb(matches);
           };
         };
@@ -180,11 +183,25 @@
         {
             name: 'questions',
             source: substringMatcher(JSON.parse(questions)),
+            limit: 1000,
             templates: {
                 footer: '<btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask new question</button>',
-                empty: '<p>No results found matching your query.</p><btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask a new question or share something</button>'
+                empty: '<p>No results found matching your query.</p><btn class="btn btn-info btn-new-post" data-toggle="modal" data-target="#modalAskNewQuestion">Ask a new question or share something</button>',
             }
         });
+
+        $('.searchInput').on("keyup", function() {
+            var dataSearch = $(".tt-dataset .tt-suggestion").detach();
+            if(dataSearch.length) {
+                var html = "<div class='scrollSearchData'>";
+                    $.each(dataSearch,function(index, value) {
+                        html+=$(this)[0].outerHTML;
+                    })
+                html+="</div>";
+
+                $(".tt-dataset .btn").before(html);
+            }
+        })
 
         $('.tt-suggestion').live("click", function() {
             var text = $(this).text();
