@@ -72,6 +72,7 @@
                     'streamAction' => '//dashboard/dashboard/stream',
                 ));
             ?>
+            <?php $this->widget('application.modules.questionanswer.widgets.KnowledgeTour'); ?>
         </div>
     </div>
 </div>
@@ -184,7 +185,9 @@
                                     $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
                                         'uploaderId' => 'contentFormFiles'
                                     ));
+
                                     ?>
+
                                 </div>
 
                                 <?php
