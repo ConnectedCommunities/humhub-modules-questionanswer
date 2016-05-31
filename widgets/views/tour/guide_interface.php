@@ -20,8 +20,8 @@
             // step 0
             orphan: true,
             backdrop: true,
-            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_interface', '<strong>Dashboard</strong>')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_interface', "This is your dashboard.<br><br>Any new activities or posts that might interest you will be displayed here.")); ?>
+            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_interface', '<strong>Community Knowledge</strong>')); ?>,
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_interface', "Welcome to TeachConnect! This is your home page, where community knowledge is being developed around the teaching profession.<br><br>Here you can ask questions, share resources or see what other teachers are interested in. The community is made up of pre-service teachers, in-service teachers and subject experts across Queensland.")); ?>
         },
         {
             element: "#icon-notifications",
@@ -36,11 +36,30 @@
             placement: "bottom"
         },
         {
-            element: "#space-menu",
-            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Space</strong> Menu')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'This is the most important menu and will probably be the one you use most often!<br><br>Access all the spaces you have joined and create new spaces here.<br><br>The next guide will show you how:')); ?> + "<br><br><a href='javascript:gotoSpace = true; tourCompleted();'><?php echo Yii::t("TourModule.widgets_views_index", "<strong>Start</strong> space guide"); ?></a><br><br>",
+            element: "#qanda-search",
+            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Search, share something</strong> or ask a question')); ?>,
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>",
             placement: "bottom"
-        }
+        },
+        {
+            element: ".media-heading",
+            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> title')); ?>,
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>",
+            placement: "bottom"
+        },
+        {
+            element: ".media-body",
+            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> post')); ?>,
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>",
+            placement: "bottom"
+        },
+        {
+            element: ".btn-like",
+            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> karma')); ?>,
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?> + "<br><br><a href='javascript:gotoSpace = true; tourCompleted();'><?php echo Yii::t("TourModule.widgets_views_index", "<strong>Start</strong> mentorship circle guide"); ?></a><br><br>",
+            placement: "bottom"
+        },
+
     ]);
 
     // Initialize tour plugin
