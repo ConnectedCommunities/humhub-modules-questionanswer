@@ -387,14 +387,18 @@ ul.yiiPager .selected a {
 }
 
 @media(max-width: 768px) {
-	typeahead{
+	.typeahead{
 		font-size:18px;
 	}
+
+  .twitter-typeahead {
+    width: 100%;
+  }
 }
 
 @media(max-width: 558px) {
-	typeahead{
-		font-size:14px;
+	.typeahead{
+		font-size:16px;
 	}
 }
 
