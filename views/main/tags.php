@@ -18,7 +18,7 @@
             <h3 class="text-center">Posts Tagged: <?php echo $tag->tag; ?></h3>
         </div>
         <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="panel panel-default qanda-panel">
                 <?php $this->renderPartial('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading"><strong>Related</strong> Posts</div>
                 <div class="list-group">

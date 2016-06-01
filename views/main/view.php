@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
                 <div class="panel-body">
                     <div class="media">
@@ -140,7 +140,7 @@
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading"><strong>Question</strong> information</div>
                 <div class="list-group">

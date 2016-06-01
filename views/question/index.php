@@ -43,7 +43,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="panel panel-default qanda-panel">
                 <?php $this->renderPartial('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 layout-sidebar-container">
+        <div class="col-md-4 layout-sidebar-container">
             <div class="row">
                 <div class="col-xs-12" id="quotes">
 					<div class="panel panel-default panel-teachingquotes">
@@ -67,12 +67,12 @@
                     </div>
                 </div>
             </div>
+            <?php $this->widget('application.modules.questionanswer.widgets.KnowledgeTour'); ?>
 			<?php
                 $this->widget('application.modules_core.activity.widgets.ActivityStreamWidget', array(
                     'streamAction' => '//dashboard/dashboard/stream',
                 ));
             ?>
-            <?php $this->widget('application.modules.questionanswer.widgets.KnowledgeTour'); ?>
         </div>
     </div>
 </div>
