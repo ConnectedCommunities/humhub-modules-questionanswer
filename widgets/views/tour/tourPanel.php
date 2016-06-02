@@ -33,7 +33,7 @@
         ?>
 
         <ul class="tour-list">
-            <li id="interface_entry" class="<?php if ($interface == 1) : ?>completed<?php endif; ?>"><a href="<?php echo Yii::app()->createUrl('//dashboard/dashboard', array('tour' => true)); ?>"><i class="fa fa-play-circle-o"></i><?php echo Yii::t('TourModule.widgets_views_tourPanel', '<strong>Guide:</strong> Community Knowledge'); ?></a></li>
+            <li id="interface_entry" class="<?php if ($interface == 1) : ?>completed<?php endif; ?>"><a href="<?php echo Yii::app()->createUrl('//questionanswer/question/index', array('tour' => true)); ?>"><i class="fa fa-play-circle-o"></i><?php echo Yii::t('TourModule.widgets_views_tourPanel', '<strong>Guide:</strong> Community Knowledge'); ?></a></li>
             <li class="<?php if ($spaces == 1) : ?>completed<?php endif; ?>"><a id="interface-tour-link" href="<?php echo Yii::app()->createUrl('//tour/tour/startSpaceTour'); ?>"><i class="fa fa-play-circle-o"></i><?php echo Yii::t('TourModule.widgets_views_tourPanel', '<strong>Guide:</strong> Spaces'); ?></a></li>
             <li class="<?php if ($profile == 1) : ?>completed<?php endif; ?>"><a href="<?php echo Yii::app()->createUrl('//user/profile', array('uguid' => Yii::app()->user->guid, 'tour' => 'true')); ?>"><i class="fa fa-play-circle-o"></i><?php echo Yii::t('TourModule.widgets_views_tourPanel', '<strong>Guide:</strong> User profile'); ?></a></li>
             <?php if (Yii::app()->user->isAdmin() == true) : ?>

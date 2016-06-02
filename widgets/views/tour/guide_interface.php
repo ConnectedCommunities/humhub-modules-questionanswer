@@ -38,19 +38,19 @@
         {
             element: "#qanda-search",
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Search, share something</strong> or ask a question')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>",
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>,
             placement: "bottom"
         },
         {
             element: ".media-heading",
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> title')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>",
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>,
             placement: "bottom"
         },
         {
             element: ".media-body",
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> post')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>",
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>,
             placement: "bottom"
         },
         {

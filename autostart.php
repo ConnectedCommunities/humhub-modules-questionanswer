@@ -25,7 +25,9 @@ Yii::app()->moduleManager->register(array(
         // Up vote on question, up vote on answer, answer created
         array('class' => 'QuestionVotes', 'event' => 'onAfterSave', 'callback' => array('QuestionAnswerEvents', 'onQuestionVoteAfterSave')),
 
-        
+        array('class' => 'SpaceSidebarWidget', 'event' => 'onInit', 'callback' => array('QuestionAnswerEvents', 'onSidebarSpaces')),
+
+        array('class' => 'ProfileSidebarWidget', 'event' => 'onInit', 'callback' => array('QuestionAnswerEvents', 'onSidebarProfiles')),
     ),
 ));
 ?>

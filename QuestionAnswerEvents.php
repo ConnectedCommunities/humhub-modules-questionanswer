@@ -105,5 +105,13 @@ class QuestionAnswerEvents{
 
     }
 
+    public static function onSidebarSpaces($event)
+    {
+        $event->sender->widget('application.modules.questionanswer.widgets.KnowledgeTour');
+    }
 
+    public static function onSidebarProfiles($event)
+    {
+        $event->sender->widget('application.modules.questionanswer.widgets.KnowledgeTour');
+    }
 }
