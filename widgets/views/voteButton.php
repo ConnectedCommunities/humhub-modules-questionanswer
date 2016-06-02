@@ -13,7 +13,7 @@ if(!isset($btnClass)) {
 <?php echo $form->hiddenField($model,'vote_on',array('type'=>"hidden", 'value' => $vote_on)); ?>
 <?php echo $form->hiddenField($model,'vote_type',array('type'=>"hidden", 'value' => $vote_type)); ?>
 <?php
-    if ($vote_type='up'){
+    if ($vote_type='up') {
         echo CHtml::tag('button', array('class'=> $btnClass . " btn-like " . $class, 'type'=>'submit', 'title' => 'like'), '<i class="fa fa-thumbs-o-'.$vote_type.'"></i>');
     }else{
         echo CHtml::tag('button', array('class'=> $btnClass . " btn-like " . $class, 'type'=>'submit', 'title' => 'dislike'), '<i class="fa fa-thumbs-o-'.$vote_type.'"></i>');

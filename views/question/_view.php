@@ -6,7 +6,7 @@
     <div class="pull-left">
         <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
             <?php 
-            $upBtnClass = ""; $downBtnClass = ""; $vote = "";
+            $upBtnClass = ""; $downBtnClass = ""; $vote = ""; $vote_type = "up";
 
             // Change the button class to 'active' if the user has voted
             $vote = QuestionVotes::model()->post($data->id)->user(Yii::app()->user->id)->find();
@@ -14,14 +14,16 @@
                 if($vote->vote_type == "up") {
                     $upBtnClass = "active btn-info";
                     $downBtnClass = "";
+                    $vote_type = 'down';
                 } else {
                     $downBtnClass = "active btn-info";
                     $upBtnClass = "";
+                    $vote_type = "up";
                 }
             }
             
-            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 0)); 
-            /* $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0)); */
+            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => $vote_type, 'class' => $upBtnClass, 'should_open_question' => 0));
+//            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0));
 
             ?>
         </div>
@@ -35,6 +37,10 @@
         <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
             <b><?php echo $stats['score']; ?></b>
             <p>likes</p>
+        </div>
+        <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
+            <b><?php echo Question::getViewQuestion($data->id); ?></b>
+            <p>views</p>
         </div>
         <div class="pull-left" style="text-align:center; margin-top:5px;">
             <b><?php echo $stats['answers']; ?></b>

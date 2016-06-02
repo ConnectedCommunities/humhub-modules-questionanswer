@@ -378,4 +378,27 @@ class Question extends HActiveRecordContent implements ISearchable
 	public function canWrite() {
 		return true;
 	}
+
+	const ZERO_QUESTION_COUNT = 0;
+	public static function getViewQuestion($idQuestion)
+	{
+
+		$modelCount = QuestionView::model()->count('id='.$idQuestion);
+		if(!empty($modelCount)) {
+			return $modelCount;
+		}
+		
+		return self::ZERO_QUESTION_COUNT;
+
+	}
+
+	public static function setViewQuestion($idQuestion)
+	{
+		$model = QuestionView::model()->find('id='.$idQuestion. ' AND created_by='. Yii::app()->user->id);
+		if(empty($model)) {
+			$q_view = new QuestionView();
+			$q_view->question_id = $idQuestion;
+			$q_view->save();
+		}
+	}
 }

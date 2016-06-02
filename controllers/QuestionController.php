@@ -37,18 +37,18 @@ class QuestionController extends Controller
 	public function actionView($id)
 	{
 		$model = $this->loadModel($id);
-
+		
 		if(empty($model->user)) {
 			$this->redirect(Yii::app()->request->getUrlReferrer());
 		}
 
+		Question::setViewQuestion($id);
 		$this->render('view',array(
 
     		'author' => $model->user->id,
     		'question' => $model,
     		'answers' => Answer::model()->overview($model->id),
     		'related' => Question::model()->related($model->id),
-
 			'model'=> $model,
 		));
 	}
