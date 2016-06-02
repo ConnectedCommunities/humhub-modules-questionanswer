@@ -12,6 +12,7 @@ class QuestionAnswerEvents{
             'url' => Yii::app()->createUrl('/questionanswer/question/picked', array()),
             'icon' => '<i class="fa fa-stack-exchange"></i>',
             'isActive' => (Yii::app()->controller->module && Yii::app()->controller->module->id == 'questionanswer'),
+            'sortOrder' => 10,
         ));
     }
 
