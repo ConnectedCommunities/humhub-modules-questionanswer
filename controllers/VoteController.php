@@ -77,7 +77,7 @@ class VoteController extends Controller
 				if($_POST['QuestionVotes']['should_open_question'] == true) {
 					$this->redirect(array('//questionanswer/question/view','id'=>$question_id));
 				} else {
-					$this->redirect(array('//questionanswer/question/index'));
+					$this->redirect(Yii::app()->request->urlReferrer);
 				}
 
 			}
@@ -170,5 +170,9 @@ class VoteController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public static function countLikes($question_id)
+	{
 	}
 }

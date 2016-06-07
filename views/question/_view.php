@@ -14,10 +14,11 @@
                 if($vote->vote_type == "up") {
                     $upBtnClass = "active btn-info";
                     $downBtnClass = "";
+                }
+
+                if($vote->created_by == Yii::app()->user->id && $vote->vote_type == "up") {
                     $vote_type = 'down';
                 } else {
-                    $downBtnClass = "active btn-info";
-                    $upBtnClass = "";
                     $vote_type = "up";
                 }
             }

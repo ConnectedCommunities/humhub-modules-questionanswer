@@ -6,8 +6,8 @@
                     <div class="media">
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
-                                
-                                <?php 
+
+                                <?php
                                 $upBtnClass = ""; $downBtnClass = "";
 
                                 // Change the button class to 'active' if the user has voted
@@ -21,7 +21,7 @@
                                         $upBtnClass = "";
                                     }
                                 }
-                        
+
                                 ?>
                                 <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'btnClass' => 'btn btn-default btn-sm', 'class' => $upBtnClass)); ?>
                                 <div class="text-center"><strong>
@@ -29,9 +29,9 @@
                                 </strong><br /></div>
                                 <?php echo $this->renderPartial('vote', array('post_id' => $question['id'], 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
                             </div>
-                            
+
                         </div>
-                        
+
                         <?php
                         $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $question->user));
                         ?>
@@ -59,7 +59,7 @@
                             ?>
                             <br />
                             <br />
-                            <?php 
+                            <?php
                             $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question->id, 'parent_id' => $question->id));
                             ?>
 
@@ -78,7 +78,7 @@
                     <div class="media">
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
-                                <?php 
+                                <?php
                                 $upBtnClass = ""; $downBtnClass = "";
                                 $vote = QuestionVotes::model()->post($question_answer['id'])->user(Yii::app()->user->id)->find();
                                 if($vote) {
@@ -96,7 +96,7 @@
                                 <?php echo $this->renderPartial('vote', array('post_id' => $question_answer['id'], 'model' => new QuestionVotes, 'vote_on' => 'answer', 'vote_type' => 'down', 'btnClass' => 'btn btn-default btn-sm', 'class' => $downBtnClass)); ?>
                             </div>
                         </div>
-                        <?php $user = User::model()->findByPk($question_answer['created_by']); ?>                        
+                        <?php $user = User::model()->findByPk($question_answer['created_by']); ?>
                         <?php
                         $this->widget('application.modules.questionanswer.widgets.ProfileWidget', array('user' => $user));
                         ?>
@@ -105,8 +105,8 @@
                             <?php echo nl2br(CHtml::encode($question_answer['post_text'])); ?>
                             <br />
                             <br />
-                            <?php 
-                            
+                            <?php
+
                             echo $this->renderPartial('vote_best_answer', array('post_id' => $question_answer['id'], 'author' => $author, 'model' => new QuestionVotes, 'accepted_answer' => ($question_answer['answer_status'] ? true : false)));
 
                             $comments = Answer::model()->findByPk($question_answer['id'])->comments;
@@ -122,13 +122,13 @@
                             }
                             ?>
                             <br />
-                            <?php 
+                            <?php
                             $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
                             ?>
                         </div>
 
                     </div>
-                    
+
                 </div>
             </div>
             <?php } ?>

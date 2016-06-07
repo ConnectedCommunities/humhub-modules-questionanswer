@@ -161,7 +161,7 @@ class QuestionVotes extends HActiveRecord
 	public function score($post_id) {
 
 		// Calculate the "score" (up votes minus down votes)
-		$sql = "SELECT ((SELECT COUNT(*) FROM question_votes WHERE vote_type = 'up' AND post_id=:post_id) - (SELECT COUNT(*) FROM question_votes WHERE vote_type = 'down' AND post_id=:post_id))";
+		$sql = "SELECT ((SELECT COUNT(*) FROM question_votes WHERE vote_type = 'up' AND post_id=:post_id))";
 		return Yii::app()->db->createCommand($sql)->bindValue('post_id', $post_id)->queryScalar();
 
 	}
