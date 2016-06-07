@@ -11,7 +11,6 @@
             tourCompleted();
         }
     });
-    alert(1234);
 
     // Add tour steps
     spacesTour.addSteps([
