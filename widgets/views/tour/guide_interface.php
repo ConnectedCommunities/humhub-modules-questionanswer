@@ -36,29 +36,29 @@
             placement: "bottom"
         },
         {
-            element: "#qanda-search",
+            element: ".typeahead",
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Search, share something</strong> or ask a question')); ?>,
             content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>,
-            placement: "bottom"
+            placement: "top"
         },
         {
-            element: ".media-heading",
+            element: ".media-heading:eq(0)",
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> title')); ?>,
             content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>,
-            placement: "bottom"
+            placement: "left"
         },
         {
-            element: ".media-body",
+            element: ".media-body:eq(0)",
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> post')); ?>,
             content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>,
-            placement: "bottom"
+            placement: "left"
         },
         {
-            element: ".btn-like",
+            element: ".vote_control:eq(0)",
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> karma')); ?>,
             content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?> + "<br><br><a href='javascript:gotoSpace = true; tourCompleted();'><?php echo Yii::t("TourModule.widgets_views_index", "<strong>Start</strong> mentorship circle guide"); ?></a><br><br>",
             placement: "bottom"
-        },
+        }
 
     ]);
 
