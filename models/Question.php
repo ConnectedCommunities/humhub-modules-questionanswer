@@ -383,7 +383,7 @@ class Question extends HActiveRecordContent implements ISearchable
 	public static function getViewQuestion($idQuestion)
 	{
 
-		$modelCount = QuestionView::model()->count('id='.$idQuestion);
+		$modelCount = QuestionView::model()->count('question_id='.$idQuestion);
 		if(!empty($modelCount)) {
 			return $modelCount;
 		}
@@ -394,7 +394,7 @@ class Question extends HActiveRecordContent implements ISearchable
 
 	public static function setViewQuestion($idQuestion)
 	{
-		$model = QuestionView::model()->find('id='.$idQuestion. ' AND created_by='. Yii::app()->user->id);
+		$model = QuestionView::model()->find('question_id='.$idQuestion. ' AND created_by='. Yii::app()->user->id);
 		if(empty($model)) {
 			$q_view = new QuestionView();
 			$q_view->question_id = $idQuestion;
