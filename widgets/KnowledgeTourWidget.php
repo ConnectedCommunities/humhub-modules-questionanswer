@@ -46,7 +46,7 @@ class KnowledgeTourWidget extends HWidget
         } elseif ($currentModuleId == "admin" && $currentControllerId == "module") {
             $this->render('/tour/guide_administration', array());
         } elseif ($currentModuleId == "chat" && $currentControllerId == "chat") {
-            $this->render('tour/guide_spaces', array());
+            $this->render('/tour/guide_chat', array());
         }
     }
 
