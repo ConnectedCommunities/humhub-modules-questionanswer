@@ -58,7 +58,7 @@ class CommentController extends Controller
 	public function actionCreate()
 	{
 		$model=new Comment;
-
+		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -67,7 +67,7 @@ class CommentController extends Controller
 			$model->attributes=$_POST['Comment'];
 			$model->created_by = Yii::app()->user->id;
 	        $model->post_type = "comment";
-	        
+			$model->content->populateByForm();
 			if($model->save())
 				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
 		}

@@ -15,8 +15,11 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Comment extends HActiveRecord
+class Comment extends HActiveRecordContent
 {
+
+	public $autoAddToWall = false;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -27,7 +30,7 @@ class Comment extends HActiveRecord
 
 	/**
 	 * Set default scope so that
-	 * only comments are retrieved 
+	 * only comments are retrieved
 	 */
     public function defaultScope()
     {
@@ -36,21 +39,42 @@ class Comment extends HActiveRecord
         );
     }
 
+	/**
+	 * After Save Addons
+	 *
+	 * @return type
+	 */
+	public function afterSave()
+	{
 
-    /** 
+		parent::afterSave();
+
+		if ($this->isNewRecord) {
+			$activity = Activity::CreateForContent($this);
+			$activity->type = "KnowledgeCommentCreated";
+			$activity->module = "questionanswer";
+			$activity->save();
+			$activity->fire();
+		}
+
+		return true;
+
+	}
+
+	/**
      * Filters results by the question_id
      * @param $question_id
      */
     public function question($question_id)
     {
         $this->getDbCriteria()->mergeWith(array(
-            'condition'=>"question_id=:question_id", 
+            'condition'=>"question_id=:question_id",
             'params' => array(':question_id' => $question_id)
         ));
 
         return $this;
     }
-    
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */

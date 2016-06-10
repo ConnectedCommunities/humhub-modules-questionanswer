@@ -32,7 +32,7 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>
 	<?php echo CHtml::encode($data->created_at); ?>
 	<br />
-
+	
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('created_by')); ?>:</b>
 	<?php echo CHtml::encode($data->created_by); ?>
