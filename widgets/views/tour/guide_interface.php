@@ -56,7 +56,7 @@
         {
             element: ".vote_control:eq(0)",
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> karma')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?> + "<br><br><a href='javascript:gotoSpace = true; tourCompleted();'><?php echo Yii::t("TourModule.widgets_views_index", "<strong>Start</strong> mentorship circle guide"); ?></a><br><br>",
+            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Text to be defined.')); ?>,
             placement: "bottom"
         }
 

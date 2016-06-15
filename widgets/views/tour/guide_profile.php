@@ -44,23 +44,7 @@
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_profile', '<strong>Profile</strong> stream')); ?>,
             content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_profile', 'Each profile has its own pin board. Your posts will also appear on the dashboards of those users who are following you.')); ?>,
             placement: "bottom"
-        },
-        <?php if (Yii::app()->user->isAdmin() == true) : ?>
-        {
-            orphan: true,
-            backdrop: true,
-            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_profile', '<strong>Hurray!</strong> You\'re done!')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_profile', 'You\'ve completed the user profile guide!<br><br>To carry on with the administration guide, click here:<br /><br />')); ?> + "<a href='javascript:gotoAdministration = true; tourCompleted();'><?php echo Yii::t("TourModule.widgets_views_guide_profile", "<strong>Administration (Modules)</strong>"); ?></a><br><br>"
         }
-        <?php else : ?>
-        {
-            orphan: true,
-            backdrop: true,
-            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_profile', '<strong>Hurray!</strong> The End.')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_profile', "You've completed the user profile guide!")); ?>
-        }
-        <?php endif; ?>
-
     ]);
 
     // Initialize tour plugin
