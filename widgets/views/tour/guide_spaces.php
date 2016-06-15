@@ -93,7 +93,7 @@
                 window.location.href="<?php echo Yii::app()->createUrl('//user/profile', array('uguid' => Yii::app()->user->guid,'tour' => 'true')); ?>";
             } else {
                 // redirect to dashboard
-                window.location.href="<?php echo Yii::app()->createUrl('/tour/tour/startSpaceTour'); ?>">";
+                window.location.href="<?php echo Space::model()->find('visibility!=' . Space::VISIBILITY_NONE)->getUrl(); ?>";
             }
 
         });
