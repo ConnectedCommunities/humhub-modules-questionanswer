@@ -88,7 +88,7 @@
                 window.location.href="<?php echo Yii::app()->createUrl('//admin/module/listOnline', array('tour' => 'true')); ?>";
             } else {
                 // redirect to dashboard
-                window.location.href="<?php echo Yii::app()->createUrl('//dashboard/dashboard'); ?>";
+                window.location.href="<?php echo $this->createUrl('//user/profile', array('uguid' => Yii::app()->user->guid)); ?>";
             }
         });
     }

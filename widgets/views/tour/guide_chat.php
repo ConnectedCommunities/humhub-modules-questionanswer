@@ -47,7 +47,7 @@
                 window.location.href="<?php echo Yii::app()->createUrl('//user/profile', array('uguid' => Yii::app()->user->guid,'tour' => 'true')); ?>";
             } else {
                 // redirect to dashboard
-                window.location.href="<?php echo Yii::app()->createUrl('//dashboard/dashboard'); ?>";
+                window.location.href="<?php echo Yii::app()->createUrl('/chat/chat/index'); ?>";
             }
 
         });

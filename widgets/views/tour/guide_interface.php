@@ -84,11 +84,8 @@
             // cross out welcome tour entry
             $('#interface_entry').addClass('completed');
 
-            if (gotoSpace == true) {
-
                 // redirect to space
-                window.location.href = "<?php echo Yii::app()->createUrl('//tour/tour/startSpaceTour'); ?>";
-            }
+                window.location.href = "<?php echo Yii::app()->createUrl('/questionanswer/question/index'); ?>";
         });
     }
 
