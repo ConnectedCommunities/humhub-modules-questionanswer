@@ -61,12 +61,6 @@
             title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '<strong>Space</strong> members')); ?>,
             content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'All users who are a member of this space will be displayed here.<br /><br />New members can be added by anyone who has been given access rights by the admin.')); ?>,
             placement: "left"
-        },
-        {
-            orphan: true,
-            backdrop: true,
-            title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '<strong>Yay! You\'re done.</strong>')); ?>,
-            content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', "That's it for the space guide.<br><br>To carry on with the user profile guide, click here: ")); ?> + "<a href='javascript:gotoProfile = true; tourCompleted();'><?php echo Yii::t("TourModule.widgets_views_guide_spaces", "<strong>Profile Guide</strong>"); ?></a><br><br>"
         }
     ]);
 
