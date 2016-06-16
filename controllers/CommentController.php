@@ -57,14 +57,14 @@ class CommentController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Comment;
+		$model=new QAComment;
 		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Comment']))
+		if(isset($_POST['QAComment']))
 		{
-			$model->attributes=$_POST['Comment'];
+			$model->attributes=$_POST['QAComment'];
 			$model->created_by = Yii::app()->user->id;
 	        $model->post_type = "comment";
 			$model->content->populateByForm();
@@ -131,7 +131,7 @@ class CommentController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Comment('search');
+		$model=new QAComment('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Comment']))
 			$model->attributes=$_GET['Comment'];
@@ -150,7 +150,7 @@ class CommentController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Comment::model()->findByPk($id);
+		$model=QAComment::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

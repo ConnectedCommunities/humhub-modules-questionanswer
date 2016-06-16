@@ -39,7 +39,7 @@ class QuestionAnswerEvents{
             print "a";
         }
 
-        foreach (Comment::model()->findAll() as $obj) {
+        foreach (QAComment::model()->findAll() as $obj) {
             HSearch::getInstance()->addModel($obj);
             print "c";
         }

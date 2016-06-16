@@ -60,7 +60,7 @@
                             <br />
                             <br />
                             <?php
-                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question->id, 'parent_id' => $question->id));
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new QAComment, 'question_id' => $question->id, 'parent_id' => $question->id));
                             ?>
 
                             <a href="#">Edit</a>
@@ -123,7 +123,7 @@
                             ?>
                             <br />
                             <?php
-                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
+                            $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new QAComment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
                             ?>
                         </div>
 

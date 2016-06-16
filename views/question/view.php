@@ -155,7 +155,7 @@
                             		<a class="add-comment-link" style="margin-left:4px;color:#ccc;">add a comment</a>
                                 </div>
                                 <div class="hidden-comment-form">
-                                    <?php $this->widget('application.modules.questionanswer.widgets.CommentFormWidget', array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id)); ?>
+                                    <?php $this->widget('application.modules.questionanswer.widgets.CommentFormWidget', array('model' => new QAComment, 'question_id' => $model->id, 'parent_id' => $model->id)); ?>
 
                                 </div>
 
@@ -316,7 +316,7 @@
                             		<a class="add-comment-link<?php echo $question_answer['id'] ?>" style="margin-left:4px;color:#ccc;">add a comment</a>
                                 </div>
                                 <div class="hidden-comment-form-answer" id="<?php echo $question_answer['id'] ?>">
-                                    <?php $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id'])); ?>
+                                    <?php $this->widget('application.modules.questionanswer.widgets.commentFormWidget', array('model' => new QAComment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id'])); ?>
                                 </div>
 
                                 <script type="text/javascript">

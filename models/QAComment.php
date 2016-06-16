@@ -15,7 +15,7 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Comment extends HActiveRecordContent
+class QAComment extends HActiveRecordContent
 {
 
 	public $autoAddToWall = false;

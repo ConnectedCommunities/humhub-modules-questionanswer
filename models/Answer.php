@@ -84,7 +84,7 @@ class Answer extends HActiveRecordContent implements ISearchable
 	{
         return array(
             'user' => array(static::BELONGS_TO, 'User', 'created_by'),
-            'comments' => array(static::HAS_MANY, 'Comment', 'parent_id'),
+            'comments' => array(static::HAS_MANY, 'QAComment', 'parent_id'),
         );
 	}
 
