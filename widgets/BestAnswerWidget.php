@@ -1,5 +1,11 @@
 <?php
 
+
+
+namespace humhub\modules\questionanswer\widgets;
+
+use humhub\components\Widget;
+
 /**
  * VoteWidget. 
  * Displays the vote 
@@ -8,7 +14,7 @@
  * @since 0.5
  * @author Ben
  */
-class BestAnswerWidget extends HWidget {
+class BestAnswerWidget extends Widget {
 
     public $post_id;
     public $author;
@@ -20,7 +26,7 @@ class BestAnswerWidget extends HWidget {
      */
     public function run() {
 
-        $this->render('bestAnswer', array(
+        return $this->render('bestAnswer', array(
             'post_id' => $this->post_id, 
             'author' => $this->author, 
             'model' => $this->model,

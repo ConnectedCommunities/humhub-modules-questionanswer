@@ -1,6 +1,16 @@
 <?php
 
-class AnswerController extends Controller
+namespace humhub\modules\questionanswer\controllers;
+
+use humhub\modules\content\controllers\ContentController;
+use humhub\modules\questionanswer\models\Answer;
+use yii\base\Exception;
+use yii\bootstrap\ActiveForm;
+use yii\data\ActiveDataProvider;
+use humhub\modules\content\models\Content;
+use Yii;
+
+class AnswerController extends ContentController
 {
 
 	/**
@@ -62,42 +72,18 @@ class AnswerController extends Controller
 		if(isset($_POST['Answer'])) {
 
 			$this->forcePostRequest();
-            $_POST = Yii::app()->input->stripClean($_POST);
 
-            $answer->attributes=$_POST['Answer'];
-            $answer->content->populateByForm();
+            $answer->load(\Yii::$app->request->post());
             $answer->post_type = "answer";
 
             if ($answer->validate()) {
 
                 $answer->save();
-                $this->redirect(array('//questionanswer/question/view','id'=>$answer->question_id));
-
+                return $this->redirect(array('//questionanswer/question/view','id'=>$answer->question_id));
             }
 
+			return $this->redirect(\Yii::$app->request->referrer);
         }
-
-
-
-
-        /*$model=new Answer;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Answer']))
-		{
-			$model->attributes=$_POST['Answer'];
-	        $model->created_by = Yii::app()->user->id;
-	        $model->post_type = "answer";
-
-			if($model->save())
-				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
-		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));*/
 	}
 
 	/**
@@ -114,12 +100,12 @@ class AnswerController extends Controller
 
 		if(isset($_POST['Answer']))
 		{
-			$model->attributes=$_POST['Answer'];
+			$model->load(\Yii::$app->request->post());
 			if($model->save())
 				$this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $model->question_id)));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
@@ -143,9 +129,11 @@ class AnswerController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Answer');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+		$dataProvider=new ActiveDataProvider([
+			'query' => Answer::find(),
+		]);
+		return $this->render('index',array(
+			'dataProvider'=> $dataProvider,
 		));
 	}
 
@@ -155,11 +143,10 @@ class AnswerController extends Controller
 	public function actionAdmin()
 	{
 		$model=new Answer('search');
-		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Answer']))
-			$model->attributes=$_GET['Answer'];
+			$model->load(\Yii::$app->request->get());
 
-		$this->render('admin',array(
+		return $this->render('admin', array(
 			'model'=>$model,
 		));
 	}
@@ -173,7 +160,7 @@ class AnswerController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Answer::model()->findByPk($id);
+		$model=Answer::findOne($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -187,8 +174,8 @@ class AnswerController extends Controller
 	{
 		if(isset($_POST['ajax']) && $_POST['ajax']==='answer-form')
 		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
+			echo ActiveForm::validate($model);
+			\Yii::$app->end();
 		}
 	}
 }

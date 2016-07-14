@@ -1,5 +1,9 @@
 <?php
 
+namespace humhub\modules\questionanswer\widgets;
+
+use humhub\components\Widget;
+
 /**
  * CommentFormWidget. 
  * Displays the comment form
@@ -8,7 +12,7 @@
  * @since 0.5
  * @author Luke
  */
-class CommentFormWidget extends HWidget {
+class CommentFormWidget extends Widget {
 
     /**
      * The comment model
@@ -39,7 +43,7 @@ class CommentFormWidget extends HWidget {
      */
     public function run() {
 
-        $this->render('commentForm', array(
+        return $this->render('commentForm', array(
             'model' => $this->model,
             'question_id' => $this->question_id,
             'parent_id' => $this->parent_id

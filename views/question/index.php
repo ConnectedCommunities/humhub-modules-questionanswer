@@ -1,13 +1,17 @@
 <?php
 /* @var $this QuestionController */
 /* @var $dataProvider CActiveDataProvider */
+
+
+use humhub\modules\user\components\User;
+
 ?>
 
 <link rel="stylesheet" type="text/css"
-         href="<?php echo $this->module->assetsUrl; ?>/css/questionanswer.css"/>
+         href="<?php echo $this->context->module->assetsUrl; ?>/css/questionanswer.css"/>
          
 <script type="text/javascript"
-            src="<?php echo $this->module->assetsUrl; ?>/js/typeahead/typeahead.bundle.js"></script>
+            src="<?php echo $this->context->module->assetsUrl; ?>/js/typeahead/typeahead.bundle.js"></script>
             
 <div class="container">
 
@@ -17,7 +21,7 @@
             <div class="panel panel-default panel-profile">
     			<div class="panel-profile-header">
         			<div class="image-upload-container">
-            			<img class="img-profile-header-background img-profile-header-background-qanda" id="space-banner-image" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tc-qanda-banner.png" width="100%">
+            			<img class="img-profile-header-background img-profile-header-background-qanda" id="space-banner-image" src="<?php echo $this->theme->getBaseUrl(); ?>/img/tc-qanda-banner.png" width="100%">
             
                         <div class="img-profile-data">
                             <h1 class="space">Community Knowledge</h1>
@@ -26,7 +30,7 @@
         			</div>
 
                     <div class="image-upload-container profile-user-photo-container">
-                        <img class="img-rounded profile-user-photo" id="space-profile-image" src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tc-profile-qanda.png" data-src="holder.js/140x140" alt="140x140">
+                        <img class="img-rounded profile-user-photo" id="space-profile-image" src="<?php echo $this->theme->getBaseUrl(); ?>/img/tc-profile-qanda.png" data-src="holder.js/140x140" alt="140x140">
                     </div>
 
     			</div>
@@ -45,14 +49,17 @@
     <div class="row">
         <div class="col-md-8">
             <div class="panel panel-default qanda-panel">
-                <?php $this->renderPartial('../partials/top_menu_bar'); ?>
+                <?= $this->render('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
                     <?php
-                        $this->widget('zii.widgets.CListView', array(
-                            'dataProvider'=>$dataProvider,
+                       echo \yii\widgets\ListView::widget(array(
+                            'dataProvider'=> $dataProvider,
                             'id'=>'customDataList',
-                            'ajaxUpdate'=>true,
                             'itemView'=>'_view',
+                            'summaryOptions' => [
+                                'style' => 'float:right',
+                                'class' => 'summary'
+                            ],
                         ));
                     ?>
                 </div>
@@ -62,17 +69,13 @@
             <div class="row">
                 <div class="col-xs-12" id="quotes">
 					<div class="panel panel-default panel-teachingquotes">
-                        <img src="<?php echo Yii::app()->theme->baseUrl; ?>/img/tc-apple.png" style="">
-                        <?php $this->renderPartial('/quotes/quotes', array()); ?>
+                        <img src="<?php echo $this->theme->getBaseUrl(); ?>/img/tc-apple.png" style="">
+                        <?= $this->render('/quotes/quotes', array()); ?>
                     </div>
                 </div>
             </div>
-            <?php $this->widget('application.modules.questionanswer.widgets.KnowledgeTour'); ?>
-			<?php
-                $this->widget('application.modules_core.activity.widgets.ActivityStreamWidget', array(
-                    'streamAction' => '//dashboard/dashboard/stream',
-                ));
-            ?>
+            <?= \humhub\modules\questionanswer\widgets\KnowledgeTour::widget(); ?>
+            <?= \humhub\modules\activity\widgets\Stream::widget(['streamAction' => '//dashboard/dashboard/stream']); ?>
         </div>
     </div>
 </div>
@@ -135,22 +138,18 @@
 	            </div>
 	            <div class="panel-body">
 	                <div class="col-xs-12">
-                        <?php $form=$this->beginWidget('CActiveForm', array(
-                            'action' => Yii::app()->createUrl("/questionanswer/question/create"),
+                        <?php $form=\yii\bootstrap\ActiveForm::begin(array(
+                            'action' => \yii\helpers\Url::toRoute(["/questionanswer/default/create"]),
                             'id'=>'question-form_create',
 
                         )); ?>
                         <div class="logErrors"></div>
-                        <?= $form->label($question, 'post_title'); ?>
-                            <?php echo $form->textArea($question,'post_title',array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask or share anything!")); ?>
-                            <?php echo $form->error($question,'post_title'); ?>
+                            <?php echo $form->field($question,'post_title')->textarea(array('class' => 'form-control autosize contentForm post_title', 'rows' => '1', "placeholder" => "Ask or share anything!")); ?>
 
                             <div class="contentForm_options">
-                                <?= $form->label($question, 'post_text'); ?>
-                                <?php echo $form->textArea($question,'post_text',array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "What is it about teaching that is confusing or exciting you today?")); ?>
-                                <?php echo $form->error($question,'post_text'); ?>
+                                <?php echo $form->field($question,'post_text')->textarea(array('rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "What is it about teaching that is confusing or exciting you today?")); ?>
                                 <br />
-                                <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Enter comma separated tags here...")); ?>
+                                <?php echo \yii\helpers\Html::textInput('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Enter comma separated tags here...")); ?>
                                 <p class="help-block">Example: teaching, students, lesson planning ...</p>
                             </div>
 
@@ -159,10 +158,10 @@
                                 <div class="pull-left">
                                     <?php
                                     // Creates Uploading Button
-                                    $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
-                                        'uploaderId' => 'contentFormFiles',
-                                        'fileListFieldName' => 'fileList',
-                                    ));
+                                        echo \humhub\modules\file\widgets\FileUploadButton::widget(array(
+                                            'uploaderId' => 'contentFormFiles',
+                                            'fileListFieldName' => 'fileList',
+                                        ));
                                     ?>
                                     <script>
                                         $('#fileUploaderButton_contentFormFiles').bind('fileuploaddone', function (e, data) {
@@ -182,23 +181,23 @@
                                     </script>
                                     <?php
                                     // Creates a list of already uploaded Files
-                                    $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
-                                        'uploaderId' => 'contentFormFiles'
-                                    ));
+                                        echo \humhub\modules\file\widgets\FileUploadList::widget(array(
+                                            'uploaderId' => 'contentFormFiles'
+                                        ));
 
                                     ?>
 
                                 </div>
 
                                 <?php
-                                echo CHtml::hiddenField("containerGuid", Yii::app()->user->guid);
-                                echo CHtml::hiddenField("containerClass",  get_class(new User()));
+                                    echo \yii\helpers\Html::hiddenInput("uguid", Yii::$app->user->guid);
+//                                    echo \yii\helpers\Html::hiddenInput("sguid", Yii::$app->user->guid);
                                 ?>
 
-                                <?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right')); ?>
+                                <?php echo \yii\helpers\Html::submitButton('Submit', array('class' => ' btn btn-info pull-right')); ?>
                             </div>
                         </div>
-                        <?php $this->endWidget(); ?>
+                        <?php \yii\bootstrap\ActiveForm::end(); ?>
                     </div>
                 </div>
             </div>
@@ -258,12 +257,12 @@
             }
         })
 
-        $('.tt-suggestion').live("click", function() {
+        $(document).on("click", ".tt-suggestion", function() {
             var text = $(this).text();
             $.ajax({
                     data: {text:text},
                     type: "POST",
-                    url: '<?= Yii::app()->createUrl("/questionanswer/question/getLocationOneSelectItem") ?>',
+                    url: '<?= \yii\helpers\Url::toRoute("/questionanswer/question/get-location-one-select-item") ?>',
                     success: function (data) {
                         if(data) {
                             window.location.href = data;
@@ -277,7 +276,7 @@
                 $.ajax({
                     data: $(this).serialize(),
                     type: "POST",
-                    url: '<?= Yii::app()->createUrl("/questionanswer/question/create") ?>',
+                    url: '<?= \yii\helpers\Url::toRoute("/questionanswer/question/create") ?>',
                     success: function (data) {
                         var res = JSON.parse(data);
                         if(res.flag) {
@@ -292,8 +291,8 @@
             return false;
         });
 
-        $("body").on("click",".btn-new-post",function() {
-            var text = $(".searchInput[value!='']").val();
+        $(document).on("click",".btn-new-post",function() {
+            var text = $(".tt-input.searchInput[value!='']").val();
             $(".post_title").val(text);
         });
 

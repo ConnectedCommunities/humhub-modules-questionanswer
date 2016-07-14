@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="panel panel-default qanda-panel">
-                <?php $this->renderPartial('../partials/top_menu_bar'); ?>
+                <?= $this->renderPartial('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
 
                 <?php

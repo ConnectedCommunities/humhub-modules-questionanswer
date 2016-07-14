@@ -1,5 +1,11 @@
 <?php
 
+namespace humhub\modules\questionanswer\models;
+
+use humhub\components\ActiveRecord;
+use humhub\modules\post\models\Post;
+use humhub\modules\user\models\User;
+
 /**
  * This is the model class for table "question_votes".
  *
@@ -13,12 +19,12 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class QuestionVotes extends HActiveRecord
+class QuestionVotes extends ActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+	public static function tableName()
 	{
 		return 'question_votes';
 	}
@@ -31,24 +37,13 @@ class QuestionVotes extends HActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('post_id, created_by', 'required'),
-			array('post_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
-			array('vote_on, vote_type', 'length', 'max'=>255),
-			array('created_at, updated_at', 'safe'),
+			array(['post_id', 'created_by'], 'required'),
+			array(['post_id', 'created_by', 'updated_by'], 'integer'),
+			array(['vote_on', 'vote_type'], 'string', 'max'=>255),
+			array(['created_at', 'updated_at'], 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, post_id, vote_on, vote_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
-		);
-	}
-
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
 		);
 	}
 
@@ -141,6 +136,15 @@ class QuestionVotes extends HActiveRecord
 	    return $this;
 	}
 
+	public function getPost()
+	{
+		return $this->hasOne(Question::className(), ['id' => 'post_id']);
+	}
+
+	public function getUser()
+	{
+		return $this->hasOne(Question::className(), ['id' => 'post_id'])->andWhere(['question.created_by' => \Yii::$app->user->id]);
+	}
 
 	/** 
 	 * Returns votes a user has cast on a post
@@ -158,11 +162,11 @@ class QuestionVotes extends HActiveRecord
 	/** 
 	 * Returns the score of a post
 	 */
-	public function score($post_id) {
+	public static function score($post_id) {
 
 		// Calculate the "score" (up votes minus down votes)
 		$sql = "SELECT ((SELECT COUNT(*) FROM question_votes WHERE vote_type = 'up' AND post_id=:post_id))";
-		return Yii::app()->db->createCommand($sql)->bindValue('post_id', $post_id)->queryScalar();
+		return \Yii::$app->db->createCommand($sql)->bindValue('post_id', $post_id)->queryScalar();
 
 	}
 
@@ -171,29 +175,18 @@ class QuestionVotes extends HActiveRecord
 	 * Returns the accepted answer for a question
 	 * @param $question_id
 	 */
-	public function findAcceptedAnswer($question_id) {
+	public static function findAcceptedAnswer($question_id) {
 
 		$sql = "SELECT * FROM question_votes
 				WHERE post_id IN (SELECT id FROM question WHERE question_id = :question_id)
 				AND vote_on = 'answer' 
 				AND vote_type = 'accepted_answer'";
 
-		return QuestionVotes::model()->findBySql($sql, array(':question_id' => $question_id));
+		return QuestionVotes::findBySql($sql, array(':question_id' => $question_id))->one();
 
 	}
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return QuestionVotes the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-
-	/** 
 	 * Cast a vote
 	 * @param QuestionVote 
 	 * @param int question_id (optional)
@@ -201,23 +194,22 @@ class QuestionVotes extends HActiveRecord
 	public static function castVote($questionVotesModel, $question_id) 
 	{
 		
-		$question = Question::model()->findByPk($question_id);
-		$questionVotesModel->created_by = Yii::app()->user->id;	
+		$question = Question::findOne($question_id);
+		$questionVotesModel->created_by = \Yii::$app->user->id;
     
         if($questionVotesModel->validate())
         {
-
         	// Is the author "voting" on the accepted answer?
         	if($question->created_by == $questionVotesModel->created_by && $questionVotesModel->vote_type == "accepted_answer") {
 
 	        	// If the user has previously selected a best answer, drop the old one
-	        	$previousAccepted = QuestionVotes::model()->findAcceptedAnswer($question->id);
+	        	$previousAccepted = QuestionVotes::findAcceptedAnswer($question->id);
 	        	if($previousAccepted && $previousAccepted->post_id != $question->id) $previousAccepted->delete();
 
         	} else { // no, just a normal up/down vote then
 
 	        	// If the user has previously voted on this, drop it 
-	        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::app()->user->id));
+	        	$previousVote = QuestionVotes::find()->andWhere(['post_id' => $questionVotesModel->post_id, 'created_by' => \Yii::$app->user->id])->one();
 	        	if($previousVote) $previousVote->delete();
 
         	}

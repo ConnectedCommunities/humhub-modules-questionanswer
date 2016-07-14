@@ -1,6 +1,19 @@
 <?php
 
-class MainController extends Controller{
+namespace humhub\modules\questionanswer\controllers;
+
+use humhub\components\Controller;
+use humhub\models\Setting;
+use humhub\modules\comment\models\Comment;
+use humhub\modules\questionanswer\models\Answer;
+use humhub\modules\questionanswer\models\Question;
+use humhub\modules\questionanswer\models\QuestionVotes;
+use yii\helpers\Url;
+use humhub\modules\questionanswer\models\Tag;
+use Yii;
+
+class MainController extends Controller
+{
 
 	public function init() {
         return parent::init();
@@ -27,7 +40,7 @@ class MainController extends Controller{
     {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'users' => array('@', (HSetting::Get('allowGuestAccess', 'authentication_internal')) ? "?" : "@"),
+                'users' => array('@', (Setting::Get('allowGuestAccess', 'authentication_internal')) ? "?" : "@"),
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -41,7 +54,8 @@ class MainController extends Controller{
 	 * Shows the index page and handles
 	 * a vote being cast
 	 */
-    public function actionIndex(){
+    public function actionIndex()
+	{
 		
     	error_reporting(E_ALL); 
 		ini_set("display_errors", 1); 
@@ -52,7 +66,7 @@ class MainController extends Controller{
 	    {
 	    	$questionVotesModel->attributes=$_POST['QuestionVotes'];
 	    	QuestionVotes::model()->castVote($questionVotesModel, $questionVotesModel->post_id);
-            $this->redirect($this->createUrl('//questionanswer/main/index'));
+            $this->redirect(Url::toRoute('//questionanswer/main/index'));
 	    }
 
 
@@ -72,36 +86,36 @@ class MainController extends Controller{
     	error_reporting(E_ALL); 
 		ini_set("display_errors", 1); 
     	
-    	$question = Question::model()->findByPk(Yii::app()->request->getParam('id'));
+    	$question = Question::findOne(Yii::$app->request->getParam('id'));
 
     	if(isset($_POST['Answer'])) {
 			
-			$answerModel = new Answer;
+			$answerModel = new Answer();
 	        $answerModel->attributes=$_POST['Answer'];
-	        $answerModel->created_by = Yii::app()->user->id;
+	        $answerModel->created_by = Yii::$app->user->id;
 	        $answerModel->post_type = "answer";
 	        $answerModel->question_id = $question->id;
 
 	        if($answerModel->validate())
 	        {
 	            $answerModel->save();
-	            $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $question->id)));
+				Url::toRoute($this->createUrl('//questionanswer/main/view', array('id' => $question->id)));
 	        }
     	}
 
 
     	if(isset($_POST['Comment'])) {
         	
-        	$commentModel = new Comment;
+        	$commentModel = new Comment();
 	        $commentModel->attributes=$_POST['Comment'];
-	        $commentModel->created_by = Yii::app()->user->id;
+	        $commentModel->created_by = Yii::$app->user->id;
 	        $commentModel->post_type = "comment";
 	        $commentModel->question_id = $question->id;
 
 	        if($commentModel->validate())
 	        {
 	            $commentModel->save();
-	            $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $question->id)));
+	            $this->redirect(Url::toRoute('//questionanswer/main/view', array('id' => $question->id)));
 	        }
 
     	}
@@ -142,7 +156,7 @@ class MainController extends Controller{
 		ini_set("display_errors", 1); 
 
 	    $model = new Question;
-        $model->created_by = Yii::app()->user->id;
+        $model->created_by = Yii::$app->user->id;
         $model->post_type = "question";
 	    
 	    if(isset($_POST['Question'])) {
@@ -169,7 +183,7 @@ class MainController extends Controller{
 					// throw error(?) no tag provided
 				}
 			    
-        	    $this->redirect($this->createUrl('//questionanswer/main/view', array('id' => $model->id)));
+        	    $this->redirect(Url::toRoute('//questionanswer/main/view', array('id' => $model->id)));
 	        }
 	    }
 
@@ -190,14 +204,14 @@ class MainController extends Controller{
 	    if(isset($_POST['ajax']) && $_POST['ajax']==='question-votes-vote-form')
 	    {
 	        echo CActiveForm::validate($model);
-	        Yii::app()->end();
+	        Yii::$app->end();
 	    }
 	    */
 
 	    if(isset($_POST['QuestionVotes']))
 	    {
 	        $model->attributes=$_POST['QuestionVotes'];
-            $model->created_by = Yii::app()->user->id;
+            $model->created_by = Yii::$app->user->id;
         	
 	        if($model->validate())
 	        {
@@ -218,39 +232,35 @@ class MainController extends Controller{
     public function actionTag() {
 		
     	error_reporting(E_ALL); 
-		ini_set("display_errors", 1); 
-
-    	$tag = Tag::model()->findByPk(Yii::app()->request->getParam('id'));
+		ini_set("display_errors", 1);
+    	$tag = Tag::findOne(Yii::$app->request->get('id'));
 
     	// Find all questions with that tag
-		$criteria = new CDbCriteria();
-		$criteria->condition = "tag_id=:tag_id";
-		$criteria->params = array(':tag_id' => $tag->id);
-		$questions = Question::model()->with('tags')->findAll($criteria);
+		$questions = Question::find()->joinWith("tags")->andWhere(['tag_id' => $tag->id])->all();
 
 		// User has just voted on a question
-		$questionVotesModel = new QuestionVotes;
+		$questionVotesModel = new QuestionVotes();
 	    if(isset($_POST['QuestionVotes']))
 	    {
 	        $questionVotesModel->attributes=$_POST['QuestionVotes'];
-            $questionVotesModel->created_by = Yii::app()->user->id;
+            $questionVotesModel->created_by = Yii::$app->user->id;
         	
 	        if($questionVotesModel->validate())
 	        {
 
 	        	// TODO: If the user has previously voted on this, drop it 
-	        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::app()->user->id));
+	        	$previousVote = QuestionVotes::model()->find('post_id=:post_id AND created_by=:user_id', array('post_id' => $questionVotesModel->post_id, 'user_id' => Yii::$app->user->id));
 	        	if($previousVote) $previousVote->delete();
 
 	            $questionVotesModel->save();
-	            $this->redirect($this->createUrl('//questionanswer/main/index'));
+	            $this->redirect(Url::toRoute('//questionanswer/main/index'));
 	        }
 	    }
 
 
-        $this->render('tags', array(
+        return $this->render('tags', array(
         	'tag' => $tag,
-        	'questions' => Question::model()->tag_overview($tag->id)
+        	'questions' => Question::tag_overview($tag->id)
         ));
         
     }

@@ -11,7 +11,7 @@
 
             <div class="panel-body">
             <h1>Update Answer <?php echo $model->id; ?></h1>
-			<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+			<?php echo $this->render('_form', array('model'=>$model)); ?>
 			</div>
 		</div>
 

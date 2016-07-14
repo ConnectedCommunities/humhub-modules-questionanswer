@@ -1,50 +1,51 @@
 <?php
 /* @var $this QuestionController */
 /* @var $data Question */
+
+use humhub\modules\questionanswer\models\QuestionVotes;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use humhub\modules\questionanswer\models\Question;
 ?>
-<div class="media" >
+
+<div class="media" style="margin-top: 10px;">
     <div class="pull-left">
-        <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+        <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;margin-top:-18px">
             <?php 
             $upBtnClass = ""; $downBtnClass = ""; $vote = ""; $vote_type = "up";
-
+            $model = (object) $model;
             // Change the button class to 'active' if the user has voted
-            $vote = QuestionVotes::model()->post($data->id)->user(Yii::app()->user->id)->find();
+            $vote = QuestionVotes::find()->andWhere(['post_id' => $model->id, 'created_by' => \Yii::$app->user->id])->one(); // post($data->id)->user(Yii::app()->user->id)
             if($vote) {
                 if($vote->vote_type == "up") {
                     $upBtnClass = "active btn-info";
                     $downBtnClass = "";
                 }
 
-                if($vote->created_by == Yii::app()->user->id && $vote->vote_type == "up") {
+                if($vote->created_by == Yii::$app->user->id && $vote->vote_type == "up") {
                     $vote_type = 'down';
                 } else {
                     $vote_type = "up";
                 }
             }
-            
-            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => $vote_type, 'class' => $upBtnClass, 'should_open_question' => 0));
-//            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0));
+            echo \humhub\modules\questionanswer\widgets\VoteButtonWidget::widget(array('post_id' => $model->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => $vote_type, 'classObj' => $upBtnClass, 'should_open_question' => 0));
 
             ?>
         </div>
-        <!--<a href="" class="pull-left" style="padding-top:5px; padding-right:10px;">
-            <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">
-        </a>-->
-        <?php 
-        $stats = Question::model()->stats($data->id); 
+        <?php
+        $stats = Question::stats($model->id);
         ?>
 
         <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
-            <b><?php echo $stats['score']; ?></b>
+            <b><?php echo (int) $stats['score']; ?></b>
             <p>likes</p>
         </div>
         <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
-            <b><?php echo Question::getViewQuestion($data->id); ?></b>
+            <b><?php echo (int) Question::getViewQuestion($model->id); ?></b>
             <p>views</p>
         </div>
         <div class="pull-left" style="text-align:center; margin-top:5px;">
-            <b><?php echo $stats['answers']; ?></b>
+            <b><?php echo (int) $stats['answers']; ?></b>
             <p>responses</p>
         </div>
 
@@ -52,10 +53,10 @@
 
     <div class="media-body" style="padding-top:5px; padding-left:10px;">
         <h4 class="media-heading">
-        	<?php echo CHtml::link(CHtml::encode($data->post_title), array('view', 'id'=>$data->id)); ?>
+        	<?php echo Html::a(Html::encode($model->post_title), array('view', 'id'=>$model->id)); ?>
         </h4>
 
-        <h5><?php echo CHtml::encode(Helpers::truncateText($data->post_text, 200)); ?></h5>
+        <h5><?php echo Html::encode(\humhub\libs\Helpers::truncateText($model->post_text, 200)); ?></h5>
     </div>
 </div>
 

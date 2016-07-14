@@ -1,5 +1,8 @@
 <?php
 
+namespace humhub\modules\questionanswer\models;
+use humhub\components\ActiveRecord;
+
 /**
  * This is the model class for table "question".
  *
@@ -15,12 +18,12 @@
  * @property string $updated_at
  * @property integer $updated_by
  */
-class QuestionView extends HActiveRecord
+class QuestionView extends ActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+	public static function tableName()
 	{
 		return 'question_views';
 	}
@@ -35,20 +38,10 @@ class QuestionView extends HActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('question_id, created_by', 'required'),
-			array('question_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
-			array('created_at, updated_at', 'safe'),
+			array(['question_id'], 'required'),
+			array(['question_id', 'created_by', 'updated_by'], 'integer'),
+			array(['created_at', 'updated_at'], 'safe'),
 		);
-	}
-
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-        return array(
-            'user' => array(static::BELONGS_TO, 'User', 'created_by')
-        );
 	}
 
 	/**
@@ -64,16 +57,5 @@ class QuestionView extends HActiveRecord
 			'updated_at' => 'Updated At',
 			'updated_by' => 'Updated By',
 		);
-	}
-
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Comment the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
 	}
 }

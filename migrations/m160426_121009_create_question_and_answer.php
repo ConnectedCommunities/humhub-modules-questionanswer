@@ -1,6 +1,9 @@
 <?php
 
-class m160426_121009_create_question_and_answer extends EDbMigration
+use yii\db\Migration;
+
+
+class m160426_121009_create_question_and_answer extends Migration
 {
 	public function up()
 	{

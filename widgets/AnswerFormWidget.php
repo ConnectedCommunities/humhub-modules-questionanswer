@@ -1,5 +1,9 @@
 <?php
 
+namespace humhub\modules\questionanswer\widgets;
+
+use humhub\components\Widget;
+
 /**
  * ProfileWidget. 
  * Displays the user profile
@@ -8,7 +12,7 @@
  * @since 0.5
  * @author Luke
  */
-class AnswerFormWidget extends HWidget {
+class AnswerFormWidget extends Widget {
 
     public $question;
     public $answer;
@@ -17,8 +21,8 @@ class AnswerFormWidget extends HWidget {
      * Executes the widget.
      */
     public function run() {
-        
-        $this->render('answerForm', array(
+
+        return $this->render('answerForm', array(
             'question' => $this->question,
             'answer' => $this->answer,
         ));

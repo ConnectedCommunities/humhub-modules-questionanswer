@@ -1,5 +1,15 @@
 <?php
 
+namespace humhub\modules\questionanswer\controllers;
+
+use humhub\components\Controller;
+use humhub\modules\questionanswer\models\QuestionVotes;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use humhub\modules\questionanswer\models\Answer;
+use Yii;
+
 class VoteController extends Controller
 {
 
@@ -47,14 +57,13 @@ class VoteController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new QuestionVotes;
+		$model= new QuestionVotes();
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-
 		if(isset($_POST['QuestionVotes']))
 		{
-			$model->attributes=$_POST['QuestionVotes'];
+			$model->load(Yii::$app->request->post());
 
 			// TODO: I'd like to figure out a way to instantiate the model 
 			//			dynamically. I think they might do that with 
@@ -65,19 +74,19 @@ class VoteController extends Controller
 				break;
 
 				case "answer":
-					$obj = Answer::model()->findByPk($model->post_id);
+					$obj = Answer::findOne($model->post_id);
 					$question_id = $obj->question_id;
 				break;
 
 			}
 
 			
-			if(QuestionVotes::model()->castVote($model, $question_id)) {
+			if(QuestionVotes::castVote($model, $question_id)) {
 
 				if($_POST['QuestionVotes']['should_open_question'] == true) {
 					$this->redirect(array('//questionanswer/question/view','id'=>$question_id));
 				} else {
-					$this->redirect(Yii::app()->request->urlReferrer);
+					$this->redirect(Yii::$app->request->referrer);
 				}
 
 			}
@@ -85,7 +94,7 @@ class VoteController extends Controller
 
 		}
 
-		$this->render('create',array(
+		return $this->render('create',array(
 			'model'=>$model,
 		));
 	}

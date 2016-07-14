@@ -1,5 +1,9 @@
 <?php
 
+namespace humhub\modules\questionanswer\widgets;
+
+use humhub\components\Widget;
+
 /**
  * ProfileWidget.
  * Displays the user profile
@@ -8,7 +12,7 @@
  * @since 0.5
  * @author Luke
  */
-class KnowledgeTour extends HWidget {
+class KnowledgeTour extends Widget {
 
     /**
      * The user object
@@ -28,7 +32,7 @@ class KnowledgeTour extends HWidget {
      * Executes the widget.
      */
     public function run() {
-        $this->render('tour/tourPanel');
+       return $this->render('tour/tourPanel');
     }
 
 }

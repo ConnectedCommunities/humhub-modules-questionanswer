@@ -1,18 +1,28 @@
 <?php
 
-class QuestionController extends Controller
+namespace humhub\modules\questionanswer\controllers;
+use humhub\modules\content\components\ContentAddonController;
+use humhub\modules\content\components\ContentContainerController;
+use humhub\modules\content\controllers\ContentController;
+use humhub\modules\questionanswer\models\Answer;
+use humhub\modules\questionanswer\models\Question;
+use humhub\modules\questionanswer\models\QuestionTag;
+use humhub\modules\questionanswer\models\Tag;
+use Yii;
+
+use humhub\models\Setting;
+use humhub\components\Controller;
+use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use humhub\modules\content\models\Content;
+
+
+class QuestionController extends ContentController
 {
-	
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
 
 	/**
 	 * Specifies the access control rules.
@@ -23,7 +33,7 @@ class QuestionController extends Controller
     {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'users' => array('@', (HSetting::Get('allowGuestAccess', 'authentication_internal')) ? "?" : "@"),
+                'users' => array('@', (Setting::Get('allowGuestAccess', 'authentication_internal')) ? "?" : "@"),
             ),
             array('deny', // deny all users
                 'users' => array('*'),
@@ -36,19 +46,17 @@ class QuestionController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->loadModel($id);
-		
+		$model = Question::find()->joinWith(['tags'])->andWhere(['question.id'=> $id])->one();
 		if(empty($model->user)) {
-			$this->redirect(Yii::app()->request->getUrlReferrer());
+			$this->redirect(Yii::$app->request->referrer);
 		}
 
 		Question::setViewQuestion($id);
-		$this->render('view',array(
-
+		return $this->render('view',array(
     		'author' => $model->user->id,
     		'question' => $model,
-    		'answers' => Answer::model()->overview($model->id),
-    		'related' => Question::model()->related($model->id),
+    		'answers' => Answer::overview($model->id),
+    		'related' => Question::related($model->id),
 			'model'=> $model,
 		));
 	}
@@ -63,44 +71,45 @@ class QuestionController extends Controller
         if(isset($_POST['Question'])) {
 
 			$this->forcePostRequest();
-			$_POST = Yii::app()->input->stripClean($_POST);
 
-			$question->attributes = $_POST['Question'];
-			$question->content->populateByForm();
+			$question->load(Yii::$app->request->post());
 			$question->post_type = "question";
-
 			if($question->validate()) {
 				$question->save();
-			}else{
+
+				\humhub\modules\file\models\File::attachPrecreated($question, Yii::$app->request->post('fileList'));
+			} else {
 				echo json_encode(
 					[
 						'flag' => true,
 						'errors' => $this->implodeAssocArray($question->getErrors()),
 					]
 				);
-				Yii::app()->end();
+				Yii::$app->end();
 			}
 
 
 			if (isset($_POST['Tags'])) {
+
 				// Split tag string into array
 				$tags = explode(", ", $_POST['Tags']);
 				foreach ($tags as $tag) {
-					$tag = Tag::model()->firstOrCreate($tag);
-					$question_tag = new QuestionTag;
+					$tagObj = new Tag();
+					$tagObj = $tagObj->firstOrCreate($tag);
+					$question_tag = new QuestionTag();
 					$question_tag->question_id = $question->id;
-					$question_tag->tag_id = $tag->id;
+					$question_tag->tag_id = $tagObj->id;
 					$question_tag->save();
 				}
+
 			}
-			
 			echo json_encode(
 				[
 					'flag' => false,
-					'location' => $this->createUrl('//questionanswer/question/view', array('id' => $question->getPrimaryKey())),
+					'location' => Url::toRoute(['//questionanswer/question/view', 'id' => $question->getPrimaryKey()]),
 				]
 			);
-			Yii::app()->end();
+			Yii::$app->end();
 		}
 	}
 
@@ -138,7 +147,7 @@ class QuestionController extends Controller
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
@@ -162,42 +171,19 @@ class QuestionController extends Controller
 	 */
 	public function actionIndex()
 	{
-
-		// TODO: Use below. 
-		// This will produce the same results as Question::model->overview()
-		// our current implementation does a handful of additional queries 
-		// from within the view to load up question info
-		/*
-		$criteria=new CDbCriteria;
-		$criteria->select = "question.id, question.post_title, question.post_text, question.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes";
-
-		$criteria->join = "LEFT JOIN question_votes up ON (question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
-							LEFT JOIN question_votes down ON (question.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
-							LEFT JOIN question answers ON (question.id = answers.question_id AND answers.post_type = 'answer')";
-
-		$criteria->group = "question.id";
-		$criteria->order = "question.created_at DESC, score DESC, vote_count DESC";
-
-		$dataProvider=new CActiveDataProvider('Question', array(
-			'criteria'=>$criteria
-		));
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-		*/
 		$limit = 10;
 		$question = new Question;
-		$dataProvider=new CActiveDataProvider('Question', array(
-			'pagination'=>array(
-				'pageSize'=>$limit,
-			),
-			'criteria'=>array(
-				'order'=>'created_at DESC',
-			)
-		));
-		$getAllQuestion = Question::model()->findAll();
-		$resultSearchData = CHtml::listData($getAllQuestion,"id", "post_title");
-		$this->render('index',array(
+		$dataProvider=new ActiveDataProvider([
+			'query' => Question::find()->andWhere(['post_type' => 'question']),
+			'pagination' => [
+				'pageSize' => $limit,
+			],
+		]);
+
+		$getAllQuestion = Question::find()->all();
+		$resultSearchData = ArrayHelper::map($getAllQuestion, "id" , "post_title");
+//		var_dump($resultSearchData);die;
+		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 			'question' => $question,
 			'resultSearchData' => json_encode($resultSearchData),
@@ -210,29 +196,29 @@ class QuestionController extends Controller
 	 */
 	public function actionUnanswered()
 	{
+		$sql = "SELECT question.id, question.post_title, question.post_text, question.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes
+				FROM question
+					LEFT JOIN question_votes up ON (question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
+					LEFT JOIN question_votes down ON (question.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
+					LEFT JOIN question answers ON (question.id = answers.question_id AND answers.post_type = 'answer')
+				WHERE question.post_type = 'question'
+				GROUP BY question.id
+				HAVING answers = 0
+				ORDER BY score DESC, vote_count DESC, question.created_at DESC
+				";
 
-		$criteria=new CDbCriteria;
-		$criteria->select = "question.id, question.post_title, question.post_text, question.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes";
-
-		$criteria->join = "LEFT JOIN question_votes up ON (question.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
-							LEFT JOIN question_votes down ON (question.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
-							LEFT JOIN question answers ON (question.id = answers.question_id AND answers.post_type = 'answer')";
-
-		$criteria->group = "question.id";
-		$criteria->having = "answers = 0";
-		$criteria->order = "score DESC, vote_count DESC, question.created_at DESC";
 		$limit = 10;
-		$dataProvider=new CActiveDataProvider('Question', array(
-			'pagination'=>array(
-				'pageSize'=>$limit,
-			),
-			'criteria'=>$criteria
-		));
+		$dataProvider=new SqlDataProvider([
+			'sql' => $sql,
+			'pagination' => [
+				'pageSize' => $limit,
+			],
+		]);
 
 		$question = new Question;
-		$getAllQuestion = Question::model()->findAll();
-		$resultSearchData = CHtml::listData($getAllQuestion,"id", "post_title");
-		$this->render('index',array(
+		$getAllQuestion = Question::find()->all();
+		$resultSearchData = ArrayHelper::getColumn($getAllQuestion, ["id" => "post_title"]);
+		return $this->render('index', array(
 			'dataProvider'=>$dataProvider,
 			'question' => $question,
 			'resultSearchData' => json_encode($resultSearchData),
@@ -242,21 +228,23 @@ class QuestionController extends Controller
 
 	public function actionPicked()
 	{
-		$criteria=new CDbCriteria;
-        $criteria->select = "question.id, question.post_title, question.post_text, question.post_type, COUNT(*) as tag_count";
-
-		$criteria->join = "LEFT JOIN question_tag ON (question.id = question_tag.question_id)";
-
-        $criteria->addCondition('question_tag.tag_id IN (
+		$sql = "SELECT question.id, question.post_title, question.post_text, question.post_type, COUNT(*) as tag_count 
+				FROM question 
+				LEFT JOIN question_tag 
+					ON (question.id = question_tag.question_id)
+				WHERE
+				question.post_type = 'question'
+				AND
+				question_tag.tag_id IN (
                                         SELECT id as tag_id FROM (
                                             SELECT tag.id
                                             FROM tag, question_votes, question
                                             LEFT JOIN question_tag ON (question.id = question_tag.question_id)
                                             WHERE question_votes.post_id = question.id
                                             AND question_tag.tag_id = tag.id
-                                            AND tag.tag != ""
-                                            AND question_votes.vote_on = "question"
-                                            AND question_votes.vote_type = "up"
+                                            AND tag.tag != \"\"
+                                            AND question_votes.vote_on = \"question\"
+                                            AND question_votes.vote_type = \"up\"
                                             AND question_votes.created_by = :user_id
 
                                             UNION ALL
@@ -264,30 +252,28 @@ class QuestionController extends Controller
                                             SELECT tag.id
                                             FROM tag, question_tag LEFT JOIN question ON (question_tag.question_id = question.id)
                                             WHERE question_tag.tag_id = tag.id
-                                            AND tag.tag != ""
+                                            AND tag.tag != \"\"
                                             AND question.created_by = :user_id
                                         ) as c
                                         GROUP BY id
                                         ORDER BY COUNT(tag_id) DESC, question.created_at DESC
-                                    )');
-        $criteria->params = array(
-            ':user_id'=> Yii::app()->user->id
-        );
-
-		$criteria->group = "question.id";
-		$criteria->order = "tag_count DESC";
+                                    )
+				GROUP BY question.id
+				
+				ORDER BY tag_count DESC";
 		$limit = 10;
-		$dataProvider=new CActiveDataProvider('Question', array(
-			'pagination'=>array(
-				'pageSize'=>$limit,
-			),
-            'criteria'=>$criteria
-		));
+		$dataProvider=new SqlDataProvider([
+			'sql' => $sql,
+			'params' => [':user_id' => Yii::$app->user->id],
+			'pagination' => [
+				'pageSize' => $limit,
+			],
+		]);
 
 		$question = new Question;
-		$getAllQuestion = Question::model()->findAll();
-		$resultSearchData = CHtml::listData($getAllQuestion,"id", "post_title");
-		$this->render('index',array(
+		$getAllQuestion = Question::find()->all();
+		$resultSearchData = ArrayHelper::getColumn($getAllQuestion,[ "id" => "post_title"]);
+		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 			'question' => $question,
 			'resultSearchData' => json_encode($resultSearchData),
@@ -321,18 +307,18 @@ class QuestionController extends Controller
         $json['success'] = false;
 
         // Only run if the reportcontent module is available
-        if(isset(Yii::app()->modules['reportcontent'])) {
+        if(isset(Yii::$app->modules['reportcontent'])) {
 
             $form = new ReportReasonForm();
 
             if (isset($_POST['ReportReasonForm'])) {
-                $_POST['ReportReasonForm'] = Yii::app()->input->stripClean($_POST['ReportReasonForm']);
+                $_POST['ReportReasonForm'] = Yii::$app->input->stripClean($_POST['ReportReasonForm']);
                 $form->attributes = $_POST['ReportReasonForm'];
 
                 if ($form->validate() && Question::model()->findByPk($form->object_id)->canReportPost()) {
 
                     $report = new ReportContent();
-                    $report->created_by = Yii::app()->user->id;
+                    $report->created_by = Yii::$app->user->id;
                     $report->reason = $form->reason;
                     $report->object_model = 'Question';
                     $report->object_id = $form->object_id;
@@ -346,7 +332,7 @@ class QuestionController extends Controller
         }
 
 		echo CJSON::encode($json);
-		Yii::app()->end();
+		Yii::$app->end();
 	}
 
 	/**
@@ -358,7 +344,7 @@ class QuestionController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Question::model()->findByPk($id);
+		$model= Question::findOne($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -373,7 +359,7 @@ class QuestionController extends Controller
 		if(isset($_POST['ajax']) && $_POST['ajax']==='question-form')
 		{
 			echo CActiveForm::validate($model);
-			Yii::app()->end();
+			Yii::$app->end();
 		}
 	}
 
@@ -387,9 +373,9 @@ class QuestionController extends Controller
 	{
 		$text = $_POST['text'];
 
-		$question = Question::model()->find("post_title='" . $text ."'");
+		$question = Question::find()->andFilterWhere(["post_title" => $text ])->one();
 		if(!empty($question)) {
-			echo $this->createUrl('//questionanswer/question/view', array('id' => $question->id));
+			echo Url::toRoute(array('//questionanswer/question/view', 'id' => $question->id));
 		}
 	}
 }

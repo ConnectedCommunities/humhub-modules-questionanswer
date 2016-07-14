@@ -1,5 +1,9 @@
 <?php
 
+namespace humhub\modules\questionanswer\widgets;
+
+use humhub\components\Widget;
+
 /**
  * QuestionWallEntryWidget is used to display a question inside the stream.
  *
@@ -9,12 +13,12 @@
  * @since 0.5
  * @author Luke
  */
-class QuestionWallEntryWidget extends HWidget {
+class QuestionWallEntryWidget extends Widget {
 
     public $question;
 
     public function run() {
-        $this->render('entry', array('question' => $this->question,
+       return $this->render('entry', array('question' => $this->question,
             'user' => $this->question->content->user,
             'contentContainer' => $this->question->content->container));
     }

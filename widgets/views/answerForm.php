@@ -1,12 +1,15 @@
 
-<?php $form=$this->beginWidget('CActiveForm', array(
+<?php
+
+use yii\helpers\Url;
+use yii\helpers\Html;
+
+?>
+
+<?php $form=\yii\bootstrap\ActiveForm::begin(array(
     'id'=>'answer-answer-form',
-    // Please note: When you enable ajax validation, make sure the corresponding
-    // controller action is handling ajax validation correctly.
-    // See class documentation of CActiveForm for details on this,
-    // you need to use the performAjaxValidation()-method described there.
     'enableAjaxValidation'=>false,
-    'action' => Yii::app()->createUrl('//questionanswer/answer/create')
+    'action' => Url::toRoute('//questionanswer/answer/create')
 )); ?>
 <div class="panel panel-default panel-answer">
     <div class="panel-heading">
@@ -14,17 +17,13 @@
     </div>
     <div class="panel-body">
         <?php echo $form->errorSummary($answer); ?>
-        <?php echo $form->error($answer,'post_text'); ?>
-        <?php echo $form->textArea($answer,'post_text',array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => "Your response...")); ?>
-        <?php echo $form->hiddenField($answer,'question_id',array('type'=>"hidden", 'value' => $question->id)); ?>
+        <?php echo $form->field($answer,'post_text')->textarea(array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => "Your response..."))->label(false); ?>
+        <?php echo $form->field($answer,'question_id')->hiddenInput(array('type'=>"hidden", 'value' => $question->id))->label(false); ?>
         <div class="pull-left">
-            <?php
-            // Creates Uploading Button
-            $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
+            <?= \humhub\modules\file\widgets\FileUploadButton::widget(array(
                 'uploaderId' => 'contentFormFiles',
                 'fileListFieldName' => 'fileList',
-            ));
-            ?>
+            )); ?>
             <script>
                 $('#fileUploaderButton_contentFormFiles').bind('fileuploaddone', function (e, data) {
                     $('.btn_container').show();
@@ -41,19 +40,11 @@
                     }
                 });
             </script>
-            <?php
-            // Creates a list of already uploaded Files
-            $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
+            <?= \humhub\modules\file\widgets\FileUploadList::widget(array(
                 'uploaderId' => 'contentFormFiles'
-            ));
-            ?>
+            )); ?>
         </div>
-
-        <?php
-        echo CHtml::hiddenField("containerGuid", Yii::app()->user->guid);
-        echo CHtml::hiddenField("containerClass",  get_class(new User()));
-        ?>
-        <?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
+        <?php echo Html::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
     </div>
 </div>
-<?php $this->endWidget(); ?>
+<?php \yii\bootstrap\ActiveForm::end(); ?>

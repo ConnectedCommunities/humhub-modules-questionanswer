@@ -1,6 +1,8 @@
 <?php
 
-class m160602_053557_table_question_views extends EDbMigration
+use yii\db\Migration;
+
+class m160602_053557_table_question_views extends Migration
 {
 	public function up()
 	{

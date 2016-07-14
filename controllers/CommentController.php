@@ -1,5 +1,17 @@
 <?php
 
+namespace humhub\modules\questionanswer\controllers;
+
+use humhub\components\Controller;
+use yii\base\Exception;
+use yii\bootstrap\ActiveForm;
+use yii\data\ActiveDataProvider;
+use humhub\modules\questionanswer\models\QAComment;
+use Yii;
+use humhub\modules\content\models\Content;
+
+
+
 class CommentController extends Controller
 {
 
@@ -46,7 +58,7 @@ class CommentController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		return $this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -64,17 +76,12 @@ class CommentController extends Controller
 
 		if(isset($_POST['QAComment']))
 		{
-			$model->attributes=$_POST['QAComment'];
-			$model->created_by = Yii::app()->user->id;
+			$model->load(Yii::$app->request->post());
+			$model->created_by = Yii::$app->user->id;
 	        $model->post_type = "comment";
-			$model->content->populateByForm();
 			if($model->save())
-				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
+				return $this->redirect(array('//questionanswer/question/view', 'id'=>$model->question_id));
 		}
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
 	}
 
 	/**
@@ -89,14 +96,14 @@ class CommentController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Comment']))
+		if(isset($_POST['QAComment']))
 		{
-			$model->attributes=$_POST['Comment'];
+			$model->load(Yii::$app->request->post());
 			if($model->save())
 				$this->redirect(array('//questionanswer/question/view','id'=>$model->question_id));
 		}
 
-		$this->render('update',array(
+		return $this->render('update',array(
 			'model'=>$model,
 		));
 	}
@@ -112,7 +119,7 @@ class CommentController extends Controller
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(Yii::$app->request->referrer);
 	}
 
 	/**
@@ -120,8 +127,10 @@ class CommentController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Comment');
-		$this->render('index',array(
+		$dataProvider=new ActiveDataProvider([
+			'query' => QAComment::find()
+		]);
+		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
@@ -131,12 +140,12 @@ class CommentController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new QAComment('search');
+		$model= new QAComment('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Comment']))
-			$model->attributes=$_GET['Comment'];
+		if(isset($_GET['QAComment']))
+			$model->attributes=$_GET['QAComment'];
 
-		$this->render('admin',array(
+		return $this->render('admin',array(
 			'model'=>$model,
 		));
 	}
@@ -150,7 +159,7 @@ class CommentController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=QAComment::model()->findByPk($id);
+		$model=QAComment::findOne($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -164,8 +173,8 @@ class CommentController extends Controller
 	{
 		if(isset($_POST['ajax']) && $_POST['ajax']==='comment-form')
 		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
+			echo ActiveForm::validate($model);
+			Yii::$app->end();
 		}
 	}
 }

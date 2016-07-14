@@ -1,5 +1,9 @@
 <?php
 
+namespace humhub\modules\questionanswer\widgets;
+
+use humhub\components\Widget;
+
 /**
  * UserSearchResultWidget displays a user inside the search results.
  * The widget will be called by the User Model getSearchOutput method.
@@ -8,7 +12,7 @@
  * @since 0.5
  * @author Luke
  */
-class QuestionSearchResultWidget extends HWidget {
+class QuestionSearchResultWidget extends Widget {
 
     /**
      * The user object
@@ -22,7 +26,7 @@ class QuestionSearchResultWidget extends HWidget {
      */
     public function run() {
 
-        $this->render('searchResult', array(
+        return $this->render('searchResult', array(
             'question' => $this->question,
         ));
     }

@@ -1,5 +1,9 @@
 <?php
 
+namespace humhub\modules\questionanswer\widgets;
+
+use humhub\components\Widget;
+
 /**
  * VoteWidget. 
  * Displays the vote 
@@ -8,25 +12,24 @@
  * @since 0.5
  * @author Ben
  */
-class VoteButtonWidget extends HWidget {
+class VoteButtonWidget extends Widget {
 
     public $post_id;
     public $model; 
     public $vote_on;
     public $vote_type;
-    public $class;
+    public $classObj;
     public $should_open_question;
     /**
      * Executes the widget.
      */
     public function run() {
-
-        $this->render('voteButton', array(
+        return $this->render('voteButton', array(
             'post_id' => $this->post_id,
             'model' => $this->model, 
             'vote_on' => $this->vote_on, 
             'vote_type' => $this->vote_type,
-            'class' => $this->class,
+            'class' => $this->classObj,
             'should_open_question' => $this->should_open_question
         ));
     }

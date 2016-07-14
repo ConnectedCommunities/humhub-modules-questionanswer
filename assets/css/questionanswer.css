@@ -406,3 +406,8 @@ ul.yiiPager .selected a {
   max-height: 200px;
   overflow-y: auto;
 }
+
+#customDataList .summary
+{
+  float:left;
+}

@@ -1,5 +1,11 @@
 <?php
 
+namespace humhub\modules\questionanswer\models;
+
+use humhub\components\ActiveRecord;
+use humhub\modules\content\components\ContentActiveRecord;
+use humhub\modules\search\interfaces\Searchable;
+
 /**
  * This is the model class for table "tag".
  *
@@ -8,12 +14,15 @@
  * @property string $tag
  * @property string $description
  */
-class Tag extends HActiveRecordContentContainer implements ISearchable
+class Tag extends ActiveRecord implements Searchable
 {
+
+	public $autoAddToWall = false;
+
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+	public static function tableName()
 	{
 		return 'tag';
 	}
@@ -26,23 +35,21 @@ class Tag extends HActiveRecordContentContainer implements ISearchable
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tag', 'length', 'max'=>255),
+			array('tag', 'string', 'max'=>255),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, tag, description', 'safe', 'on'=>'search'),
+			array(['id', 'tag', 'description'], 'safe', 'on'=>'search'),
 		);
 	}
 
+
 	/**
-	 * @return array relational rules.
+	 * Returns the Wall Output
 	 */
-	public function relations()
+	public function getWallOut()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
+		return;
 	}
 
 	/**
@@ -92,8 +99,7 @@ class Tag extends HActiveRecordContentContainer implements ISearchable
 	public function firstOrCreate($tag) 
 	{
 
-		$foundTag = Tag::model()->find('tag=:tag', array(':tag'=>$tag));
-
+		$foundTag = Tag::find()->andWhere(['tag' => $tag])->one();
 		if($foundTag) { // found tag
 			return $foundTag;
 		} else {
@@ -118,27 +124,15 @@ class Tag extends HActiveRecordContentContainer implements ISearchable
     }
 
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Tag the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
-
 
     /**
      * After Save Addons
      *
      * @return type
      */
-    protected function afterSave()
+    public function afterSave($insert, $changedAttributes)
     {
-        HSearch::getInstance()->addModel($this);
-        return parent::afterSave();
+        return parent::afterSave($insert, $changedAttributes);
     }
 
 
@@ -179,4 +173,9 @@ class Tag extends HActiveRecordContentContainer implements ISearchable
     {
         return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.TagSearchResultWidget', array('tag' => $this), true);
     }
+
+	public function getQuestionTag()
+	{
+		return $this->hasOne(QuestionTag::className(), ['tag_id' => 'id']);
+	}
 }
