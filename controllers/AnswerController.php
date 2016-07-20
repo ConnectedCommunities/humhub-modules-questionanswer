@@ -8,9 +8,10 @@ use yii\base\Exception;
 use yii\bootstrap\ActiveForm;
 use yii\data\ActiveDataProvider;
 use humhub\modules\content\models\Content;
+use humhub\components\Controller;
 use Yii;
 
-class AnswerController extends ContentController
+class AnswerController extends Controller
 {
 
 	/**

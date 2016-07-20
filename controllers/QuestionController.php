@@ -20,9 +20,20 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use humhub\modules\content\models\Content;
 
-
-class QuestionController extends ContentController
+class QuestionController extends Controller
 {
+
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			'acl' => [
+				'class' => \humhub\components\behaviors\AccessControl::className(),
+			]
+		];
+	}
 
 	/**
 	 * Specifies the access control rules.
@@ -33,7 +44,7 @@ class QuestionController extends ContentController
     {
         return array(
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'users' => array('@', (Setting::Get('allowGuestAccess', 'authentication_internal')) ? "?" : "@"),
+                'users' => ('@'),
             ),
             array('deny', // deny all users
                 'users' => array('*'),
