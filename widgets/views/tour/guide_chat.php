@@ -22,7 +22,7 @@ $this->context->loadResources($this);
             {
                 orphan: true,
                 backdrop: true,
-                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '<strong>CHATTT</strong>')); ?>,
+                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '<strong>Live Chat</strong>')); ?>,
                 content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', "This is your mentorship circle, where you can talk in-depth about your teaching.  Discuss it over with your group, or call upon an experienced mentor.")); ?>
             },
             {
