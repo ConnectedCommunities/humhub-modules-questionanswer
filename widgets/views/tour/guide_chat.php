@@ -69,7 +69,7 @@ $this->context->loadResources($this);
         function tourCompleted() {
             // load user spaces
             $.ajax({
-                'url': '<?php echo Url::toRoute(array('//tour/tour/tour-completed', 'section' => 'spaces')); ?>',
+                'url': '<?php echo Url::toRoute(array('//tour/tour/tour-completed', 'section' => 'chat')); ?>',
                 'cache': false,
                 'data': jQuery(this).parents("form").serialize()
             }).done(function () {
