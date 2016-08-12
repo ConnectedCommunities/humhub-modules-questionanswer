@@ -21,7 +21,7 @@ use humhub\modules\space\models\Space;
             {
                 orphan: true,
                 backdrop: true,
-                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '<strong>Space</strong>')); ?>,
+                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '<strong>Mentorship Circle</strong>')); ?>,
                 content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', "Once you have joined or created a new space you can work on projects, discuss topics or just share information with other users.<br><br>There are various tools to personalize a space, thereby making the work process more productive.")); ?>
             },
             {
