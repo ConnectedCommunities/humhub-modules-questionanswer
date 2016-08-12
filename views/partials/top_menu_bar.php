@@ -31,11 +31,11 @@ use humhub\modules\questionanswer\models\Tag;
                 ?>
             </ul>
         </li>
-        <?php if(Yii::$app->user->isAdmin()) { ?>
-            <li class="dropdown">
-                <?php echo \yii\helpers\Html::a('Admin', Yii::$app->urlManager->createUrl('//questionanswer/question/admin'), array()); ?>
-            </li>
-        <?php } ?>
+<!--        --><?php //if(Yii::$app->user->isAdmin()) { ?>
+<!--            <li class="dropdown">-->
+<!--                --><?php //echo \yii\helpers\Html::a('Admin', Yii::$app->urlManager->createUrl('//questionanswer/question/admin'), array()); ?>
+<!--            </li>-->
+<!--        --><?php //} ?>
         <li class="dropdown pull-right" style="display:none;">
             <?php echo \yii\helpers\Html::a('<i class="fa fa-plus"></i> Ask Question', Yii::$app->urlManager->createAbsoluteUrl('//questionanswer/question/create'), array('class'=>'dropdown-toggle btn btn-community', 'style'=>"padding:8px;")); ?>
         </li>
