@@ -50,7 +50,7 @@ use yii\helpers\Url;
                 placement: "left"
             },
             {
-                element: ".btn-like",
+                element: ".btn-like:first",
                 title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> karma')); ?>,
                 content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'Like what you read? Find something interesting? Click here and let them know – you will also gain karma points within the community.')); ?>,
                 placement: "bottom"
