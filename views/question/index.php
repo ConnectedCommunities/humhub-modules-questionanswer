@@ -228,7 +228,7 @@ use humhub\modules\user\components\User;
           };
         };
 
-        var questions = '<?= $resultSearchData ?>';
+        var questions = '<?= addslashes($resultSearchData); ?>';
         $('#qanda-search .typeahead').typeahead({
             hint: true,
             highlight: true,

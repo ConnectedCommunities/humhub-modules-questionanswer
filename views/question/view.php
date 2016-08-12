@@ -326,7 +326,7 @@ use humhub\modules\user\models\User;
                 <?php if(count($related) > 0) { ?>
                     <div class="list-group">
                         <?php foreach ($related as $question) { ?>
-                            <a class="list-group-item" href="<?php echo Yii::$app->createUrl('//questionanswer/question/view', array('id' => $question['id'])); ?>"><?php echo Html::encode($question['post_title']); ?></a>
+                            <a class="list-group-item" href="<?php echo Url::toRoute(array('//questionanswer/question/view', 'id' => $question['id'])); ?>"><?php echo Html::encode($question['post_title']); ?></a>
                         <?php } ?>
                     </div>
                     <br>
