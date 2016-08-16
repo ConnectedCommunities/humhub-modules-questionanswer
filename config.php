@@ -33,5 +33,6 @@ return [
         array('class' => Sidebar::className(), 'event' => Sidebar::EVENT_INIT, 'callback' => array('humhub\modules\questionanswer\Events', 'onSidebarSpaces')),
 
         array('class' => ProfileSidebar::className(), 'event' => ProfileSidebar::EVENT_INIT, 'callback' => array('humhub\modules\questionanswer\Events', 'onSidebarProfiles')),
+        array('class' => Search::className(), 'event' => Search::EVENT_ON_REBUILD, 'callback' => array('humhub\modules\questionanswer\Events', 'onSearchRebuild')),
     ),
 ];

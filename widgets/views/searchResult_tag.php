@@ -7,13 +7,17 @@
  * @package humhub.modules.post
  * @since 0.5
  */
+
+use yii\helpers\Url;
+use yii\helpers\Html;
+
 ?>
 
 <li>
-    <a href="<?php echo $this->createUrl('//questionanswer/main/tag', array('id' => $tag->id)); ?>">
+    <a href="<?php echo Url::toRoute(array('/questionanswer/main/tag', 'id' => $tag->id)); ?>">
         <div class="media">
             <div class="media-body">
-                TAG: <strong><?php echo CHtml::encode($tag->tag); ?> </strong><br>
+                TAG: <strong><?php echo Html::encode($tag->tag); ?> </strong><br>
             </div>
         </div>
     </a>

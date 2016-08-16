@@ -110,6 +110,11 @@ class QAComment extends ActiveRecord implements ContentTitlePreview
         );
 	}
 
+	public function getUrl($id)
+	{
+		return Url::toRoute(['/questionanswer/question/view', 'id' => $id]);
+	}
+
 	public function getUser()
 	{
 		return $this->hasOne(User::className(), ['id' => 'created_by']);

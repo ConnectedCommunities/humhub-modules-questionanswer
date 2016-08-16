@@ -4,6 +4,7 @@ namespace humhub\modules\questionanswer\models;
 
 use humhub\components\ActiveRecord;
 use humhub\modules\content\components\ContentActiveRecord;
+use humhub\modules\questionanswer\widgets\TagSearchResultWidget;
 use humhub\modules\search\interfaces\Searchable;
 
 /**
@@ -49,7 +50,7 @@ class Tag extends ActiveRecord implements Searchable
 	 */
 	public function getWallOut()
 	{
-		return;
+		return TagSearchResultWidget::widget(array('tag' => $this));
 	}
 
 	/**
@@ -118,9 +119,9 @@ class Tag extends ActiveRecord implements Searchable
      * @param array $parameters
      * @return string
      */
-    public function getUrl($parameters = array())
+    public function getUrl($id)
     {
-    	return $this->createUrl('//questionanswer/main/tag', $parameters);
+    	return $this->createUrl(['//questionanswer/main/tag', 'id' => $id]);
     }
 
 
@@ -145,25 +146,14 @@ class Tag extends ActiveRecord implements Searchable
     public function getSearchAttributes()
     {
 
-        $attributes = array(
+		$attributes = [
+			'title' => $this->tag,
+			'description' => $this->description,
+		];
 
-        	// Assignments
-            'belongsToType' => 'Tag',
-            'belongsToId' => $this->id,
-            'belongsToGuid' => null,
+		$this->trigger(self::EVENT_SEARCH_ADD, new \humhub\modules\search\events\SearchAddEvent($attributes));
 
-            // Information about the record
-            'model' => 'Tag',
-            'pk' => $this->id,
-            'title' => $this->tag,
-            'url' => $this->getUrl(array('id' => $this->id)),
-
-            // Extra indexed fields
-            'post_text' => $this->tag
-        );
-
-
-        return $attributes;
+		return $attributes;
     }
 
     /**

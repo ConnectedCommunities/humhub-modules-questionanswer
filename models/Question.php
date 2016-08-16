@@ -3,12 +3,16 @@
 namespace humhub\modules\questionanswer\models;
 
 use humhub\components\ActiveRecord;
+use humhub\libs\Helpers;
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\content\interfaces\ContentTitlePreview;
+use humhub\modules\questionanswer\widgets\QuestionSearchResultWidget;
+use humhub\modules\questionanswer\widgets\QuestionWallEntryWidget;
 use humhub\modules\questionanswer\widgets\WallEntry;
 use humhub\modules\search\interfaces\Searchable;
 use humhub\modules\user\components\User;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "question".
@@ -56,9 +60,9 @@ class Question extends ActiveRecord implements Searchable, ContentTitlePreview
 		);
 	}
 
-	public function getUrl()
+	public function getUrl($id)
 	{
-		return $this->content->container->createUrl('/tasks/task/show', array('id' => $this->id));
+		return Url::toRoute(['/questionanswer/question/view', 'id' => $id]);
 	}
 
 	public function afterSave($insert, $changedAttributes)
@@ -125,12 +129,17 @@ class Question extends ActiveRecord implements Searchable, ContentTitlePreview
 		return $this->hasMany(QuestionTag::className(), ['question_id' => 'id']);
 	}
 
+	public function getTag()
+	{
+		return $this->hasOne(QuestionTag::className(), ['question_id' => 'id']);
+	}
+
 	/**
 	 * Returns the Wall Output
 	 */
 	public function getWallOut()
 	{
-		return Yii::$app->getController()->widget('application.modules.questionanswer.widgets.QuestionWallEntryWidget', array('question' => $this), true);
+		return QuestionSearchResultWidget::widget(array('question' => $this));
 	}
 
 	/**
@@ -141,28 +150,13 @@ class Question extends ActiveRecord implements Searchable, ContentTitlePreview
 	 */
 	public function getSearchAttributes()
 	{
-
-		// THIS WORKS PERFECTLY IF YOU ADD THE QUESTION MODEL TO THE QUERY
-		// See: Line 84, /protected/controllers/SearchController.php
-
-
-		$attributes = array(
-
-			// Assignments
-			'belongsToType' => 'Question',
-			'belongsToId' => $this->id,
-			'belongsToGuid' => $this->user->guid,
-
-			// Information about the record
-			'model' => 'Question',
-			'pk' => $this->id,
+		$attributes = [
 			'title' => $this->post_title,
-			'url' => $this->getUrl(array('id' => $this->id)),
+//			'tags' => $this->tags,
+			'description' => $this->post_text,
+		];
 
-			// Extra indexed fields
-			'post_text' => $this->post_text
-		);
-
+		$this->trigger(self::EVENT_SEARCH_ADD, new \humhub\modules\search\events\SearchAddEvent($attributes));
 
 		return $attributes;
 	}

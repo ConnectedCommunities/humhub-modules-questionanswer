@@ -4,6 +4,7 @@ namespace humhub\modules\questionanswer\models;
 
 use humhub\components\ActiveRecord;
 use humhub\modules\content\interfaces\ContentTitlePreview;
+use humhub\modules\questionanswer\widgets\AnswerSearchResultWidget;
 use humhub\modules\search\interfaces\Searchable;
 use Yii;
 use yii\helpers\Url;
@@ -110,13 +111,17 @@ class Answer extends ActiveRecord implements Searchable, ContentTitlePreview
 		return $this->hasMany(QAComment::className(), ['parent_id' => 'id']);
 	}
 
+	public function getQuestion()
+	{
+		return $this->hasOne(Question::className(), ['parent_id' => 'id']);
+	}
+
     /**
      * Returns the Wall Output
      */
     public function getWallOut()
     {
-//        return "Hello World";
-         return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.AnswerWallEntryWidget', array('answer' => $this), true);
+         return AnswerSearchResultWidget::widget(['answer' => $this, 'question' => $this->question]);
     }
 
     /**
@@ -127,9 +132,15 @@ class Answer extends ActiveRecord implements Searchable, ContentTitlePreview
      */
     public function getSearchAttributes()
     {
-        $attributes = [];
+		$attributes = [
+//			'title' => $this->post_title,
+//			'tags' => $this->tags,
+			'description' => $this->post_text,
+		];
 
-        return $attributes;
+		$this->trigger(self::EVENT_SEARCH_ADD, new \humhub\modules\search\events\SearchAddEvent($attributes));
+
+		return $attributes;
     }
 
     /**
@@ -221,9 +232,9 @@ class Answer extends ActiveRecord implements Searchable, ContentTitlePreview
      * @param array $parameters
      * @return string
      */
-    public function getUrl($parameters = array())
+    public function getUrl($id)
     {
-    	return  Url::toRoute('//questionanswer/question/view', $parameters);
+    	return  Url::toRoute(['/questionanswer/question/view', 'id' => $id]);
     }
 
     /**

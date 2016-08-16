@@ -18,9 +18,11 @@ class QuestionWallEntryWidget extends Widget {
     public $question;
 
     public function run() {
-       return $this->render('entry', array('question' => $this->question,
-            'user' => $this->question->content->user,
-            'contentContainer' => $this->question->content->container));
+       return $this->render('entry', array(
+            'question' => $this->question,
+            'user' => $this->question->user
+           )
+       );
     }
 
 }

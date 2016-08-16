@@ -25,7 +25,7 @@ class TagSearchResultWidget extends Widget {
      */
     public function run() {
 
-        $this->render('searchResult_tag', array(
+        return $this->render('searchResult_tag', array(
             'tag' => $this->tag,
         ));
     }

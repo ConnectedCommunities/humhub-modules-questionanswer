@@ -1,6 +1,8 @@
 <?php
 
 namespace humhub\modules\questionanswer;
+use humhub\modules\questionanswer\models\QAComment;
+use humhub\modules\questionanswer\models\Tag;
 use humhub\modules\questionanswer\widgets\KnowledgeTour;
 use Yii;
 
@@ -19,10 +21,10 @@ class Events extends \yii\base\Object
      */
     public static function onTopMenuInit($event)
     {
-
         if (Yii::$app->user->isGuest) {
             return;
         }
+
         $event->sender->addItem(array(
             'label' => 'Knowledge',
             'url' => \Yii::$app->urlManager->createUrl('/questionanswer/question/picked', array()),
@@ -43,6 +45,29 @@ class Events extends \yii\base\Object
         $karma->addKarma('asked', \Yii::$app->user->id);
     }
 
+    /**
+     * On rebuild of the search index, rebuild all space records
+     *
+     * @param type $event
+     */
+    public static function onSearchRebuild($event)
+    {
+        foreach (Question::find()->all() as $obj) {
+            Yii::$app->search->add($obj);
+        }
+
+        foreach (Answer::find()->all() as $obj) {
+            Yii::$app->search->add($obj);
+        }
+
+        foreach (Tag::find()->all() as $obj) {
+            Yii::$app->search->add($obj);
+        }
+
+        foreach (QAComment::find()->all() as $obj) {
+            Yii::$app->search->add($obj);
+        }
+    }
 
     /**
      * An answer has been created
