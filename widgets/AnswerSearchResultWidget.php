@@ -27,11 +27,12 @@ class AnswerSearchResultWidget extends Widget {
      * Executes the widget.
      */
     public function run() {
-
-        return  $this->render('searchResult_answer', array(
-            'question' => $this->question,
-            'answer' => $this->answer,
-        ));
+        if(!empty($this->question)) {
+            return $this->render('searchResult_answer', array(
+                'question' => $this->question,
+                'answer' => $this->answer,
+            ));
+        }
     }
 
 }
