@@ -78,7 +78,7 @@ $this->context->loadResources($this);
                     window.location.href="<?php echo Url::toRoute(array('//user/profile',  'uguid' => Yii::$app->user->guid,'tour' => 'true')); ?>";
                 } else {
                     // redirect to dashboard
-                    window.location.href="<?php echo Url::toRoute('//dashboard/dashboard'); ?>";
+                    window.location.href="<?php echo Url::toRoute('/questionanswer/question/index'); ?>";
                 }
 
             });

@@ -70,7 +70,7 @@ echo $this->context->loadResources($this);
                 'data': jQuery(this).parents("form").serialize()
             }).done(function () {
                 // redirect to dashboard
-                window.location.href = "<?php echo Url::toRoute('//dashboard/dashboard'); ?>";
+                window.location.href = "<?php echo Url::toRoute('/questionanswer/question/index'); ?>";
 
                 if (gotoAdministration == true) {
                     // redirect to administration

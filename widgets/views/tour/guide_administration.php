@@ -57,7 +57,7 @@ $this->context->loadResources($this);
                 'cache': false,
                 'data': jQuery(this).parents("form").serialize()
             }).done(function () {
-                window.location.href="<?php echo Url::toRoute('//dashboard/dashboard'); ?>";
+                window.location.href="<?php echo Url::toRoute('/questionanswer/question/index'); ?>";
             });
         }
     });
