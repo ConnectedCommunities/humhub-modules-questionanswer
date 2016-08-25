@@ -174,7 +174,7 @@ class QuestionController extends Controller
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : ['/questionanswer/question/index']);
 	}
 
 	/**
@@ -296,7 +296,9 @@ class QuestionController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Question('search');
+		return $this->redirect(Url::toRoute(['/questionanswer/question/index']));
+
+		$model= new Question('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Question']))
 			$model->attributes=$_GET['Question'];
