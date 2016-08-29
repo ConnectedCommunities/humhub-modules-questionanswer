@@ -1,5 +1,5 @@
 <?php
-$this->context->loadResources($this);
+echo $this->context->loadResources($this);
 use yii\helpers\Url;
 ?>
 <script type="text/javascript">
