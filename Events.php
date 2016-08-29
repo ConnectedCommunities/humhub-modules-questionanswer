@@ -1,6 +1,7 @@
 <?php
 
 namespace humhub\modules\questionanswer;
+
 use humhub\modules\questionanswer\models\QAComment;
 use humhub\modules\questionanswer\models\Tag;
 use humhub\modules\questionanswer\widgets\KnowledgeTour;
@@ -33,25 +34,6 @@ class Events extends \yii\base\Object
             'isActive' => (\Yii::$app->controller->module && \Yii::$app->controller->module->id == 'questionanswer'),
             'sortOrder' => 10,
         ));
-
-        $getSearchQuestion = (bool) Setting::Get("searchQuestion");
-
-        if (!$getSearchQuestion) {
-            foreach (Question::find()->all() as $obj) {
-                Yii::$app->search->add($obj);
-            }
-
-            foreach (Answer::find()->all() as $obj) {
-                Yii::$app->search->add($obj);
-            }
-
-            foreach (Tag::find()->all() as $obj) {
-                Yii::$app->search->add($obj);
-            }
-
-            Setting::Set("searchQuestion", 1);
-        }
-
     }
 
 
@@ -72,26 +54,16 @@ class Events extends \yii\base\Object
      */
     public static function onSearchRebuild($event)
     {
+        foreach (Question::find()->all() as $obj) {
+            Yii::$app->search->add($obj);
+        }
 
-        $getSearchQuestion = Setting::Get("searchQuestion");
+        foreach (Answer::find()->all() as $obj) {
+            Yii::$app->search->add($obj);
+        }
 
-        if ((bool) $getSearchQuestion) {
-            foreach (Question::find()->all() as $obj) {
-                Yii::$app->search->add($obj);
-            }
-
-            foreach (Answer::find()->all() as $obj) {
-                Yii::$app->search->add($obj);
-            }
-
-            foreach (Tag::find()->all() as $obj) {
-                Yii::$app->search->add($obj);
-            }
-
-            foreach (QAComment::find()->all() as $obj) {
-                Yii::$app->search->add($obj);
-            }
-            Setting::Set("searchQuestion", 1);
+        foreach (Tag::find()->all() as $obj) {
+            Yii::$app->search->add($obj);
         }
     }
 

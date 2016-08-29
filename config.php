@@ -9,6 +9,7 @@ use humhub\modules\questionanswer\models\Answer;
 use humhub\modules\questionanswer\models\QuestionVotes;
 use humhub\modules\space\widgets\Sidebar;
 use humhub\modules\user\widgets\ProfileSidebar;
+use humhub\modules\questionanswer\Events;
 
 include(\Yii::getAlias("@app/modules/questionanswer/models/Question"). ".php");
 include(\Yii::getAlias("@app/modules/questionanswer/models/Answer"). ".php");
