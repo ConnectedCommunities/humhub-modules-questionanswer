@@ -145,6 +145,8 @@ class AnswerController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		return $this->redirect(Yii::$app->request->referrer);
+
 		$model=new Answer('search');
 		if(isset($_GET['Answer']))
 			$model->load(\Yii::$app->request->get());
