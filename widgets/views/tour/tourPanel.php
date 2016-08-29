@@ -18,7 +18,7 @@ use yii\helpers\Url;
     ?>
 
     <!-- Display panel menu widget -->
-    <?= \humhub\widgets\PanelMenu::widget(['id' => 'getting-started-panel', 'extraMenus' => $removeOptionHtml]); ?>
+    <?= \humhub\widgets\PanelMenu::widget(['id' => 'getting-started-panel']); ?>
 
     <div class="panel-heading">
         <?php echo Yii::t('TourModule.widgets_views_tourPanel', '<strong>Getting</strong> Started'); ?>
