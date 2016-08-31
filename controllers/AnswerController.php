@@ -80,8 +80,8 @@ class AnswerController extends Controller
             if ($answer->validate()) {
 
                 $answer->save();
-				Yii::$app->search->add($answer);
 				\humhub\modules\file\models\File::attachPrecreated($answer, Yii::$app->request->post('fileList'));
+				Yii::$app->search->add($answer);
                 return $this->redirect(array('//questionanswer/question/view','id'=>$answer->question_id));
             }
 

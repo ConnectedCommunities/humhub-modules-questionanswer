@@ -44,7 +44,7 @@ use yii\helpers\Url;
                 placement: "top"
             },
             {
-                element: ".media-body",
+                element: ".media-body:first",
                 title: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', '<strong>Existing questions/answers</strong> posts')); ?>,
                 content: <?php echo json_encode(Yii::t('TourModule.widgets_views_index', 'These are posts or questions from other community members – a title and a description. Click on the title to follow the thread and see what’s been said in the conversation – you can also add your own response.')); ?>,
                 placement: "left"
