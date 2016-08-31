@@ -222,9 +222,18 @@ class QuestionController extends Controller
 				ORDER BY score DESC, vote_count DESC, question.created_at DESC
 				";
 
+		$count = Yii::$app->db->createCommand($sql)->queryAll();
+
+		if(!empty($count)) {
+			$count = count($count);
+		} else {
+			$count = 0;
+		}
+
 		$limit = 10;
 		$dataProvider=new SqlDataProvider([
 			'sql' => $sql,
+			'totalCount' => $count,
 			'pagination' => [
 				'pageSize' => $limit,
 			],
@@ -277,9 +286,19 @@ class QuestionController extends Controller
 				
 				ORDER BY tag_count DESC";
 		$limit = 10;
+
+		$count = Yii::$app->db->createCommand($sql, [':user_id' => Yii::$app->user->id])->queryAll();
+
+		if(!empty($count)) {
+			$count = count($count);
+		} else {
+			$count = 0;
+		}
+
 		$dataProvider=new SqlDataProvider([
 			'sql' => $sql,
 			'params' => [':user_id' => Yii::$app->user->id],
+			'totalCount' => $count,
 			'pagination' => [
 				'pageSize' => $limit,
 			],
