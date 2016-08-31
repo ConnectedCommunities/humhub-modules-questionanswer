@@ -87,7 +87,7 @@ class QuestionController extends Controller
 			$question->post_type = "question";
 			if($question->validate()) {
 				$question->save();
-
+				Yii::$app->search->add($question);
 				\humhub\modules\file\models\File::attachPrecreated($question, Yii::$app->request->post('fileList'));
 			} else {
 				echo json_encode(
@@ -111,6 +111,8 @@ class QuestionController extends Controller
 					$question_tag->question_id = $question->id;
 					$question_tag->tag_id = $tagObj->id;
 					$question_tag->save();
+
+					Yii::$app->search->add($tagObj);
 				}
 
 			}
@@ -147,13 +149,13 @@ class QuestionController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Question']))
 		{
 			$model->attributes=$_POST['Question'];
+			Yii::$app->search->update($model);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -170,7 +172,9 @@ class QuestionController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+		Yii::$app->search->delete($model);
+		$model->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))

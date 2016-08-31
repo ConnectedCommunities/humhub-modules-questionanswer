@@ -80,7 +80,7 @@ class AnswerController extends Controller
             if ($answer->validate()) {
 
                 $answer->save();
-
+				Yii::$app->search->add($answer);
 				\humhub\modules\file\models\File::attachPrecreated($answer, Yii::$app->request->post('fileList'));
                 return $this->redirect(array('//questionanswer/question/view','id'=>$answer->question_id));
             }
@@ -104,6 +104,7 @@ class AnswerController extends Controller
 		if(isset($_POST['Answer']))
 		{
 			$model->load(\Yii::$app->request->post());
+			Yii::$app->search->update($model);
 			if($model->save())
 				$this->redirect($this->createUrl('//questionanswer/question/view', array('id' => $model->question_id)));
 		}
@@ -120,7 +121,9 @@ class AnswerController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+		Yii::$app->search->delete($model);
+		$model->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
