@@ -411,3 +411,27 @@ ul.yiiPager .selected a {
 {
   float:left;
 }
+
+.searchInput{
+  padding-right: 50px !important;
+}
+.searchInput::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.searchInput::-moz-placeholder { /* Firefox 19+ */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.searchInput:-ms-input-placeholder { /* IE 10+ */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.searchInput:-moz-placeholder { /* Firefox 18- */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
