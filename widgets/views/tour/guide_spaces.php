@@ -46,7 +46,7 @@ use humhub\modules\space\models\Space;
                 element: ".wall-entry:eq(0)",
                 title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '<strong>Posts</strong>')); ?>,
                 content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'Yours, and other users\' posts will appear here.<br><br>These can then be liked or commented on.')); ?>,
-                placement: "bottom"
+                placement: "top"
             },
             {
                 element: ".space-info",
