@@ -435,3 +435,14 @@ ul.yiiPager .selected a {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
+
+@media(max-width: 767px) {
+  #customDataList .summary
+  {
+    width: 100%;
+    display: block;
+    float: none !important;
+    text-align: center;
+    padding-bottom: 10px;
+  }
+}
