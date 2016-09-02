@@ -445,4 +445,8 @@ ul.yiiPager .selected a {
     text-align: center;
     padding-bottom: 10px;
   }
+
+  .media>.pull-left {
+    margin-right: 25px;
+  }
 }
