@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use humhub\modules\questionanswer\models\QuestionVotes;
 use humhub\modules\questionanswer\models\Question;
-
+\humhub\modules\questionanswer\Assets::register($this);
 ?>
 
 <style>
@@ -22,8 +22,6 @@ use humhub\modules\questionanswer\models\Question;
 }
 
 </style>
-<link rel="stylesheet" type="text/css"
-      href="<?php echo $this->context->module->assetsUrl; ?>/css/questionanswer.css"/>
 <div class="container">
     <div class="row">
         <div class="col-md-12">

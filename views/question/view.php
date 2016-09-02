@@ -9,10 +9,9 @@ use yii\helpers\Url;
 use humhub\modules\questionanswer\models\Answer;
 use humhub\modules\questionanswer\models\QAComment;
 use humhub\modules\user\models\User;
+\humhub\modules\questionanswer\Assets::register($this);
 ?>
 
-<link rel="stylesheet" type="text/css"
-         href="<?php echo $this->context->module->assetsUrl; ?>/css/questionanswer.css"/>
 
 <div class="container">
 

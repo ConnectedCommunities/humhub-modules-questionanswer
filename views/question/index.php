@@ -4,15 +4,9 @@
 
 
 use humhub\modules\user\components\User;
-
+\humhub\modules\questionanswer\Assets::register($this);
 ?>
 
-<link rel="stylesheet" type="text/css"
-         href="<?php echo $this->context->module->assetsUrl; ?>/css/questionanswer.css"/>
-         
-<script type="text/javascript"
-            src="<?php echo $this->context->module->assetsUrl; ?>/js/typeahead/typeahead.bundle.js"></script>
-            
 <div class="container">
 
 	<!-- Top Banner -->

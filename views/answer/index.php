@@ -1,7 +1,6 @@
 <?php
 /* @var $this AnswerController */
 /* @var $dataProvider CActiveDataProvider */
-
 $this->breadcrumbs=array(
 	'Responses',
 );
