@@ -447,6 +447,7 @@ ul.yiiPager .selected a {
   }
 
   .media>.pull-left {
-    margin-right: 25px;
+    margin-right: 18px;
+    width: 100%;
   }
 }
