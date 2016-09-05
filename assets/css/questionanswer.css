@@ -267,7 +267,7 @@ ul.yiiPager .selected a {
 .twitter-typeahead::after {
   font-family: 'FontAwesome';
   content: "\f002" !important;
-  margin-top: -35px;
+  margin-top: -32px;
   z-index: 1000;
   position: absolute;
   right: 20px;
@@ -413,7 +413,8 @@ ul.yiiPager .selected a {
 }
 
 .searchInput{
-  padding-right: 50px !important;
+  padding-right: 40px !important;
+  font-size: 24px !important;
 }
 .searchInput::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   white-space: nowrap !important;
@@ -449,5 +450,17 @@ ul.yiiPager .selected a {
   .media>.pull-left {
     margin-right: 18px;
     width: 100%;
+  }
+}
+
+@media(max-width: 767px) {
+  .searchInput {
+    font-size: 18px !important;
+  }
+}
+
+@media(max-width: 375px) {
+  .searchInput {
+    font-size: 12px !important;
   }
 }
