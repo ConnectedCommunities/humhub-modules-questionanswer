@@ -50,9 +50,10 @@ use humhub\modules\user\components\User;
                             'dataProvider'=> $dataProvider,
                             'id'=>'customDataList',
                             'itemView'=>'_view',
+                            'summary' => '<div class="row"><div class="summary" style="float:right">Showing <b>{begin}</b>-<b>{end}</b> of <b>{count}</b> items.</div></div>',
                             'summaryOptions' => [
                                 'style' => 'float:right',
-                                'class' => 'summary'
+                                'class' => 'summary',
                             ],
                         ));
                     ?>
