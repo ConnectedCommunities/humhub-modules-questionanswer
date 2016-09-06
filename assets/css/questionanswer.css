@@ -437,6 +437,11 @@ ul.yiiPager .selected a {
   text-overflow: ellipsis !important;
 }
 
+.typeahead {
+  height: 40px !important;
+  padding: 5px 12px !important;
+}
+
 @media(max-width: 767px) {
   #customDataList .summary
   {
@@ -459,8 +464,19 @@ ul.yiiPager .selected a {
   }
 }
 
+@media(max-width: 430px) {
+  .searchInput {
+    font-size: 14px !important;
+  }
+}
+
 @media(max-width: 375px) {
   .searchInput {
     font-size: 12px !important;
   }
+  .typeahead {
+    height: 37px !important;
+    padding: 5px 12px !important;
+  }
 }
+
