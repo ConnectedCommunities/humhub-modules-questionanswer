@@ -81,7 +81,7 @@ use humhub\modules\user\models\User;
 
                         <div class="media-body" style="padding-top:5px; ">
                             <h3 class="media-heading">
-                                <?php echo \yii\helpers\Html::a(\yii\helpers\Html::encode($model->post_title), Url::toRoute('//questionanswer/question/view', array('id' => $model->id))); ?>
+                                <?php echo \yii\helpers\Html::a(\yii\helpers\Html::encode($model->post_title), Url::toRoute(array('//questionanswer/question/view', 'id' => $model->id))); ?>
                             </h3>
                             <?php print \yii\helpers\Html::decode($model->post_text); ?>
                             <?= \humhub\modules\file\widgets\ShowFiles::widget(array('object' => $model)); ?>
