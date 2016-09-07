@@ -470,7 +470,7 @@ ul.yiiPager .selected a {
   }
 }
 
-@media(max-width: 375px) {
+@media(max-width: 350px) {
   .searchInput {
     font-size: 12px !important;
   }
