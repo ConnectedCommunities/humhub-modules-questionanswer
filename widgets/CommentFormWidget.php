@@ -3,6 +3,7 @@
 namespace humhub\modules\questionanswer\widgets;
 
 use humhub\components\Widget;
+use yii\base\Exception;
 
 /**
  * CommentFormWidget. 
@@ -37,16 +38,27 @@ class CommentFormWidget extends Widget {
      */
     public $question_id;
 
-
+    /**
+     *
+     * Add id to form for validation of unique form
+     *
+     * @var string
+     */
+    public $id;
     /**
      * Executes the widget.
      */
     public function run() {
 
+        if(empty($this->id)) {
+            throw new Exception('Empty id parameter');
+        }
+
         return $this->render('commentForm', array(
             'model' => $this->model,
             'question_id' => $this->question_id,
-            'parent_id' => $this->parent_id
+            'parent_id' => $this->parent_id,
+            'id' => $this->id,
         ));
     }
 

@@ -145,7 +145,7 @@ use humhub\modules\user\models\User;
                             		<a class="add-comment-link" style="margin-left:4px;color:#ccc;">add a comment</a>
                                 </div>
                                 <div class="hidden-comment-form">
-                                    <?= \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new QAComment, 'question_id' => $model->id, 'parent_id' => $model->id)); ?>
+                                    <?= \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new QAComment, 'question_id' => $model->id, 'parent_id' => $model->id, "id" => "comment-to-post-1")); ?>
 
                                 </div>
 
@@ -175,7 +175,7 @@ use humhub\modules\user\models\User;
 
             <h4><?php echo count($answers) ?> Responses</h4>
             <hr>
-
+            <?php $comment_id = 1; ?>
             <?php foreach($answers as $question_answer) { ?>
             <div class="panel panel-default qanda-panel">
                 <div class="panel-body">
@@ -286,7 +286,8 @@ use humhub\modules\user\models\User;
                             		<a class="add-comment-link<?php echo $question_answer['id'] ?>" style="margin-left:4px;color:#ccc;">add a comment</a>
                                 </div>
                                 <div class="hidden-comment-form-answer" id="<?php echo $question_answer['id'] ?>">
-                                    <?= \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new QAComment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id'])); ?>
+
+                                    <?= \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new QAComment(), 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id'], "id" => 'comment-to-answer-' . $comment_id++)); ?>
                                 </div>
 
                                 <script type="text/javascript">
