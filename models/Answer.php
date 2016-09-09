@@ -47,7 +47,7 @@ class Answer extends ActiveRecord implements Searchable, ContentTitlePreview
 		return array(
 			array(['post_text', 'post_type'], 'required'),
 			array(['question_id', 'created_by', 'updated_by'], 'integer'),
-			array('post_title', 'string', 'max'=>255),
+			array(['post_title', 'post_text'], 'string', 'max'=>255),
 			array('post_type', 'string', 'max'=>8),
 			array(['created_at', 'updated_at'], 'safe'),
 			// The following rule is used by search().

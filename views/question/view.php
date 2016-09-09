@@ -43,7 +43,7 @@ use humhub\modules\user\models\User;
         <div class="col-md-8">
             <div class="panel panel-default qanda-panel qanda-panel-question">
                 <div class="panel-body">
-                    <div class="media">
+                    <div class="question">
                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
 
@@ -79,7 +79,7 @@ use humhub\modules\user\models\User;
 
 
 
-                        <div class="media-body" style="padding-top:5px; ">
+                        <div class="question-body" style="padding-top:5px;overflow: hidden;">
                             <h3 class="media-heading">
                                 <?php echo \yii\helpers\Html::a(\yii\helpers\Html::encode($model->post_title), Url::toRoute(array('/questionanswer/question/view', 'id' => $model->id))); ?>
                             </h3>
@@ -117,7 +117,7 @@ use humhub\modules\user\models\User;
 							echo " Comments</h5>";
                             if($comments) {
                                 foreach($comments as $comment) {
-                                    echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
+                                    echo '<div class="break-wrap-text">';
                                     echo Html::encode($comment->post_text);
 									echo '<div class="row"><div class="col-sm-6">';
                                     echo "<a class='display-name' href=\"". Url::toRoute(array('//user/profile', 'uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
@@ -211,7 +211,7 @@ use humhub\modules\user\models\User;
                             </div>
                         </div>
                         <?php $user = User::find()->andWhere(['id' => ($question_answer['created_by'])])->one(); ?>
-                        <div class="media-body" style="padding-top:5px; ">
+                        <div class="answer-body break-wrap-text" style="padding-top:5px;overflow: hidden;">
                             <?php echo Html::encode($question_answer['post_text']); ?>
                             <?php
                             $answerModel = Answer::findOne($question_answer['id']);
@@ -254,7 +254,7 @@ use humhub\modules\user\models\User;
                             if($comments) {
 
                                 foreach($comments as $comment) {
-                                    echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
+                                    echo '<div class="break-wrap-text">';
                                     echo Html::encode($comment->post_text);
 									echo '<div class="row"><div class="col-sm-6">';
 									echo "<a class='display-name' href=\"". Url::toRoute(array('//user/profile', 'uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
