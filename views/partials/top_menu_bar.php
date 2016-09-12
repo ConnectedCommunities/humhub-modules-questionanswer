@@ -24,7 +24,7 @@ use humhub\modules\questionanswer\models\Tag;
                 } else {
                     foreach($tags as $tag) {
                         if(!empty($tag->questionTag->question)) {
-                            echo "<li><a href=\"" . yii\helpers\Url::toRoute(array('//questionanswer/main/tag', 'id' => $tag->id)) . "\" class=\"wallFilter\">" . $tag->tag . "</a></li>";
+                            echo "<li><a href=\"" . yii\helpers\Url::toRoute(array('//questionanswer/main/tag', 'id' => $tag->id)) . "\" class=\"wallFilter\">" . \yii\helpers\Html::encode($tag->tag) . "</a></li>";
                         }
                     }
                 }

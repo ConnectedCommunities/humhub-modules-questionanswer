@@ -25,7 +25,7 @@ use humhub\modules\questionanswer\models\Question;
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="text-center">Posts Tagged: <?php echo $tag->tag; ?></h3>
+            <h3 class="text-center">Posts Tagged: <?php echo Html::encode($tag->tag); ?></h3>
         </div>
         <div class="row">
         <div class="col-md-8">
