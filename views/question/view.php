@@ -83,14 +83,14 @@ use humhub\modules\user\models\User;
                             <h3 class="media-heading">
                                 <?php echo \yii\helpers\Html::a(\yii\helpers\Html::encode($model->post_title), Url::toRoute(array('/questionanswer/question/view', 'id' => $model->id))); ?>
                             </h3>
-                            <?php echo \yii\helpers\Html::decode($model->post_text); ?>
+                            <?php echo \yii\helpers\Html::encode($model->post_text); ?>
                             <?= \humhub\modules\file\widgets\ShowFiles::widget(array('object' => $model)); ?>
                             <div class="row qanda-details-padding">
                             	<div class="col-sm-8">
                                 	<div class="row">
                                     	<div class="col-sm-12">
 									    <?php foreach($model->tags as $tag) { ?>
-                                            <span class="label label-default tag6"><a href="<?php echo Url::toRoute(array('//questionanswer/main/tag', 'id' => $tag->tag_id)); ?>"><?php echo $tag->tag->tag; ?></a></span>
+                                            <span class="label label-default tag6"><a href="<?php echo Url::toRoute(array('//questionanswer/main/tag', 'id' => $tag->tag_id)); ?>"><?php echo Html::encode($tag->tag->tag); ?></a></span>
                                         <?php } ?>
                                     	</div>
                                         <div class="col-sm-12">
