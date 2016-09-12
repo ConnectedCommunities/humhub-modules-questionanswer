@@ -132,7 +132,7 @@ class QuestionController extends Controller
 			if(is_array($array) && !empty(array_filter($array))) {
 				foreach ($array as $key => $value) {
 					foreach ($value as $item) {
-						$string.=  $item . "<br />";
+						$string.=  Html::encode($item) . "<br />";
 					}
 				}
 			}
