@@ -44,7 +44,7 @@ use humhub\modules\user\models\User;
             <div class="panel panel-default qanda-panel qanda-panel-question">
                 <div class="panel-body">
                     <div class="question">
-                        <div class="pull-left">
+                        <div class="answer-pull">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
 
                                 <?php
