@@ -44,9 +44,15 @@ $this->context->loadResources($this);
                 placement: "bottom"
             },
             {
-                element: ".panel-activities",
-                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '<strong>Most recent</strong> activities')); ?>,
-                content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'To keep you up to date, other users\' most recent activities in this space will be displayed here, along with recent chat messages and community knowledge questions.')); ?>,
+                element: "#messages",
+                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'The <strong>Live Chat</strong> conversations apear here')); ?>,
+                content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'Scroll up and down to read what has been happening')); ?>,
+                placement: "left"
+            },
+            {
+                element: ".textoverlay-wrapper",
+                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '')); ?>,
+                content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'Type here to enter the Live Chat conversation. <br>Feeling too much for words? Try an emoticon! <br><br> Don\'t forget to press [send]')); ?>,
                 placement: "left"
             }
         ]);
