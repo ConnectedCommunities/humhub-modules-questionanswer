@@ -51,8 +51,8 @@ $this->context->loadResources($this);
             },
             {
                 element: ".textoverlay-wrapper",
-                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', '')); ?>,
-                content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'Type here to enter the Live Chat conversation. <br>Feeling too much for words? Try an emoticon! <br><br> Don\'t forget to press [send]')); ?>,
+                title: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'Type here to enter the <strong>Live Chat</strong> conversation.')); ?>,
+                content: <?php echo json_encode(Yii::t('TourModule.widgets_views_guide_spaces', 'Feeling too much for words? Try an emoticon! <br><br> Don\'t forget to press <strong>[send]</strong>')); ?>,
                 placement: "left"
             }
         ]);
