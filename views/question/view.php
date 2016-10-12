@@ -9,6 +9,8 @@ use yii\helpers\Url;
 use humhub\modules\questionanswer\models\Answer;
 use humhub\modules\questionanswer\models\QAComment;
 use humhub\modules\user\models\User;
+use humhub\libs\HHtml;
+
 \humhub\modules\questionanswer\Assets::register($this);
 ?>
 
@@ -83,7 +85,7 @@ use humhub\modules\user\models\User;
                             <h3 class="media-heading">
                                 <?php echo \yii\helpers\Html::a(\yii\helpers\Html::encode($model->post_title), Url::toRoute(array('/questionanswer/question/view', 'id' => $model->id))); ?>
                             </h3>
-                            <?php echo \yii\helpers\Html::encode($model->post_text); ?>
+                            <?php echo HHtml::enrichText(\yii\helpers\Html::encode($model->post_text)); ?>
                             <?= \humhub\modules\file\widgets\ShowFiles::widget(array('object' => $model)); ?>
                             <div class="row qanda-details-padding">
                             	<div class="col-sm-8">
@@ -212,7 +214,7 @@ use humhub\modules\user\models\User;
                         </div>
                         <?php $user = User::find()->andWhere(['id' => ($question_answer['created_by'])])->one(); ?>
                         <div class="answer-body break-wrap-text" style="padding-top:5px;overflow: hidden;">
-                            <?php echo Html::encode($question_answer['post_text']); ?>
+                            <?php echo HHtml::enrichText(Html::encode($question_answer['post_text'])); ?>
                             <?php
                             $answerModel = Answer::findOne($question_answer['id']);
                             ?>
@@ -252,10 +254,9 @@ use humhub\modules\user\models\User;
 							echo " Comments</h5>";
 
                             if($comments) {
-
                                 foreach($comments as $comment) {
                                     echo '<div class="break-wrap-text">';
-                                    echo Html::encode($comment->post_text);
+                                    echo HHtml::enrichText(Html::encode($comment->post_text));
 									echo '<div class="row"><div class="col-sm-6">';
 									echo "<a class='display-name' href=\"". Url::toRoute(array('//user/profile', 'uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
                                     echo " &bull; ".date('Y-m-d H:i:s', strtotime($comment->created_at));
