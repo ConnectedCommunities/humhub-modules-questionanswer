@@ -120,7 +120,7 @@ use humhub\libs\HHtml;
                             if($comments) {
                                 foreach($comments as $comment) {
                                     echo '<div class="break-wrap-text">';
-                                    echo Html::encode($comment->post_text);
+                                    echo HHtml::enrichText(Html::encode($comment->post_text));
 									echo '<div class="row"><div class="col-sm-6">';
                                     echo "<a class='display-name' href=\"". Url::toRoute(array('//user/profile', 'uguid' => $comment->user->guid)) . "\">" . $comment->user->displayName . "</a>";
                                     echo " &bull; ".date('Y-m-d H:i:s', strtotime($comment->created_at));
