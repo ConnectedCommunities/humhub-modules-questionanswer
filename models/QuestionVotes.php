@@ -54,7 +54,6 @@ class QuestionVotes extends ActiveRecord
 		return array(
 			array(['post_id', 'created_by'], 'required'),
 			array(['post_id', 'created_by', 'updated_by'], 'integer'),
-			array(['vote_on', 'vote_type'], 'string', 'max'=>255),
 			array(['created_at', 'updated_at'], 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

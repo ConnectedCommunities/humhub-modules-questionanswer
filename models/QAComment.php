@@ -106,7 +106,6 @@ class QAComment extends ActiveRecord implements ContentTitlePreview
 		return array(
 			array(['post_text', 'post_type', 'created_by'], 'required'),
 			array(['question_id', 'parent_id', 'created_by', 'updated_by'], 'integer'),
-			array(['post_title', 'post_text'], 'string', 'max'=>255),
 			array('post_type', 'string', 'max'=>8),
 			array(['created_at', 'updated_at'], 'safe'),
 			// The following rule is used by search().

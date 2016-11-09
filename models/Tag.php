@@ -51,7 +51,6 @@ class Tag extends ActiveRecord implements Searchable
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tag', 'string', 'max'=>255),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

@@ -68,7 +68,6 @@ class Question extends ActiveRecord implements Searchable, ContentTitlePreview
 			array('post_title', 'unique'),
 			array(['post_text', 'post_title', 'post_type'], 'required'),
 			array(['question_id', 'created_by', 'updated_by'], 'integer'),
-			array(['post_title', 'post_type'], 'string', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, question_id, post_title, post_text, post_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
