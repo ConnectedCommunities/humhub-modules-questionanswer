@@ -22,7 +22,7 @@ use yii\helpers\Url;
                 <span class="content"><?php echo Html::encode(Helpers::truncateText($question->post_text, 150)); ?></span>
                 <br />
                 <?php foreach($question->tags as $tag) { ?>
-                    <span class="label label-default"><?php echo $tag->tag->tag; ?></span>
+                    <span class="label label-default"><?php echo Html::encode($tag->tag->tag); ?></span>
                 <?php } ?>
             </div>
         </div>
