@@ -39,17 +39,18 @@ use humhub\modules\questionanswer\models\Question;
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;margin-top:-18px">
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = ""; $vote = ""; $vote_type = "up";
-
+                                $model = (object) $question;
                                 // Change the button class to 'active' if the user has voted
-                                $vote = QuestionVotes::find()->one();
+                                $vote = QuestionVotes::find()->andWhere(['post_id' => $model->id, 'created_by' => \Yii::$app->user->id])->one(); // post($data->id)->user(Yii::app()->user->id)
                                 if($vote) {
                                     if($vote->vote_type == "up") {
                                         $upBtnClass = "active btn-info";
                                         $downBtnClass = "";
-                                        $vote_type = "down";
+                                    }
+
+                                    if($vote->created_by == Yii::$app->user->id && $vote->vote_type == "up") {
+                                        $vote_type = 'down';
                                     } else {
-                                        $downBtnClass = "active btn-info";
-                                        $upBtnClass = "";
                                         $vote_type = "up";
                                     }
                                 }
