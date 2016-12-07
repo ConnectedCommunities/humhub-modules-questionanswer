@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8a99e29b-5ef5-4a26-a2c2-89443d5f3629" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Events.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Module.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/config.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/controllers/ReindexController.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/controllers/SettingController.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/forms/SettingsForm.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/helpers/Url.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/models/AnswerSearch.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/models/Category.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/models/CommentSearch.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/models/QuestionSearch.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/answer/_adminGrid.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/category/index.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/comment/_adminGrid.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/partials/aggregated_group.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/question/_adminGrid.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/question/_create.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/question/aggregated_index.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/question/tags.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/views/setting/index.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/widgets/DeleteButtonWidget.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/widgets/TagWallEntryWidget.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/widgets/views/deleteButton.php" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LICENSE" afterPath="$PROJECT_DIR$/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/AnswerController.php" afterPath="$PROJECT_DIR$/controllers/AnswerController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/CommentController.php" afterPath="$PROJECT_DIR$/controllers/CommentController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/QuestionController.php" afterPath="$PROJECT_DIR$/controllers/QuestionController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/VoteController.php" afterPath="$PROJECT_DIR$/controllers/VoteController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/migrations/m150617_104132_initial.php" afterPath="$PROJECT_DIR$/migrations/m150617_104132_initial.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/Answer.php" afterPath="$PROJECT_DIR$/models/Answer.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/Comment.php" afterPath="$PROJECT_DIR$/models/Comment.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/Question.php" afterPath="$PROJECT_DIR$/models/Question.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/QuestionTag.php" afterPath="$PROJECT_DIR$/models/QuestionTag.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/QuestionVotes.php" afterPath="$PROJECT_DIR$/models/QuestionVotes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/ReportContentTrait.php" afterPath="$PROJECT_DIR$/models/ReportContentTrait.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/Tag.php" afterPath="$PROJECT_DIR$/models/Tag.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/module.json" afterPath="$PROJECT_DIR$/module.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/answer/_form.php" afterPath="$PROJECT_DIR$/views/answer/_form.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/answer/_search.php" afterPath="$PROJECT_DIR$/views/answer/_search.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/answer/_view.php" afterPath="$PROJECT_DIR$/views/answer/_view.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/answer/admin.php" afterPath="$PROJECT_DIR$/views/answer/admin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/answer/create.php" afterPath="$PROJECT_DIR$/views/answer/create.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/answer/index.php" afterPath="$PROJECT_DIR$/views/answer/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/answer/update.php" afterPath="$PROJECT_DIR$/views/answer/update.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/answer/view.php" afterPath="$PROJECT_DIR$/views/answer/view.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/comment/_form.php" afterPath="$PROJECT_DIR$/views/comment/_form.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/comment/_search.php" afterPath="$PROJECT_DIR$/views/comment/_search.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/comment/_view.php" afterPath="$PROJECT_DIR$/views/comment/_view.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/comment/admin.php" afterPath="$PROJECT_DIR$/views/comment/admin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/comment/create.php" afterPath="$PROJECT_DIR$/views/comment/create.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/comment/index.php" afterPath="$PROJECT_DIR$/views/comment/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/comment/update.php" afterPath="$PROJECT_DIR$/views/comment/update.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/comment/view.php" afterPath="$PROJECT_DIR$/views/comment/view.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/admin_menu_links.php" afterPath="$PROJECT_DIR$/views/partials/admin_menu_links.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/partials/top_menu_bar.php" afterPath="$PROJECT_DIR$/views/partials/top_menu_bar.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/question/_form.php" afterPath="$PROJECT_DIR$/views/question/_form.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/question/_search.php" afterPath="$PROJECT_DIR$/views/question/_search.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/question/_view.php" afterPath="$PROJECT_DIR$/views/question/_view.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/question/admin.php" afterPath="$PROJECT_DIR$/views/question/admin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/question/create.php" afterPath="$PROJECT_DIR$/views/question/create.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/question/index.php" afterPath="$PROJECT_DIR$/views/question/index.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/question/update.php" afterPath="$PROJECT_DIR$/views/question/update.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/question/view.php" afterPath="$PROJECT_DIR$/views/question/view.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/vote/_form.php" afterPath="$PROJECT_DIR$/views/vote/_form.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/vote/_search.php" afterPath="$PROJECT_DIR$/views/vote/_search.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/vote/_view.php" afterPath="$PROJECT_DIR$/views/vote/_view.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/vote/admin.php" afterPath="$PROJECT_DIR$/views/vote/admin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/vote/create.php" afterPath="$PROJECT_DIR$/views/vote/create.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/vote/update.php" afterPath="$PROJECT_DIR$/views/vote/update.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/AnswerFormWidget.php" afterPath="$PROJECT_DIR$/widgets/AnswerFormWidget.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/AnswerWallEntryWidget.php" afterPath="$PROJECT_DIR$/widgets/AnswerWallEntryWidget.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/BestAnswerWidget.php" afterPath="$PROJECT_DIR$/widgets/BestAnswerWidget.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/CommentFormWidget.php" afterPath="$PROJECT_DIR$/widgets/CommentFormWidget.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/ProfileWidget.php" afterPath="$PROJECT_DIR$/widgets/ProfileWidget.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/QAReportContentWidget.php" afterPath="$PROJECT_DIR$/widgets/QAReportContentWidget.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/QuestionWallEntryWidget.php" afterPath="$PROJECT_DIR$/widgets/QuestionWallEntryWidget.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/VoteButtonWidget.php" afterPath="$PROJECT_DIR$/widgets/VoteButtonWidget.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/answerForm.php" afterPath="$PROJECT_DIR$/widgets/views/answerForm.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/answerWallEntry.php" afterPath="$PROJECT_DIR$/widgets/views/answerWallEntry.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/bestAnswer.php" afterPath="$PROJECT_DIR$/widgets/views/bestAnswer.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/commentForm.php" afterPath="$PROJECT_DIR$/widgets/views/commentForm.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/profile.php" afterPath="$PROJECT_DIR$/widgets/views/profile.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/reportSpamLink.php" afterPath="$PROJECT_DIR$/widgets/views/reportSpamLink.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/searchResult.php" afterPath="$PROJECT_DIR$/widgets/views/searchResult.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/searchResult_answer.php" afterPath="$PROJECT_DIR$/widgets/views/searchResult_answer.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/searchResult_tag.php" afterPath="$PROJECT_DIR$/widgets/views/searchResult_tag.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/widgets/views/voteButton.php" afterPath="$PROJECT_DIR$/widgets/views/voteButton.php" />
+    </list>
+    <ignored path="humhub-modules-questionanswer.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="humhub-modules-questionanswer" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NamedScopeManager">
+    <scope name="QUT CC" pattern="file[humhub-modules-questionanswer]:*/" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1241" />
+    <option name="height" value="709" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="humhub-modules-questionanswer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="copyright" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8a99e29b-5ef5-4a26-a2c2-89443d5f3629" name="Default" comment="" />
+      <created>1481097352931</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1481097352931</updated>
+      <workItem from="1481097354205" duration="45000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="45000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1241" height="709" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24937448" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="Copyright.UI">
+        <settings>
+          <last-edited>QUT CC</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <last-edited>QUT CC</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+          <order>
+            <scope name="QUT CC" />
+          </order>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
