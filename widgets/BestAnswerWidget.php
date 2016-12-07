@@ -1,8 +1,7 @@
 <?php
-
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,13 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+use humhub\models\Setting;
+
 /**
- * VoteWidget. 
- * Displays the vote 
- * 
+ * BestAnswerWidget.
+ *
  * @package application.modules.questionanswer.widgets
+ * @since 0.5
+ * @author Ben
  */
-class BestAnswerWidget extends HWidget {
+class BestAnswerWidget extends \yii\base\Widget
+{
 
     public $post_id;
     public $author;
@@ -36,7 +43,7 @@ class BestAnswerWidget extends HWidget {
      */
     public function run() {
 
-        $this->render('bestAnswer', array(
+        return $this->render('bestAnswer', array(
             'post_id' => $this->post_id, 
             'author' => $this->author, 
             'model' => $this->model,

@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,46 +18,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\controllers;
+
+use Yii;
+use humhub\components\Controller;
+use humhub\modules\questionanswer\models\QuestionVotes;
+use humhub\modules\questionanswer\models\Answer;
+use yii\helpers\Url;
+
 class VoteController extends Controller
 {
 
-	/**
-	 * @return array action filters
-	 */
-	public function filters()
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'acl' => [
+                'class' => \humhub\components\behaviors\AccessControl::className(),
+                'guestAllowedActions' => ['index', 'view']
+            ]
+        ];
+    }
 
 	/**
 	 * Creates a new model.
@@ -66,9 +49,6 @@ class VoteController extends Controller
 	public function actionCreate()
 	{
 		$model=new QuestionVotes;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['QuestionVotes']))
 		{
@@ -83,29 +63,24 @@ class VoteController extends Controller
 				break;
 
 				case "answer":
-					$obj = Answer::model()->findByPk($model->post_id);
+					$obj = Answer::findOne($model->post_id);
 					$question_id = $obj->question_id;
 				break;
 
 			}
 
-			
-			if(QuestionVotes::model()->castVote($model, $question_id)) {
-
-				if($_POST['QuestionVotes']['should_open_question'] == true) {
+			if(QuestionVotes::castVote($model, $question_id)) {
+				// TODO: Change answers to have a should_open_question value of 1, temp fix below.
+				if($_POST['QuestionVotes']['should_open_question'] || $model->vote_on == "answer") {
 					$this->redirect(array('//questionanswer/question/view','id'=>$question_id));
 				} else {
-					$this->redirect(array('//questionanswer/question/index'));
+					$this->redirect(Url::toRoute(['question/index']));
 				}
 
 			}
 
-
 		}
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
 	}
 
 	/**
@@ -171,7 +146,7 @@ class VoteController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=QuestionVotes::model()->findByPk($id);
+		$model=QuestionVotes::findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

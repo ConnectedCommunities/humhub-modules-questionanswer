@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,14 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+
 /**
  * CommentFormWidget. 
  * Displays the comment form
  * 
  * @package application.modules.questionanswer.widgets
+ * @since 0.5
+ * @author Luke
  */
-class CommentFormWidget extends HWidget {
-
+class CommentFormWidget extends \yii\base\Widget
+{
     /**
      * The comment model
      *
@@ -55,7 +62,7 @@ class CommentFormWidget extends HWidget {
      */
     public function run() {
 
-        $this->render('commentForm', array(
+        return $this->render('commentForm', array(
             'model' => $this->model,
             'question_id' => $this->question_id,
             'parent_id' => $this->parent_id

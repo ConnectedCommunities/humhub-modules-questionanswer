@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,6 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\models;
+
+use humhub\modules\user\models\User;
+use humhub\modules\karma\models\Karma;
+use Yii;
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
+use humhub\components\ActiveRecord;
+
 /**
  * This is the model class for table "question_tag".
  *
@@ -26,12 +35,12 @@
  * @property integer $question_id
  * @property integer $tag_id
  */
-class QuestionTag extends HActiveRecord
+class QuestionTag extends ActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
-	public function tableName()
+	public static function tableName()
 	{
 		return 'question_tag';
 	}
@@ -41,15 +50,10 @@ class QuestionTag extends HActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('question_id, tag_id', 'required'),
-			array('question_id, tag_id', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, question_id, tag_id', 'safe', 'on'=>'search'),
-		);
+        return array(
+            array(['question_id', 'tag_id'], 'required'),
+            array(['question_id', 'tag_id'], 'integer'),
+        );
 	}
 
 	/**
@@ -64,6 +68,16 @@ class QuestionTag extends HActiveRecord
 			'tag' => array(static::BELONGS_TO, 'Tag', 'tag_id'),
 		);
 	}
+
+    public function getQuestion()
+    {
+        return $this->hasOne('Question', ['question_id']);
+    }
+
+    public function getTag()
+    {
+        return $this->hasOne(Tag::class, ['id' => 'tag_id']);
+    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)

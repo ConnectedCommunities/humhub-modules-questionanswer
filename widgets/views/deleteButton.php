@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,17 +18,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class QuestionAnswerModule extends HWebModule{
- 
-    /**
-     * Inits the Module
-     */
-    public function init()
-    {
+echo humhub\widgets\ModalConfirm::widget(array(
+    'uniqueID' => 'modal_postdelete_' . $id,
+    'linkOutput' => 'a',
+    'title' => Yii::t('ContentModule.widgets_views_deleteLink', $title),
+    'message' => Yii::t('ContentModule.widgets_views_deleteLink', $message),
+    'buttonTrue' => Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
+    'buttonFalse' => Yii::t('ContentModule.widgets_views_deleteLink', 'Cancel'),
+    'linkContent' => '<i class="fa fa-trash-o"></i> ' . Yii::t('ContentModule.widgets_views_deleteLink', 'Delete'),
+    'linkHref' => $deleteRoute,
+    'confirmJS' => 'function(json) { $(".wall_"+json.uniqueId).remove(); }'
+));
 
-        $this->setImport(array(
-            'questionanswer.models.*',
-        ));
-    }
-    
-}
+?>

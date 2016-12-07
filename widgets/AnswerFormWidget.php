@@ -1,8 +1,7 @@
 <?php
-
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,14 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * ProfileWidget.
- * Displays the user profile
- *
- * @package application.modules.questionanswer.widgets
- */
-class AnswerFormWidget extends HWidget {
+namespace humhub\modules\questionanswer\widgets;
 
+use Yii;
+use humhub\modules\user\models\User;
+use humhub\models\Setting;
+
+/**
+ * ProfileWidget. 
+ * Displays the user profile
+ * 
+ * @package application.modules.questionanswer.widgets
+ * @since 0.5
+ * @author Luke
+ */
+class AnswerFormWidget extends \yii\base\Widget
+{
     public $question;
     public $answer;
 
@@ -33,8 +40,7 @@ class AnswerFormWidget extends HWidget {
      * Executes the widget.
      */
     public function run() {
-
-        $this->render('answerForm', array(
+        return $this->render('answerForm', array(
             'question' => $this->question,
             'answer' => $this->answer,
         ));

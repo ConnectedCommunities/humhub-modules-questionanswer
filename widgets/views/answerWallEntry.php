@@ -1,7 +1,7 @@
 <?php
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,6 +15,18 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * This view represents a wall entry of a polls.
+ * Used by PollWallEntryWidget to show Poll inside a wall.
+ *
+ * @property User $user the user which created this poll
+ * @property Poll $poll the current poll
+ * @property Space $space the current space
+ *
+ * @package humhub.modules.polls.widgets.views
+ * @since 0.5
  */
 ?>
 <div class="panel panel-default">

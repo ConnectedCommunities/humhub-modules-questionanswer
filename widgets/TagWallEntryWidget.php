@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,31 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+use humhub\models\Setting;
+
 /**
- * UserSearchResultWidget displays a user inside the search results.
- * The widget will be called by the User Model getSearchOutput method.
+ * QuestionWallEntryWidget is used to display a question inside the stream.
  *
- * @package application.modules.questionanswer.widgets
+ * This Widget will used by the Question Model in Method getWallOut().
+ *
+ * @package humhub.modules.questionanswer.widgets
+ * @since 0.5
+ * @author Ben
  */
-class TagSearchResultWidget extends HWidget {
-
-    /**
-     * The tag object
-     *
-     * @var Tag
-     */
-    public $tag;
-
-    /**
-     * Executes the widget.
-     */
+class TagWallEntryWidget extends \humhub\modules\content\widgets\WallEntry
+{
     public function run() {
-
-        $this->render('searchResult_tag', array(
-            'tag' => $this->tag,
+        return $this->render('searchResult_tag', array(
+            'tag' => $this->contentObject,
         ));
     }
 
 }
-
-?>

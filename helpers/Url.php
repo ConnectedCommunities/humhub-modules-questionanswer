@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,31 +18,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * UserSearchResultWidget displays a user inside the search results.
- * The widget will be called by the User Model getSearchOutput method.
- *
- * @package application.modules.questionanswer.widgets
- */
-class QuestionSearchResultWidget extends HWidget {
+namespace humhub\modules\questionanswer\helpers;
+
+use Yii;
+use yii\helpers\BaseUrl;
+
+class Url extends BaseUrl
+{
+
 
     /**
-     * The user object
+     * Create a URL that correctly carries the content container
+     * (or lack of) with it.
      *
-     * @var User
+     * @param null $route
+     * @param array $params
+     * @param bool $scheme
+     * @return string
      */
-    public $question;
+    public static function createUrl($route = null, $params = array(), $scheme = false)
+    {
 
-    /**
-     * Executes the widget.
-     */
-    public function run() {
+        array_unshift($params, $route);
 
-        $this->render('searchResult', array(
-            'question' => $this->question,
-        ));
+        if (!isset($params['sguid']) && Yii::$app->request->get('sguid')) {
+            $params['sguid'] = Yii::$app->request->get('sguid');
+        }
+
+        return parent::toRoute($params, $scheme);
+
     }
 
 }
-
-?>

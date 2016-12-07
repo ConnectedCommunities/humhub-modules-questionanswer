@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,6 +17,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+namespace humhub\modules\questionanswer\models;
+
+use humhub\components\ActiveRecord;
+use humhub\modules\content\components\ContentContainerActiveRecord;
+use humhub\modules\questionanswer\widgets\QuestionWallEntryWidget;
+use humhub\modules\user\models\User;
+use Yii;
+use humhub\modules\content\components\ContentActiveRecord;
+use humhub\modules\search\interfaces\Searchable;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "question".
@@ -33,47 +44,42 @@
  * @property integer $updated_by
  */
 //class Question extends HActiveRecordContentContainer implements ISearchable
-class Question extends HActiveRecordContent implements ISearchable
+class Question extends ContentActiveRecord implements Searchable
 {
 
 	use ReportContentTrait;
 
+    /**
+     * @inheritdoc
+     */
 	public $autoAddToWall = false;
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Question the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    /**
+     * @inheritdoc
+     */
+	public $wallEntryClass = "humhub\modules\questionanswer\widgets\QuestionWallEntryWidget";
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
+    /**
+     * @inheritdoc
+     */
+	public static function tableName()
 	{
 		return 'question';
 	}
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
+    /**
+     * @inheritdoc
+     */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('post_text, post_type, created_by, updated_by', 'required'),
-			array('question_id, created_by, updated_by', 'numerical', 'integerOnly'=>true),
-			array('post_title, post_type', 'length', 'max'=>255),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id, question_id, post_title, post_text, post_type, created_at, created_by, updated_at, updated_by', 'safe', 'on'=>'search'),
-		);
+
+        return [
+            [['post_title', 'post_text', 'post_type'], 'required'],
+			[['post_type'], 'string', 'max' => 255],
+            [['created_at', 'updated_at'], 'safe'],
+            [['created_by', 'updated_by'], 'integer'],
+        ];
+
 	}
 
 	/**
@@ -108,73 +114,19 @@ class Question extends HActiveRecordContent implements ISearchable
 		);
 	}
 
-	/**
-	 * After Save Addons
-	 *
-	 * @return type
-	 */
-	public function afterSave()
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+
+    public function getAnswers()
+    {
+//        return $this->hasMany(Answer)
+    }
+
+	public function getTags()
 	{
-
-		parent::afterSave();
-
-		if ($this->isNewRecord) {
-			$activity = Activity::CreateForContent($this);
-			$activity->type = "QuestionCreated";
-			$activity->module = "questionanswer";
-			$activity->save();
-			$activity->fire();
-		}
-
-		HSearch::getInstance()->addModel($this);
-
-		return true;
-	}
-
-
-
-
-	/**
-	 * Returns the Wall Output
-	 */
-	public function getWallOut()
-	{
-		return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionWallEntryWidget', array('question' => $this), true);
-//		return "Hello World";
-	}
-
-	/**
-	 * Returns an array of informations used by search subsystem.
-	 * Function is defined in interface ISearchable
-	 *
-	 * @return Array
-	 */
-	public function getSearchAttributes()
-	{
-
-		// THIS WORKS PERFECTLY IF YOU ADD THE QUESTION MODEL TO THE QUERY
-		// See: Line 84, /protected/controllers/SearchController.php
-
-
-		$attributes = array(
-
-			// Assignments
-			'belongsToType' => 'Question',
-			'belongsToId' => $this->id,
-			'belongsToGuid' => $this->user->guid,
-
-			// Information about the record
-			'model' => 'Question',
-			'pk' => $this->id,
-			'title' => $this->post_title,
-			'url' => $this->getUrl(array('id' => $this->id)),
-
-			// Extra indexed fields
-			'post_text' => $this->post_text
-		);
-
-
-		return $attributes;
+		return $this->hasMany(QuestionTag::class, ['question_id' => 'id']);
 	}
 
 
@@ -195,47 +147,11 @@ class Question extends HActiveRecordContent implements ISearchable
 	 * Set default scope so that
 	 * only questions are retrieved
 	 */
-	public function defaultScope()
+	public static function find()
 	{
-		return array(
-			'alias' => $this->tableName(),
-			'condition'=>"question.post_type='question'",
-		);
+		return parent::find()->andWhere(['question.post_type' => 'question']);
 	}
 
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('id',$this->id);
-		$criteria->compare('question_id',$this->question_id);
-		$criteria->compare('post_title',$this->post_title,true);
-		$criteria->compare('post_text',$this->post_text,true);
-		$criteria->compare('post_type',$this->post_type,true);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('created_by',$this->created_by);
-		$criteria->compare('updated_at',$this->updated_at,true);
-		$criteria->compare('updated_by',$this->updated_by);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
 
 
 	/**
@@ -260,7 +176,8 @@ class Question extends HActiveRecordContent implements ISearchable
 	 */
 	public function getUrl($parameters = array())
 	{
-		return Yii::app()->createUrl('//questionanswer/question/view', $parameters);
+		array_unshift($parameters, "/questionanswer/question/view");
+		return Url::toRoute($parameters);
 	}
 
 
@@ -301,7 +218,7 @@ class Question extends HActiveRecordContent implements ISearchable
 				GROUP BY q.id
 				ORDER BY score DESC, vote_count DESC";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('question_id', $question_id)->queryRow();
+		return Yii::$app->db->createCommand($sql)->bindValue('question_id', $question_id)->queryOne();
 
 
 	}
@@ -310,22 +227,31 @@ class Question extends HActiveRecordContent implements ISearchable
 	 * Returns a list of questions with stats for a tag
 	 * @parma int $tag_id
 	 */
-	public static function tag_overview($tag_id)
+	public static function tag_overview($tag_id, $contentContainer = null)
 	{
+
+		// Apply content filter to results
+		if($contentContainer) {
+			$criteria = "AND content.space_id = " . $contentContainer->id;
+		} else {
+			$criteria = "";
+		}
 
 		// $list= Yii::app()->db->createCommand('select * from post where category=:category')->bindValue('category',$category)->queryAll();
 		$sql = "SELECT q.id, q.post_title, q.post_text, q.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes
-				FROM question_tag qt, question q
+				FROM content, question_tag qt, question q
 				LEFT JOIN question_votes up ON (q.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
 				LEFT JOIN question_votes down ON (q.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
 				LEFT JOIN question answers ON (q.id = answers.question_id AND answers.post_type = 'answer')
 				WHERE q.post_type = 'question'
                 AND qt.question_id = q.id 
                 AND qt.tag_id = :tag_id
+                AND content.object_id = q.id
+                AND content.object_model LIKE 'humhub\\\\\\\\modules\\\\\\\\questionanswer\\\\\\\\models\\\\\\\\Question' ". $criteria ."
 				GROUP BY q.id
 				ORDER BY score DESC, vote_count DESC, q.created_at DESC";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('tag_id', $tag_id)->queryAll();
+		return Yii::$app->db->createCommand($sql)->bindValue('tag_id', $tag_id)->queryAll();
 
 	}
 
@@ -344,7 +270,7 @@ class Question extends HActiveRecordContent implements ISearchable
 				ORDER BY COUNT(*) DESC
 				LIMIT 0, 5";
 
-		return Yii::app()->db->createCommand($sql)->bindValue('question_id', $question_id)->queryAll();
+		return Yii::$app->db->createCommand($sql)->bindValue('question_id', $question_id)->queryAll();
 
 	}
 
@@ -384,12 +310,40 @@ class Question extends HActiveRecordContent implements ISearchable
 
 	}
 
+
 	/**
-	 * Returns the Search Result Output
+	 * Returns an array of informations used by search subsystem.
+	 * Function is defined in interface ISearchable
+	 *
+	 * @return Array
 	 */
-	public function getSearchResult()
+	public function getSearchAttributes()
 	{
-		return Yii::app()->getController()->widget('application.modules.questionanswer.widgets.QuestionSearchResultWidget', array('question' => $this), true);
+		// THIS WORKS PERFECTLY IF YOU ADD THE QUESTION MODEL TO THE QUERY
+		// See: Line 84, /protected/controllers/SearchController.php
+
+		$attributes = [
+			'title' => $this->post_title,
+			'text' => $this->post_text,
+		];
+
+		$this->trigger(self::EVENT_SEARCH_ADD, new \humhub\modules\search\events\SearchAddEvent($attributes));
+
+		return $attributes;
+	}
+
+	public function getContentName()
+	{
+		return "Question";
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+
+	public function getContentDescription()
+	{
+		return $this->post_title;
 	}
 
 	public function canWrite() {

@@ -1,8 +1,7 @@
 <?php
-
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,14 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+
+
 /**
  * ProfileWidget. 
  * Displays the user profile
  * 
  * @package application.modules.questionanswer.widgets
+ * @since 0.5
+ * @author Luke
  */
-class ProfileWidget extends HWidget {
-
+class ProfileWidget extends \yii\base\Widget
+{
     /**
      * The user object
      *
@@ -45,7 +52,7 @@ class ProfileWidget extends HWidget {
      */
     public function run() {
 
-        $this->render('profile', array(
+        return $this->render('profile', array(
             'user' => $this->user,
             'timestamp' => $this->timestamp
         ));

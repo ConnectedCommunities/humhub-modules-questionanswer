@@ -1,7 +1,7 @@
 <?php
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-?>
-<?php
+
 /* @var $this QuestionController */
 /* @var $data Question */
+use humhub\modules\questionanswer\models\Question;
+use humhub\modules\questionanswer\models\QuestionVotes;
+use humhub\modules\questionanswer\helpers\Url;
 ?>
 <div class="media" >
     <div class="pull-left">
@@ -28,7 +30,7 @@
             $upBtnClass = ""; $downBtnClass = ""; $vote = "";
 
             // Change the button class to 'active' if the user has voted
-            $vote = QuestionVotes::model()->post($data->id)->user(Yii::app()->user->id)->find();
+            $vote = QuestionVotes::findOne(['post_id' => $data->id, 'created_by' => Yii::$app->user->id]);
             if($vote) {
                 if($vote->vote_type == "up") {
                     $upBtnClass = "active btn-info";
@@ -38,9 +40,9 @@
                     $upBtnClass = "";
                 }
             }
-            
-            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'class' => $upBtnClass, 'should_open_question' => 0)); 
-            $this->widget('application.modules.questionanswer.widgets.VoteButtonWidget', array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'class' => $downBtnClass, 'should_open_question' => 0)); 
+
+            echo \humhub\modules\questionanswer\widgets\VoteButtonWidget::widget(array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'up', 'btn_class' => $upBtnClass, 'should_open_question' => 0));
+            echo \humhub\modules\questionanswer\widgets\VoteButtonWidget::widget(array('post_id' => $data->id, 'model' => new QuestionVotes, 'vote_on' => 'question', 'vote_type' => 'down', 'btn_class' => $downBtnClass, 'should_open_question' => 0));
 
             ?>
         </div>
@@ -48,7 +50,7 @@
             <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">
         </a>-->
         <?php 
-        $stats = Question::model()->stats($data->id); 
+        $stats = Question::stats($data->id);
         ?>
 
         <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
@@ -64,10 +66,16 @@
 
     <div class="media-body" style="padding-top:5px; padding-left:10px;">
         <h4 class="media-heading">
-        	<?php echo CHtml::link(CHtml::encode($data->post_title), array('view', 'id'=>$data->id)); ?>
+            <?php
+            if($data->post_title != "") {
+                echo \yii\helpers\Html::a(\yii\helpers\Html::encode($data->post_title), Url::createUrl('view', ['id'=>$data->id]));
+            } else {
+                echo \yii\helpers\Html::a("...", Url::createUrl('view', ['id'=>$data->id]));
+            }
+            ?>
         </h4>
 
-        <h5><?php echo CHtml::encode(Helpers::truncateText($data->post_text, 200)); ?></h5>
+        <h5><?php echo \yii\helpers\Html::encode(\humhub\libs\Helpers::truncateText($data->post_text, 200)); ?></h5>
     </div>
 </div>
 

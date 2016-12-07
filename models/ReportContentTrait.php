@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,6 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\models;
+
+use humhub\modules\user\models\User;
+use Yii;
+
 trait ReportContentTrait
 {
 
@@ -26,7 +31,7 @@ trait ReportContentTrait
      */
     public function reportModuleEnabled()
     {
-        return isset(Yii::app()->modules['reportcontent']);
+        return Yii::$app->hasModule('reportcontent');
     }
     /**
      * Checks if the given or current user can report post with given id.
@@ -37,13 +42,14 @@ trait ReportContentTrait
     public function canReportPost($userId = "")
     {
 
-        if(!$this->reportModuleEnabled())
+
+        if(!Yii::$app->hasModule('reportcontent'))
             return false;
 
         if ($userId == "")
-            $userId = Yii::app()->user->id;
+            $userId = Yii::$app->getUser()->id;
 
-        $user = User::model()->findByPk($userId);
+        $user = User::findOne(['id' => $userId]);
 
         if ($user->super_admin)
             return false;
@@ -51,10 +57,11 @@ trait ReportContentTrait
         if ($this->created_by == $user->id)
             return false;
 
-        if (Yii::app()->user->isGuest)
+
+        if (Yii::$app->getUser()->isGuest)
             return false;
 
-        if (User::model()->exists('id = ' . $this->created_by . ' and super_admin = 1'))
+        if (User::findOne(['id' => $this->created_by, 'super_admin' => 1]))
             return false;
 
         return true;

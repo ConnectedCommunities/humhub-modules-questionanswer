@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class m150617_104132_initial extends EDbMigration
+use humhub\components\Migration;
+
+class m150617_104132_initial extends Migration
 {
 	public function up()
 	{
@@ -64,7 +66,7 @@ class m150617_104132_initial extends EDbMigration
 	{
         $this->dropTable('question');
         $this->dropTable('question_votes');
-        $this->dropTable('tags');
+        $this->dropTable('tag');
         $this->dropTable('question_tags');
 	}
 

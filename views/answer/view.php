@@ -1,7 +1,7 @@
 <?php
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,28 +16,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-?>
-<?php
+
+
 /* @var $this AnswerController */
 /* @var $model Answer */
-
-$this->breadcrumbs=array(
-	'Answers'=>array('index'),
-	$model->id,
-);
-
-$this->menu=array(
-	array('label'=>'List Answer', 'url'=>array('index')),
-	array('label'=>'Create Answer', 'url'=>array('create')),
-	array('label'=>'Update Answer', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete Answer', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Answer', 'url'=>array('admin')),
-);
 ?>
+<div class="container">
+	<div class="row">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h1>View Answer #<?php echo $model->id; ?></h1>
+			</div>
+		</div>
+	</div>
+</div>
 
-<h1>View Answer #<?php echo $model->id; ?></h1>
-
-<?php $this->widget('zii.widgets.CDetailView', array(
+<?php /* $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
@@ -51,4 +45,4 @@ $this->menu=array(
 		'updated_at',
 		'updated_by',
 	),
-)); ?>
+)); */?>

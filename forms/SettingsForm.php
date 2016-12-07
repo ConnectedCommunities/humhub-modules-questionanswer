@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,34 +18,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\forms;
+
+use Yii;
+
 /**
- * UserSearchResultWidget displays a user inside the search results.
- * The widget will be called by the User Model getSearchOutput method.
- *
- * @package application.modules.questionanswer.widgets
+ * @package humhub.modules_core.admin.forms
+ * @since 0.5
  */
-class AnswerSearchResultWidget extends HWidget {
+class SettingsForm extends \yii\base\Model {
+
+    public $useGlobalContentContainer;
 
     /**
-     * The user object
-     *
-     * @var User
+     * Declares the validation rules.
      */
-    public $answer;
-
-    public $question;
+    public function rules() {
+        return array(
+            array('useGlobalContentContainer', 'safe'),
+        );
+    }
 
     /**
-     * Executes the widget.
+     * Declares customized attribute labels.
+     * If not declared here, an attribute would have a label that is
+     * the same as its name with the first letter in upper case.
      */
-    public function run() {
-
-        $this->render('searchResult_answer', array(
-            'question' => $this->question,
-            'answer' => $this->answer,
-        ));
+    public function attributeLabels() {
+        return array(
+            'useGlobalContentContainer' => 'Choose Q&A Mode',
+        );
     }
 
 }
-
-?>

@@ -2,7 +2,7 @@
 
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,6 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\widgets;
+
+use humhub\modules\reportcontent\models\ReportReasonForm;
+use Yii;
+
 /**
  * Taps into ReportContent module
  *
@@ -25,7 +30,8 @@
  * This widget allows to report a post.
  * @package humhub.modules.reportcontent.widgets
  */
-class QAReportContentWidget extends HWidget
+
+class QAReportContentWidget extends \yii\base\Widget
 {
 
     /**
@@ -41,7 +47,7 @@ class QAReportContentWidget extends HWidget
     public function run()
     {
         if ($this->content->canReportPost()) {
-            $this->render('reportSpamLink', array(
+            return $this->render('reportSpamLink', array(
                 'object' => $this->content,
                 'model' => new ReportReasonForm()
             ));

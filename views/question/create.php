@@ -1,7 +1,7 @@
 <?php
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -16,82 +16,58 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-?>
-<?php
-/* @var $this QuestionController */
-/* @var $model Question */
-/* @var $form CActiveForm */
-?>
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'question-new_question-form',
-	// Please note: When you enable ajax validation, make sure the corresponding
-	// controller action is handling ajax validation correctly.
-	// See class documentation of CActiveForm for details on this,
-	// you need to use the performAjaxValidation()-method described there.
-	'enableAjaxValidation'=>false,
-)); ?>
 
-<div class="container">
+use humhub\modules\space\models\Space;
+
+
+$container = $this->context->contentContainer;
+$useGlobalContentContainer = $this->context->useGlobalContentContainer;
+$isSpace = is_a($container, Space::className());
+
+?>
+<?php $form = \yii\widgets\ActiveForm::begin(); ?>
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                 	<strong>Ask</strong> a new question
 	            </div>
-	            <div class="panel-body">
-	            	<?php echo $form->errorSummary($model); ?>
-            		<?php echo $form->error($model,'post_title'); ?>
-            		<?php echo $form->textArea($model,'post_title',array('id'=>'contentForm_question', 'class' => 'form-control autosize contentForm', 'rows' => '1', "placeholder" => "Ask something...")); ?>
 
-                    <div class="contentForm_options">
-                    	<?php echo $form->error($model,'post_text'); ?>
-                    	<?php echo $form->textArea($model,'post_text',array('id' => "contentForm_answersText", 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "placeholder" => "Question details...")); ?>
-                    <br />
-                        <?php echo CHtml::textField('Tags', null, array('class' => 'form-control autosize contentForm', "placeholder" => "Tags... Specify at least one tag for your question")); ?>
-                    </div>
+                <?php if($isSpace) { ?>
 
-                    <div class="pull-left" style="margin-top:5px;">
-                    <?php
-                    // Creates Uploading Button
-                    $this->widget('application.modules_core.file.widgets.FileUploadButtonWidget', array(
-                        'uploaderId' => 'contentFormFiles',
-                        'fileListFieldName' => 'fileList',
-                    ));
-                    ?>
-                    <script>
-                        $('#fileUploaderButton_contentFormFiles').bind('fileuploaddone', function (e, data) {
-                            $('.btn_container').show();
-                        });
+                    <?php if($container->canWrite()) { ?>
 
-                        $('#fileUploaderButton_contentFormFiles').bind('fileuploadprogressall', function (e, data) {
-                            var progress = parseInt(data.loaded / data.total * 100, 10);
-                            if (progress != 100) {
-                                // Fix: remove focus from upload button to hide tooltip
-                                $('#post_submit_button').focus();
+                        <?php echo $this->render('_create.php', [
+                            'form' => $form,
+                            'model' => $model
+                        ]); ?>
 
-                                // hide form buttons
-                                $('.btn_container').hide();
-                            }
-                        });
-                    </script>
-                    <?php
-                    // Creates a list of already uploaded Files
-                    $this->widget('application.modules_core.file.widgets.FileUploadListWidget', array(
-                        'uploaderId' => 'contentFormFiles'
-                    ));
-                    ?>
-                    </div>
+                    <?php } else { ?>
 
-                    <?php
-                    echo CHtml::hiddenField("containerGuid", Yii::app()->user->guid);
-                    echo CHtml::hiddenField("containerClass",  get_class(new User()));
-                    ?>
-                    <?php echo CHtml::submitButton('Submit', array('class' => ' btn btn-info pull-right', 'style' => 'margin-top: 5px;')); ?>
-                </div>
+                        <div class="panel-body">
+                            <div class="text-center">
+                                <h2>Join this Space to Ask a Question</h2>
+                                <strong>You are not member of this space.</strong>
+                                <br><br>
+                                <?php echo \humhub\modules\space\widgets\MembershipButton::widget(['space' => $container]); ?>
+                            </div>
+                        </div>
+
+                    <?php } ?>
+
+                <?php } else { ?>
+
+                    <?php echo $this->render('_create.php', [
+                        'form' => $form,
+                        'model' => $model
+                    ]); ?>
+
+                <?php } ?>
             </div>
         </div>
    </div>
 </div>
 
-<?php $this->endWidget(); ?>
+<?php \yii\widgets\ActiveForm::end(); ?>
 

@@ -1,8 +1,7 @@
 <?php
-
 /**
  * Connected Communities Initiative
- * Copyright (C) 2016  Queensland University of Technology
+ * Copyright (C) 2016 Queensland University of Technology
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,32 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace humhub\modules\questionanswer\widgets;
+
+use Yii;
+use humhub\modules\user\models\User;
+use humhub\models\Setting;
+
 /**
  * VoteWidget. 
  * Displays the vote 
  * 
  * @package application.modules.questionanswer.widgets
+ * @since 0.5
+ * @author Ben
  */
-class VoteButtonWidget extends HWidget {
-
+class VoteButtonWidget extends \yii\base\Widget
+{
     public $post_id;
     public $model; 
     public $vote_on;
     public $vote_type;
-    public $class;
+    public $btn_class;
     public $should_open_question;
     /**
      * Executes the widget.
      */
     public function run() {
 
-        $this->render('voteButton', array(
+        return $this->render('voteButton', array(
             'post_id' => $this->post_id,
             'model' => $this->model, 
             'vote_on' => $this->vote_on, 
             'vote_type' => $this->vote_type,
-            'class' => $this->class,
-            'should_open_question' => $this->should_open_question
+            'btn_class' => $this->btn_class,
+            'should_open_question' => $this->should_open_question,
         ));
     }
 
