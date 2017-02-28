@@ -175,7 +175,6 @@ class QuestionController extends ContentContainerController
                 $question->content->container = $contentContainer;
             }
 
-			$question->content->attachFileGuidsAfterSave = Yii::$app->request->post('fileList');
 
             if ($question->validate()) {
 
@@ -186,6 +185,9 @@ class QuestionController extends ContentContainerController
 				// 		This will free us from needing to do work arounds like below :)
 				\humhub\modules\content\widgets\WallCreateContentForm::create($question, $contentContainer);
 				$question->save();
+
+                // Attach files
+                $question->fileManager->attach(Yii::$app->request->post('fileList'));
 
                 if(isset($_POST['Tags'])) {
                     // Split tag string into array

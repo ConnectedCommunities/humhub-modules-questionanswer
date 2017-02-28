@@ -76,13 +76,17 @@ class AnswerController extends Controller
             $containerClass = User::className();
             $contentContainer = $containerClass::findOne(['guid' => Yii::$app->getUser()->guid]);
             $answer->content->container = $contentContainer;
-            $answer->content->attachFileGuidsAfterSave = Yii::$app->request->post('fileList');
 
 
             if ($answer->validate()) {
 
 				$data = \humhub\modules\content\widgets\WallCreateContentForm::create($answer, $contentContainer);
-				$answer->save();
+
+                // Save answer
+                $answer->save();
+
+                // Attach files
+                $answer->fileManager->attach(Yii::$app->request->post('fileList'));
                 $this->redirect(Url::toRoute(['question/view', 'id' => $answer->question_id]));
             }
         }
