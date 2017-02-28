@@ -23,7 +23,6 @@ use humhub\modules\space\models\Space;
 $container = $this->context->contentContainer;
 $useGlobalContentContainer = $this->context->useGlobalContentContainer;
 $isSpace = is_a($container, Space::className());
-
 ?>
 <?php $form = \yii\widgets\ActiveForm::begin(); ?>
 <div class="container-fluid">
@@ -36,7 +35,7 @@ $isSpace = is_a($container, Space::className());
 
                 <?php if($isSpace) { ?>
 
-                    <?php if($container->canWrite()) { ?>
+                    <?php if($container->permissionManager->can(new \humhub\modules\content\permissions\CreatePublicContent())) { ?>
 
                         <?php echo $this->render('_create.php', [
                             'form' => $form,
