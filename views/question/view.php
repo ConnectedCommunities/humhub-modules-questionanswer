@@ -79,7 +79,7 @@ use yii\helpers\Html;
                             <h3 class="media-heading">
                                 <?php echo Html::a(Html::encode($model->post_title), Url::createUrl('question/view', ['id' => $model->id])); ?>
                             </h3>
-                            <?php print Html::encode($model->post_text); ?>
+                            <?php echo humhub\widgets\RichText::widget(['text' => $model->post_text, 'record' => $model]); ?>
                             <br /><br />
                             <?php foreach($model->tags as $tag) { ?>
                                 <span class="label label-default"><a href="<?php echo Url::createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
@@ -92,7 +92,7 @@ use yii\helpers\Html;
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px;\">";
                                 foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
-                                    print Html::encode($comment->post_text);
+                                    echo humhub\widgets\RichText::widget(['text' => $comment->post_text, 'record' => $comment]);
                                     echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
 
                                     echo "<small>";
@@ -177,7 +177,7 @@ use yii\helpers\Html;
                         ?>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
-                            <?php print Html::encode($question_answer['post_text']); ?>
+                            <?php echo humhub\widgets\RichText::widget(['text' => $question_answer['post_text'], 'record' => $question_answer]); ?>
                             <br />
                             <br />
                             <?php
@@ -253,7 +253,6 @@ use yii\helpers\Html;
                 </div>
             </div>
             <?php } ?>
-
 
             <?php
             echo \humhub\modules\questionanswer\widgets\AnswerFormWidget::widget(array('question' => $model, 'answer' => new Answer));
