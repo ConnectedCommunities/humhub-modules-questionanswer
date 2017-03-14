@@ -19,7 +19,6 @@
 
 /* @var $this QuestionController */
 /* @var $dataProvider CActiveDataProvider */
-
 use yii\widgets\ListView;
 
 // Split the groups we are provided into 2
@@ -59,6 +58,22 @@ $groupB = array_slice($groups, ceil(count($groups) / 2), count($groups));
                                 <b class="list-group-item-heading"><?php echo $category['name']; ?></b>
                                 <p class="list-group-item-text"><?php echo $category['description']; ?></p>
                             </a>
+                            <small>
+                                <ul>
+                                    <?php
+
+                                    $questions = \humhub\modules\questionanswer\models\Question::find()
+                                        ->contentContainer($category['space'])
+                                        ->andFilterWhere(['post_type' => 'question'])
+                                        ->orderBy('created_at DESC')
+                                        ->limit(3)
+                                        ->all();
+
+                                    foreach($questions as $q) { ?>
+                                    <li><a href="#"><?php echo $q['post_title']; ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            </small>
                         <?php } ?>
                     </div>
                 </div>
@@ -77,6 +92,23 @@ $groupB = array_slice($groups, ceil(count($groups) / 2), count($groups));
                                 <b class="list-group-item-heading"><?php echo $category['name']; ?></b>
                                 <p class="list-group-item-text"><?php echo $category['description']; ?></p>
                             </a>
+
+                            <small>
+                                <ul>
+                                    <?php
+
+                                    $questions = \humhub\modules\questionanswer\models\Question::find()
+                                        ->contentContainer($category['space'])
+                                        ->andFilterWhere(['post_type' => 'question'])
+                                        ->orderBy('created_at DESC')
+                                        ->limit(3)
+                                        ->all();
+
+                                    foreach($questions as $q) { ?>
+                                        <li><a href="#"><?php echo $q['post_title']; ?></a></li>
+                                    <?php } ?>
+                                </ul>
+                            </small>
                         <?php } ?>
                     </div>
                 </div>
