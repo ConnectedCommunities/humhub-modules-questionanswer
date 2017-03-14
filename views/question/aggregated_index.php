@@ -69,9 +69,16 @@ $groupB = array_slice($groups, ceil(count($groups) / 2), count($groups));
                                         ->limit(3)
                                         ->all();
 
-                                    foreach($questions as $q) { ?>
-                                    <li><a href="#"><?php echo $q['post_title']; ?></a></li>
-                                    <?php } ?>
+                                    foreach($questions as $q) {
+                                        echo "<li>";
+                                        echo \yii\helpers\Html::a(\yii\helpers\Html::encode($q['post_title']), \humhub\modules\questionanswer\helpers\Url::createUrl('view', [
+                                            'id'=> $q['id'],
+                                            'sguid' => $category['space']->guid
+                                        ]));
+                                        echo "</li>";
+                                    }
+                                    ?>
+
                                 </ul>
                             </small>
                         <?php } ?>
@@ -104,9 +111,16 @@ $groupB = array_slice($groups, ceil(count($groups) / 2), count($groups));
                                         ->limit(3)
                                         ->all();
 
-                                    foreach($questions as $q) { ?>
-                                        <li><a href="#"><?php echo $q['post_title']; ?></a></li>
-                                    <?php } ?>
+                                    foreach($questions as $q) {
+                                        echo "<li>";
+                                        echo \yii\helpers\Html::a(\yii\helpers\Html::encode($q['post_title']), \humhub\modules\questionanswer\helpers\Url::createUrl('view', [
+                                            'id'=> $q['id'],
+                                            'sguid' => $category['space']->guid
+                                        ]));
+                                        echo "</li>";
+                                    }
+                                    ?>
+
                                 </ul>
                             </small>
                         <?php } ?>
