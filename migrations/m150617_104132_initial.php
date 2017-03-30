@@ -31,9 +31,9 @@ class m150617_104132_initial extends Migration
             'post_title' => 'varchar(255) DEFAULT NULL', // null if an answer
             'post_text' => 'TEXT NOT NULL',
             'post_type' =>  'enum(\'question\',\'answer\', \'comment\') NOT NULL', 
-            'created_at' => 'TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP',
             'created_at' => 'datetime NOT NULL',
             'created_by' => 'int(11) NOT NULL',
+	    'updated_at' => 'datetime NOT NULL',
             'updated_by' => 'int(11) NOT NULL',
         ), '');
 
