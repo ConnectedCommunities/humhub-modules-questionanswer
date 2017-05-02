@@ -35,10 +35,20 @@ use humhub\widgets\DataSaved;
         )); ?>
 
         <div class="form-group">
+            <b>Q&A Mode</b><br>
             <p>Q&A module has two <i>modes</i>, global and spaces.</p>
             <ul>
                 <li><b>Global</b> - Is where all of the Q&A content is combined into one view on the front page (this is the default mode).</li>
                 <li><b>Spaces</b> - Is where <i>spaces</i> (with the questionanswer module enabled) act as categories. The front page shows the available categories and the ability to post global is removed.</li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <b>Hidden Category List</b><br>
+
+            <p>Specify the categories you wish to keep hidden from the aggregated index.</p>
+            <ul>
+                <li>Categories are separated by new lines.</li>
             </ul>
         </div>
 
@@ -50,8 +60,9 @@ use humhub\widgets\DataSaved;
         <?php
         // Use Global Content Container?
         echo $form->field($model, 'useGlobalContentContainer')->dropDownList($options,['prompt'=>'Choose Q&A mode']);
+        echo $form->field($model, 'hiddenCategoryList')->textarea(array('class' => 'form-control', 'rows' => '8'));
         ?>
-        
+
         <?php echo Html::submitButton('Save', array('class' => 'btn btn-primary')); ?>
 
         <?php $form->end(); ?>

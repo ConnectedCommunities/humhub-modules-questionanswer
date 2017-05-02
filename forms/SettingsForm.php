@@ -29,6 +29,7 @@ use Yii;
 class SettingsForm extends \yii\base\Model {
 
     public $useGlobalContentContainer;
+    public $hiddenCategoryList;
 
     /**
      * Declares the validation rules.
@@ -36,6 +37,7 @@ class SettingsForm extends \yii\base\Model {
     public function rules() {
         return array(
             array('useGlobalContentContainer', 'safe'),
+            array('hiddenCategoryList', 'safe'),
         );
     }
 
@@ -47,6 +49,7 @@ class SettingsForm extends \yii\base\Model {
     public function attributeLabels() {
         return array(
             'useGlobalContentContainer' => 'Choose Q&A Mode',
+            'hiddenCategoryList' => 'Hide Categories from the Aggregated Index page',
         );
     }
 

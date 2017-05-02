@@ -57,7 +57,8 @@ class SettingController extends \humhub\modules\admin\components\Controller
 
             if ($form->validate()) {
 
-                $form->useGlobalContentContainer = Setting::SetText('useGlobalContentContainer', $form->useGlobalContentContainer);
+                $form->useGlobalContentContainer = Yii::$app->getModule('questionanswer')->settings->set('useGlobalContentContainer', $form->useGlobalContentContainer);
+                $form->hiddenCategoryList = Yii::$app->getModule('questionanswer')->settings->set('hiddenCategoryList', $form->hiddenCategoryList);
 
                 // set flash message
                 Yii::$app->getSession()->setFlash('data-saved', 'Saved');
@@ -66,7 +67,8 @@ class SettingController extends \humhub\modules\admin\components\Controller
             }
 
         } else {
-            $form->useGlobalContentContainer = Setting::GetText('useGlobalContentContainer');
+            $form->useGlobalContentContainer = Yii::$app->getModule('questionanswer')->settings->get('useGlobalContentContainer');
+            $form->hiddenCategoryList = Yii::$app->getModule('questionanswer')->settings->get('hiddenCategoryList');
         }
 
         return $this->render('index', array(

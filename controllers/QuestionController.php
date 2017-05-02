@@ -69,9 +69,8 @@ class QuestionController extends ContentContainerController
      */
 	public function init() {
 
-
         // Use content container set in settings, global by default
-        if(Setting::GetText('useGlobalContentContainer') == null || Setting::GetText('useGlobalContentContainer') == 1) {
+        if(Yii::$app->getModule('questionanswer')->settings->get('useGlobalContentContainer') == null || Yii::$app->getModule('questionanswer')->settings->get('useGlobalContentContainer') == 1) {
             $this->useGlobalContentContainer = true;
         } else {
             $this->useGlobalContentContainer = false;
