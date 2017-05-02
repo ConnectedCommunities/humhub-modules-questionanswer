@@ -301,13 +301,17 @@ class QuestionController extends ContentContainerController
 
 		// Apply content filter to results
 		if($this->contentContainer && $this->useGlobalContentContainer == false) {
-			$criteria = "AND content.space_id = " . $this->contentContainer->id;
+            $criteria = "AND contentcontainer.id = content.contentcontainer_id 
+                        AND contentcontainer.class LIKE 'humhub\\\\\\\\modules\\\\\\\\space\\\\\\\\models\\\\\\\\Space'
+                        AND contentcontainer.pk = " . $this->contentContainer->id;
+            $criteriaFrom = ", contentcontainer";
 		} else {
-			$criteria = "";
+            $criteria = "";
+            $criteriaFrom = "";
 		}
 
 		$sql = 'SELECT question.id, question.post_title, question.post_text, question.post_type, COUNT(*) as tag_count
-				FROM content, question
+				FROM content ' . $criteriaFrom . ', question
 				LEFT JOIN question_tag ON (question.id = question_tag.question_id)
 				WHERE (content.object_id = question.id AND content.object_model LIKE "humhub\\\\\\\\modules\\\\\\\\questionanswer\\\\\\\\models\\\\\\\\Question" '. $criteria .')
 				AND question_tag.tag_id IN (

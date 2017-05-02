@@ -235,14 +235,16 @@ class Question extends ContentActiveRecord implements Searchable
 			$criteria = "AND contentcontainer.id = content.contentcontainer_id 
                         AND contentcontainer.class LIKE 'humhub\\\\\\\\modules\\\\\\\\space\\\\\\\\models\\\\\\\\Space'
                         AND contentcontainer.pk = " . $contentContainer->id;
+			$criteriaFrom = ", contentcontainer";
 		} else {
 			$criteria = "";
+			$criteriaFrom = "";
 		}
 
 
 		// $list= Yii::app()->db->createCommand('select * from post where category=:category')->bindValue('category',$category)->queryAll();
 		$sql = "SELECT q.id, q.post_title, q.post_text, q.post_type, COUNT(DISTINCT answers.id) as answers, (COUNT(DISTINCT up.id) - COUNT(DISTINCT down.id)) as score, (COUNT(DISTINCT up.id) + COUNT(DISTINCT down.id)) as vote_count, COUNT(DISTINCT up.id) as up_votes, COUNT(DISTINCT down.id) as down_votes
-				FROM content, contentcontainer, question_tag qt, question q
+				FROM content $criteriaFrom, question_tag qt, question q
 				LEFT JOIN question_votes up ON (q.id = up.post_id AND up.vote_on = 'question' AND up.vote_type = 'up')
 				LEFT JOIN question_votes down ON (q.id = down.post_id AND down.vote_on = 'question' AND down.vote_type = 'down')
 				LEFT JOIN question answers ON (q.id = answers.question_id AND answers.post_type = 'answer')
