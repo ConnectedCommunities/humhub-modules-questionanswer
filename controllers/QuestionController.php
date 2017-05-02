@@ -274,12 +274,16 @@ class QuestionController extends ContentContainerController
 
 		// Apply content filter to results
 		if($this->contentContainer && $this->useGlobalContentContainer == false) {
+            $criteria->from(['content', 'contentcontainer', 'question']);
+            $criteria->andWhere('contentcontainer.id = content.contentcontainer_id');
+            $criteria->andWhere(["like", "contentcontainer.class", "humhub\\modules\\space\\models\\Space"]);
+            $criteria->andWhere([
+                "contentcontainer.pk" => $this->contentContainer->id,
+            ]);
 
 			$criteria->andWhere('content.object_id = question.id');
 			$criteria->andWhere(['like', 'content.object_model', "humhub\\modules\\questionanswer\\models\\Question"]);
-			$criteria->andWhere([
-				'content.space_id' => $this->contentContainer->id
-			]);
+
 		}
 
 		$criteria->groupBy("question.id");
