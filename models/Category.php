@@ -79,16 +79,16 @@ class Category extends ActiveRecord
     {
         $groups = [];
 
+        // Get the list of hidden categories. If there's nothing set, set an empty array.
+        $hidden = array_map('trim', explode("\n", Yii::$app->getModule('questionanswer')->settings->get('hiddenCategoryList')));
+        if($hidden == null) $hidden = [];
+
         foreach(self::find()->all() as $category) {
 
             if($category->getSpace()->exists()) {
 
                 // Explode '>'. Everything before == Group, everything after == category name
                 $parts = explode(self::SEPARATOR, $category->space->name);
-
-                // Get the list of hidden categories. If there's nothing set, set an empty array.
-                $hidden = explode("\n", Yii::$app->getModule('questionanswer')->settings->get('hiddenCategoryList'));
-                if($hidden == null) $hidden = [];
 
                 // A category must have 2 parts and not be in the 'hiddenCategoryList' list
                 if(count($parts) == self::EXPECTED_NUMBER_OF_PARTS && !in_array($parts[self::GROUP_NAME_POSITION], $hidden)) {
