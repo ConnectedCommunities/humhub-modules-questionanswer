@@ -4,10 +4,12 @@
     </div>
     <div class="list-group">
         <?php foreach($categories as $category) { ?>
+            <?php if($category['subCategory']) { ?>
             <a href="<?php echo $category['link']; ?>" class="list-group-item">
                 <b class="list-group-item-heading"><?php echo $category['name']; ?></b>
                 <p class="list-group-item-text"><?php echo $category['description']; ?></p>
             </a>
+            <?php } ?>
             <small>
                 <ul>
                     <?php

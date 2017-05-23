@@ -90,14 +90,27 @@ class Category extends ActiveRecord
                 // Explode '>'. Everything before == Group, everything after == category name
                 $parts = explode(self::SEPARATOR, $category->space->name);
 
-                // A category must have 2 parts and not be in the 'hiddenCategoryList' list
-                if(count($parts) == self::EXPECTED_NUMBER_OF_PARTS && !in_array($parts[self::GROUP_NAME_POSITION], $hidden)) {
-                    $groups[$parts[self::GROUP_NAME_POSITION]][] = [
-                        'name' => $parts[self::CATEGORY_NAME_POSITION],
-                        'description' => $category->space->description,
-                        'link' => $category->space->createUrl('//questionanswer/question/index'),
-                        'space' => $category->space,
-                    ];
+                // A category must not be in the `hiddenCategoryList` list
+                if(!in_array($parts[self::GROUP_NAME_POSITION], $hidden)) {
+
+                    if(count($parts) == self::EXPECTED_NUMBER_OF_PARTS) { // Subcategories must have two parts
+                        $groups[$parts[self::GROUP_NAME_POSITION]][] = [
+                            'name' => $parts[self::CATEGORY_NAME_POSITION],
+                            'description' => $category->space->description,
+                            'subCategory' => true,
+                            'link' => $category->space->createUrl('//questionanswer/question/index'),
+                            'space' => $category->space,
+                        ];
+                    } else { // A space with the questionanswer module enabled
+                        $groups[$category->space->name][] = [
+                            'name' => $category->space->name,
+                            'description' => $category->space->description,
+                            'subCategory' => false,
+                            'link' => $category->space->createUrl('//questionanswer/question/index'),
+                            'space' => $category->space
+                        ];
+                    }
+
                 }
 
             }
