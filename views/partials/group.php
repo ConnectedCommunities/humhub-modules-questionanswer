@@ -18,7 +18,7 @@
                         ->contentContainer($category['space'])
                         ->andFilterWhere(['post_type' => 'question'])
                         ->orderBy('created_at DESC')
-                        ->limit(3)
+                        ->limit(6)
                         ->all();
 
                     foreach($questions as $q) {
