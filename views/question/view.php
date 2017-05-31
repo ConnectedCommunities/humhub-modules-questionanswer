@@ -201,7 +201,7 @@ use yii\helpers\Html;
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
                                     print Html::encode($comment->post_text);
 
-                                    echo " &bull; <a href=\"". \yii\helpers\Url::createUrl(['/user/profile', 'uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
+                                    echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
 
                                     echo "<small>";
                                     if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
@@ -213,7 +213,7 @@ use yii\helpers\Html;
                                         echo " &bull; ";
                                         echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
                                             'id' => 'comment_'.$comment->id,
-                                            'deleteRoute' => URL::createUrl(['comment/delete', 'id' => $comment->id]),
+                                            'deleteRoute' => URL::createUrl('comment/delete', ['id' => $comment->id]),
                                             'title' => '<strong>Confirm</strong> delete comment',
                                             'message' => 'Are you sure want to delete this comment?',
                                         ]);
