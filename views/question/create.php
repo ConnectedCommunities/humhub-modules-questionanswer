@@ -35,7 +35,18 @@ $isSpace = is_a($container, Space::className());
 
                 <?php if($isSpace) { ?>
 
-                    <?php if($container->permissionManager->can(new \humhub\modules\content\permissions\CreatePublicContent())) { ?>
+                    <?php
+                    $perm = new \humhub\modules\content\permissions\CreatePublicContent();
+                    $perm->defaultAllowedGroups = [
+                        Space::USERGROUP_OWNER,
+                        Space::USERGROUP_ADMIN,
+                        Space::USERGROUP_MODERATOR,
+                        Space::USERGROUP_MEMBER,
+                        \humhub\modules\user\models\User::USERGROUP_SELF,
+                        Space::USERGROUP_USER,
+                    ];
+                    ?>
+                    <?php if($container->permissionManager->can($perm)) { ?>
 
                         <?php echo $this->render('_create.php', [
                             'form' => $form,

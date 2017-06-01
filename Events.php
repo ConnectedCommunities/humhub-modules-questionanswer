@@ -63,7 +63,7 @@ class Events extends \yii\base\Object
 
     public static function onSpaceMenuInit($event)
     {
-        if ($event->sender->space !== null && $event->sender->space->isModuleEnabled('questionanswer') && $event->sender->space->isMember()) {
+        if ($event->sender->space !== null && $event->sender->space->isModuleEnabled('questionanswer')) {
             $event->sender->addItem(array(
                 'label' => "Q&A",
                 'group' => 'modules',
