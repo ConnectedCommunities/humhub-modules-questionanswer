@@ -31,7 +31,7 @@ use yii\helpers\Html;
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-9">
-            <div class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
+            <div id="post-<?php echo $model->id; ?>" class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
                 <div class="panel-body">
                     <div class="media">
                         <div class="pull-left">
@@ -148,10 +148,10 @@ use yii\helpers\Html;
             </div>
 
             <?php foreach($answers as $question_answer) { ?>
-            <div class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
+            <div id="post-<?php echo $question_answer['id']; ?>" class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
                 <div class="panel-body">
                     <div class="media">
-                        <div class="pull-left">
+                         <div class="pull-left">
                             <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
                                 <?php
                                 $upBtnClass = ""; $downBtnClass = "";
