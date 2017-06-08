@@ -48,13 +48,23 @@ $groupB = array_slice($groups, ceil(count($groups) / 2), count($groups));
     <div class="row">
         <div class="col-md-6">
             <?php foreach($groupA as $group => $categories) { ?>
-                <?php echo $this->render('../partials/group', ['group' => $group, 'categories' => $categories]); ?>
+                <?php echo $this->render('../partials/group', [
+                    'link' => $categories['link'],
+                    'createLink' => $categories['createLink'],
+                    'group' => $group,
+                    'categories' => $categories
+                ]); ?>
             <?php } ?>
         </div>
 
         <div class="col-md-6">
             <?php foreach($groupB as $group => $categories) { ?>
-                <?php echo $this->render('../partials/group', ['group' => $group, 'categories' => $categories]); ?>
+                <?php echo $this->render('../partials/group', [
+                    'link' => $categories['link'],
+                    'createLink' => $categories['createLink'],
+                    'group' => $group,
+                    'categories' => $categories
+                ]); ?>
             <?php } ?>
         </div>
     </div>

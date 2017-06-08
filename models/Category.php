@@ -90,6 +90,10 @@ class Category extends ActiveRecord
                 // Explode '>'. Everything before == Group, everything after == category name
                 $parts = explode(self::SEPARATOR, $category->space->name);
 
+                // Add link to parent category
+                $groups[$parts[self::GROUP_NAME_POSITION]]['link'] = $category->space->createUrl('//questionanswer/question/index');
+                $groups[$parts[self::GROUP_NAME_POSITION]]['createLink'] = $category->space->createUrl('//questionanswer/question/create');
+
                 // A category must not be in the `hiddenCategoryList` list
                 if(!in_array($parts[self::GROUP_NAME_POSITION], $hidden)) {
 
