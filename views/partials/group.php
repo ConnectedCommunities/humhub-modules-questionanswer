@@ -22,16 +22,21 @@
                             ->orderBy('created_at DESC')
                             ->limit(6)
                             ->all();
+                        
+                        ?>
 
-                        foreach($questions as $q) {
-                            echo "<li>";
-                            echo \yii\helpers\Html::a(\yii\helpers\Html::encode($q['post_title']), \humhub\modules\questionanswer\helpers\Url::createUrl('view', [
+                        <?php foreach($questions as $q) { ?>
+                            <?php
+                            $url = \humhub\modules\questionanswer\helpers\Url::createUrl('view', [
                                 'id'=> $q['id'],
                                 'sguid' => $category['space']->guid
-                            ]));
-                            echo "</li>";
-                        }
-                        ?>
+                            ])
+                            ?>
+
+                            <a href="<?php echo $url; ?>" class="list-group-item">
+                                <b class="list-group-item-heading"><?php echo \yii\helpers\Html::encode($q['post_title']); ?></b>
+                            </a>
+                        <?php } ?>
 
                     </ul>
                 </small>
