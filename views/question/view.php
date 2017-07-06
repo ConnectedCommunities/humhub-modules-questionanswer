@@ -76,10 +76,12 @@ use yii\helpers\Html;
                         ?>
 
                         <div class="media-body" style="padding-top:5px; ">
-                            <h3 class="media-heading">
+                            <h3 id="post-title" class="media-heading">
                                 <?php echo Html::a(Html::encode($model->post_title), Url::createUrl('question/view', ['id' => $model->id])); ?>
                             </h3>
-                            <?php echo humhub\widgets\RichText::widget(['text' => $model->post_text, 'record' => $model]); ?>
+                            <div class="post-text">
+                                <?php echo humhub\widgets\RichText::widget(['text' => $model->post_text, 'record' => $model]); ?>
+                            </div>
                             <br /><br />
                             <?php foreach($model->tags as $tag) { ?>
                                 <span class="label label-default"><a href="<?php echo Url::createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
@@ -177,7 +179,9 @@ use yii\helpers\Html;
                         ?>
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
-                            <?php echo humhub\widgets\RichText::widget(['text' => $question_answer['post_text'], 'record' => $question_answer]); ?>
+                            <div class="post-text">
+                                <?php echo humhub\widgets\RichText::widget(['text' => $question_answer['post_text'], 'record' => $question_answer]); ?>
+                            </div>
                             <br />
                             <br />
                             <?php
