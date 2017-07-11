@@ -80,7 +80,7 @@ use yii\helpers\Html;
                                 <?php echo Html::a(Html::encode($model->post_title), Url::createUrl('question/view', ['id' => $model->id])); ?>
                             </h3>
                             <div class="post-text">
-                                <?php echo humhub\widgets\RichText::widget(['text' => $model->post_text, 'record' => $model]); ?>
+                                <?php echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $model->post_text, 'record' => $model]); ?>
                             </div>
                             <br /><br />
                             <?php foreach($model->tags as $tag) { ?>
@@ -94,7 +94,7 @@ use yii\helpers\Html;
                                 echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px;\">";
                                 foreach($comments as $comment) {
                                     echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
-                                    echo humhub\widgets\RichText::widget(['text' => $comment->post_text, 'record' => $comment]);
+                                    echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $comment->post_text, 'record' => $comment]);
                                     echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
 
                                     echo "<small>";
@@ -180,7 +180,7 @@ use yii\helpers\Html;
                         <div class="media-body" style="padding-top:5px; ">
                             <br />
                             <div class="post-text">
-                                <?php echo humhub\widgets\RichText::widget(['text' => $question_answer['post_text'], 'record' => $question_answer]); ?>
+                                <?php echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $question_answer['post_text'], 'record' => $question_answer]); ?>
                             </div>
                             <br />
                             <br />
