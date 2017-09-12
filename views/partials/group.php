@@ -19,7 +19,7 @@
                         $questions = \humhub\modules\questionanswer\models\Question::find()
                             ->contentContainer($category['space'])
                             ->andFilterWhere(['post_type' => 'question'])
-                            ->orderBy('created_at DESC')
+                            ->orderBy('pinned DESC, created_at DESC')
                             ->limit(6)
                             ->all();
                         
@@ -34,6 +34,7 @@
                             ?>
 
                             <a href="<?php echo $url; ?>" class="list-group-item">
+                                <?php if($q['pinned']) echo "<small><i class=\"glyphicon glyphicon-pushpin\"></i></small>"; ?>
                                 <b class="list-group-item-heading"><?php echo \yii\helpers\Html::encode($q['post_title']); ?></b>
                             </a>
                         <?php } ?>

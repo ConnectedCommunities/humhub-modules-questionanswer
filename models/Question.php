@@ -77,7 +77,7 @@ class Question extends ContentActiveRecord implements Searchable
             [['post_title', 'post_text', 'post_type'], 'required'],
 			[['post_type'], 'string', 'max' => 255],
             [['created_at', 'updated_at'], 'safe'],
-            [['created_by', 'updated_by'], 'integer'],
+            [['pinned', 'created_by', 'updated_by'], 'integer'],
         ];
 
 	}
@@ -93,6 +93,7 @@ class Question extends ContentActiveRecord implements Searchable
 			'post_title' => 'Post Title',
 			'post_text' => 'Post Text',
 			'post_type' => 'Post Type',
+			'pinned' => 'Pinned',
 			'created_at' => 'Created At',
 			'created_by' => 'Created By',
 			'updated_at' => 'Updated At',
