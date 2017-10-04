@@ -30,6 +30,11 @@ use yii\helpers\Html;
 ?>
 <div class="container-fluid">
     <div class="row">
+        <div class="col-md-12">
+            <a href="<?php echo \yii\helpers\Url::toRoute('/questionanswer/question/index'); ?>"><i class="glyphicon glyphicon-chevron-left"></i> Back to Forum</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-9">
             <div id="post-<?php echo $model->id; ?>" class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
                 <div class="panel-body">
