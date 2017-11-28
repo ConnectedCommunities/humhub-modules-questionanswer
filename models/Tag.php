@@ -20,10 +20,11 @@
 
 namespace humhub\modules\questionanswer\models;
 
-use humhub\modules\content\components\ContentActiveRecord;
 use Yii;
 use humhub\components\ActiveRecord;
+use humhub\modules\questionanswer\helpers\Url;
 use humhub\modules\search\interfaces\Searchable;
+use humhub\modules\content\components\ContentActiveRecord;
 
 /**
  * This is the model class for table "tag".
@@ -150,7 +151,7 @@ class Tag extends ContentActiveRecord implements Searchable
      */
     public function getUrl($parameters = array())
     {
-    	return $this->createUrl('//questionanswer/main/tag', $parameters);
+        Url::createUrl('//questionanswer/main/tag', $parameters);
     }
 
 
