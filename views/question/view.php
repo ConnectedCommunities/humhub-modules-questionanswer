@@ -27,6 +27,8 @@ use humhub\modules\file\widgets\ShowFiles;
 use humhub\modules\questionanswer\helpers\Url;
 use yii\helpers\Html;
 
+humhub\modules\questionanswer\Asset::register($this);
+
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -36,11 +38,11 @@ use yii\helpers\Html;
     </div>
     <div class="row">
         <div class="col-md-9">
-            <div id="post-<?php echo $model->id; ?>" class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
+            <div id="post-<?php echo $model->id; ?>" class="panel panel-default qanda-panel question-area">
                 <div class="panel-body">
                     <div class="media">
                         <div class="pull-left">
-                            <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+                            <div class="vote_control pull-left">
                                 
                                 <?php 
                                 $upBtnClass = ""; $downBtnClass = "";
@@ -80,25 +82,34 @@ use yii\helpers\Html;
                         echo ProfileWidget::widget(array('user' => $model->user, 'timestamp' => $model->created_at));
                         ?>
 
-                        <div class="media-body" style="padding-top:5px; ">
+                        <div class="media-body question-content-body">
+
+                            <!-- Post Title -->
                             <h3 id="post-title" class="media-heading">
                                 <?php echo Html::a(Html::encode($model->post_title), Url::createUrl('question/view', ['id' => $model->id])); ?>
                             </h3>
+
+                            <!-- Post Text -->
                             <div class="post-text">
                                 <?php echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $model->post_text, 'record' => $model]); ?>
                             </div>
+
                             <br /><br />
+
+                            <!-- Labels -->
                             <?php foreach($model->tags as $tag) { ?>
                                 <span class="label label-default"><a href="<?php echo Url::createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
                             <?php } ?>
-                            <br /><br />
+
+                            <!-- Attachments -->
+                            <?php echo ShowFiles::widget(array('object' => $model)); ?>
+
                             <?php
-                            echo ShowFiles::widget(array('object' => $model));
                             $comments = Comment::findAll(['parent_id' => $model->id]);
                             if($comments) {
-                                echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px;\">";
+                                echo "<div class=\"comment-area\">";
                                 foreach($comments as $comment) {
-                                    echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
+                                    echo '<div class="comment">';
                                     echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $comment->post_text, 'record' => $comment]);
                                     echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
 
@@ -155,11 +166,11 @@ use yii\helpers\Html;
             </div>
 
             <?php foreach($answers as $question_answer) { ?>
-            <div id="post-<?php echo $question_answer['id']; ?>" class="panel panel-default qanda-panel" style="padding:25px; padding-left:15px;">
+            <div id="post-<?php echo $question_answer['id']; ?>" class="panel panel-default qanda-panel answers-area">
                 <div class="panel-body">
                     <div class="media">
                          <div class="pull-left">
-                            <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+                            <div class="vote_control pull-left">
                                 <?php
                                 $upBtnClass = ""; $downBtnClass = "";
                                 $vote = QuestionVotes::findOne(['post_id' => $question_answer['id'], 'created_by' => Yii::$app->user->id]);
@@ -182,7 +193,7 @@ use yii\helpers\Html;
                         $user = User::findOne(['id' => $question_answer['created_by']]);
                         echo ProfileWidget::widget(array('user' => $user, 'timestamp' => $question_answer['created_at']));
                         ?>
-                        <div class="media-body" style="padding-top:5px; ">
+                        <div class="media-body answer-body">
                             <br />
                             <div class="post-text">
                                 <?php echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $question_answer['post_text'], 'record' => $question_answer]); ?>
@@ -205,9 +216,9 @@ use yii\helpers\Html;
                             echo ShowFiles::widget(array('object' => $answerModel));
 
                             if($comments) {
-                                echo "<div style=\"border: 1px solid #ccc; background-color: #f2f2f2; padding:10px; margin-top:10px;\">";
+                                echo "<div class=\"comment-area\">";
                                 foreach($comments as $comment) {
-                                    echo '<div style="border-bottom:1px solid #d8d8d8; padding: 4px;">';
+                                    echo '<div class=\"comment\">';
                                     print Html::encode($comment->post_text);
 
                                     echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";

@@ -25,7 +25,7 @@ use humhub\modules\questionanswer\helpers\Url;
 ?>
 <div class="media" >
     <div class="pull-left">
-        <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+        <div class="vote_control pull-left">
             <?php 
             $upBtnClass = ""; $downBtnClass = ""; $vote = "";
 
@@ -53,11 +53,12 @@ use humhub\modules\questionanswer\helpers\Url;
         $stats = Question::stats($data->id);
         ?>
 
-        <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
+
+        <div class="pull-left vote_count">
             <b><?php echo $stats['score']; ?></b>
             <p>votes</p>
         </div>
-        <div class="pull-left" style="text-align:center; margin-top:5px;">
+        <div class="pull-left answer_count">
             <b><?php echo $stats['answers']; ?></b>
             <p>answers</p>
         </div>

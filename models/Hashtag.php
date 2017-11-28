@@ -25,6 +25,7 @@ use humhub\modules\questionanswer\widgets\HashtagLinkWidget;
 class Hashtag
 {
 
+    // const HASHTAG_PATTERN = '/\#\[(.*?)\]/'; // #[Hash Tag Here] format
     const HASHTAG_PATTERN = '/#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/'; // #hashtag format
 
     /**
@@ -35,6 +36,7 @@ class Hashtag
     public static function strip($text)
     {
         return substr($text, 1); // #hashtag format
+        // return substr($text, 2, -1); // #[hash tag here] format
     }
 
     /**

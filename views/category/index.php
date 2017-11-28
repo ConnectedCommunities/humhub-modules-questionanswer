@@ -18,26 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* @var $this QuestionController */
-/* @var $dataProvider CActiveDataProvider */
-
 use yii\widgets\ListView;
 ?>
 
-<style>
-    .vote_control .btn-xs:nth-child(1) {
-        margin-bottom:3px;
-    }
-
-    .qanda-panel {
-        margin-top:57px;
-    }
-
-    .qanda-header-tabs {
-        margin-top:-49px;
-    }
-
-</style>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default qanda-panel">

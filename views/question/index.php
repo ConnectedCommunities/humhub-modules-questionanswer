@@ -20,23 +20,11 @@
 /* @var $this QuestionController */
 /* @var $dataProvider CActiveDataProvider */
 
+humhub\modules\questionanswer\Asset::register($this);
+
 use yii\widgets\ListView;
 ?>
 
-<style>
-.vote_control .btn-xs:nth-child(1) {
-    margin-bottom:3px;
-}
-
-.qanda-panel {
-    margin-top:57px;
-}
-
-.qanda-header-tabs {
-    margin-top:-49px;
-}
-
-</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">

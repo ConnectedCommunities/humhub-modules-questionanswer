@@ -49,21 +49,6 @@ $('.search-form form').submit(function(){
 */
 ?>
 
-<style>
-.vote_control .btn-xs:nth-child(1) {
-    margin-bottom:3px;
-}
-
-.qanda-panel {
-    margin-top:57px;
-}
-
-.qanda-header-tabs {
-    margin-top:-49px;
-}
-</style>
-
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -80,13 +65,6 @@ $('.search-form form').submit(function(){
 					or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
 					</p>
 
-					<?php //echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-					<div class="search-form" style="display:none">
-					<?php /*$this->renderPartial('_search',array(
-						'model'=>$model,
-					)); todo: reconstruct Advance Search*/ ?>
-					</div><!-- search-form -->
-
                     <?php
                     $controllerString = (string)($controller->id);
                     $gridString = '_adminGrid';
@@ -98,8 +76,6 @@ $('.search-form form').submit(function(){
                         'model'         => $model
                     ));
                     ?>
-
-
 				</div>
 			</div>
 		</div>

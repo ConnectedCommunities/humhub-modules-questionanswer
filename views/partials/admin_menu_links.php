@@ -28,15 +28,15 @@ use humhub\modules\questionanswer\helpers\Url;
     $isAnswer = $controller->id === 'answer' && $controller->action->id === 'admin';
     $isComment = $controller->id === 'comment' && $controller->action->id === 'admin';
     ?>
-    <ul class="nav nav-tabs qanda-header-tabs" id="filter">
+    <ul class="nav nav-tabs qanda-header-tabs qanda-admin-header-tabs" id="filter">
         <li class="dropdown <?php echo ($isQuestion ? "active" : ""); ?>">
-            <?php echo Html::a('Questions', Url::createUrl('question/admin'), ['style' => 'cursor: pointer;']); ?>
+            <?php echo Html::a('Questions', Url::createUrl('question/admin')); ?>
         </li>
         <li class="dropdown <?php echo ($isAnswer ? "active" : ""); ?>">
-            <?php echo Html::a('Answers', Url::createUrl('answer/admin'), ['style' => 'cursor: pointer;']); ?>
+            <?php echo Html::a('Answers', Url::createUrl('answer/admin')); ?>
         </li>
         <li class="dropdown <?php echo ($isComment ? "active" : ""); ?>">
-            <?php echo Html::a('Comments', Url::createUrl('comment/admin'), ['style' => 'cursor: pointer;']); ?>
+            <?php echo Html::a('Comments', Url::createUrl('comment/admin')); ?>
         </li>
     </ul>
 <?php } ?>

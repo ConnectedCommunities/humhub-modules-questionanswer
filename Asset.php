@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Connected Communities Initiative
  * Copyright (C) 2016 Queensland University of Technology
@@ -18,20 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-?>
-<div class="container">
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
-			<div class="panel panel-default qanda-panel">
-				<div class="panel-body">
-					<div class="media">
-						<div class="media-body">
-							<h3 class="media-heading">Edit Comment #<?php echo $model->id ?></h3>
-							<?php echo $this->render('_form', array('model'=>$model)); ?>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+namespace humhub\modules\questionanswer;
+
+use yii\web\AssetBundle;
+
+class Asset extends AssetBundle
+{
+
+    /**
+     * @inheritdoc
+     */
+    public $sourcePath = '@questionanswer/resources';
+
+    /**
+     * @inheritdoc
+     */
+    public $css = [
+        'css/default.css'
+    ];
+
+    public $publishOptions = [
+        'forceCopy'=>true,
+    ];
+}

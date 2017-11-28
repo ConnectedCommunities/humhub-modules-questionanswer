@@ -32,14 +32,14 @@ if($this->context->contentContainer && $this->context->useGlobalContentContainer
 
 
 ?>
-<div class="panel-heading">
+<div class="panel-heading no-border-bottom">
     <ul class="nav nav-tabs qanda-header-tabs">
 
         <li class="dropdown<?php if(Yii::$app->controller->action->id == "picked") echo ' active'; ?>">
-            <a style="cursor:pointer;" href="<?php echo Url::createUrl('question/picked'); ?>">Picked for you</a>
+            <a href="<?php echo Url::createUrl('question/picked'); ?>">Picked for you</a>
         </li>
         <li class="dropdown<?php if(Yii::$app->controller->action->id == "index") echo ' active'; ?>">
-            <a style="cursor:pointer;" href="<?php echo Url::createUrl('question/index'); ?>">Questions</a>
+            <a href="<?php echo Url::createUrl('question/index'); ?>">Questions</a>
         </li>
         <li class="dropdown<?php if(Yii::$app->controller->action->id == "unanswered") echo ' active'; ?>">
             <?php echo Html::a('Unanswered', Url::createUrl('question/unanswered'), array()); ?>
@@ -67,7 +67,7 @@ if($this->context->contentContainer && $this->context->useGlobalContentContainer
             </li>
         <?php } ?>
         <li class="dropdown pull-right">
-            <?php echo Html::a('<i class="fa fa-plus"></i> Ask Question', Url::createUrl('create'), array('class'=>'dropdown-toggle btn btn-community', 'style'=>"padding:8px;")); ?>
+            <?php echo Html::a('<i class="fa fa-plus"></i> Ask Question', Url::createUrl('create'), array('class'=>'dropdown-toggle btn btn-community')); ?>
         </li>
     </ul>
 </div>

@@ -44,20 +44,6 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<style>
-.vote_control .btn-xs:nth-child(1) {
-    margin-bottom:3px;
-}
-
-.qanda-panel {
-    margin-top:57px;
-}
-
-.qanda-header-tabs {
-    margin-top:-49px;
-}
-</style>
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">

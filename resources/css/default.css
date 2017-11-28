@@ -1,0 +1,106 @@
+/*
+ * Connected Communities Initiative
+ * Copyright (C) 2016 Queensland University of Technology
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.qanda-panel.panel .panel-heading {
+    font-size: 18px;
+    font-weight: 400;
+    border-bottom: 1px solid #E6E6E6;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.qanda-panel.panel .panel-heading.no-border-bottom {
+    border-bottom: 0;
+}
+
+.qanda-panel.panel .panel-with-padding {
+    padding: 20px;
+}
+
+.vote_control {
+    padding:5px;
+    padding-right:10px;
+    border-right:1px solid #eee;
+    margin-right:10px;
+}
+
+.vote_control .btn-xs:nth-child(1) {
+    margin-bottom:3px;
+}
+
+.vote_count {
+    text-align:center;
+    margin-top:5px;
+    margin-right:8px;
+}
+
+.answer_count {
+    text-align:center;
+    margin-top:5px;
+}
+
+.qanda-panel {
+    margin-top:57px;
+}
+
+.qanda-header-tabs {
+    margin-top:-49px;
+}
+
+.qanda-header-tabs a {
+    cursor: pointer;
+}
+
+.qanda-header-tabs .btn-community {
+    padding: 8px;
+}
+
+.question-area {
+    margin-top: 0px;
+    padding:25px;
+    padding-left:15px;
+}
+
+.question-content-body {
+    padding-top: 5px;
+}
+
+.answers-area {
+    padding:25px;
+    padding-left:15px;
+}
+
+.answers-area .answer-body {
+    padding-top:5px;
+}
+
+.comment-area {
+    border: 1px solid #ccc;
+    background-color: #f2f2f2;
+    padding:10px;
+}
+
+.comment-area .comment {
+    border-bottom:1px solid #d8d8d8;
+    padding: 4px;
+}
+
+.tag-area {
+    padding-top:5px;
+    padding-left:10px;
+}

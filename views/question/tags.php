@@ -19,21 +19,10 @@
 
 use humhub\modules\questionanswer\models\Question;
 use humhub\modules\questionanswer\models\QuestionVotes;
+
+humhub\modules\questionanswer\Asset::register($this);
+
 ?>
-<style>
-    .vote_control .btn-xs:nth-child(1) {
-        margin-bottom:3px;
-    }
-
-    .qanda-panel {
-        margin-top:57px;
-    }
-
-    .qanda-header-tabs {
-        margin-top:-49px;
-    }
-
-</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -46,9 +35,9 @@ use humhub\modules\questionanswer\models\QuestionVotes;
                     <div class="panel-body">
 
                         <?php foreach ($questions as $question) { ?>
-                            <div class="media" >
+                            <div class="media">
                                 <div class="pull-left">
-                                    <div class="vote_control pull-left" style="padding:5px; padding-right:10px; border-right:1px solid #eee; margin-right:10px;">
+                                    <div class="vote_control pull-left">
                                         <?php
                                         $upBtnClass = ""; $downBtnClass = ""; $vote = "";
 
@@ -72,18 +61,18 @@ use humhub\modules\questionanswer\models\QuestionVotes;
                                     <!--<a href="" class="pull-left" style="padding-top:5px; padding-right:10px;">
                                         <img class="media-object img-rounded user-image" alt="40x40" data-src="holder.js/40x40" style="width: 40px; height: 40px;" src="img/default_user.jpg?cacheId=0" width="40" height="40">
                                     </a>-->
-                                    <div class="pull-left" style="text-align:center; margin-top:5px; margin-right:8px;">
+                                    <div class="pull-left vote_count">
                                         <b><?php echo $question['vote_count']; ?></b>
                                         <p>votes</p>
                                     </div>
-                                    <div class="pull-left" style="text-align:center; margin-top:5px;">
+                                    <div class="pull-left answer_count">
                                         <b><?php echo $question['answers']; ?></b>
                                         <p>answers</p>
                                     </div>
 
                                 </div>
 
-                                <div class="media-body" style="padding-top:5px; padding-left:10px;">
+                                <div class="media-body tag-area">
                                     <h4 class="media-heading">
                                         <?php echo \yii\helpers\Html::a(\yii\helpers\Html::encode($question['post_title']), array('question/view', 'id'=>$question['id'])); ?>
                                     </h4>
