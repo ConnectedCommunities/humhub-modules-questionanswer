@@ -112,7 +112,7 @@ class Events extends \yii\base\Object
     public static function onQuestionAfterSave($event)
     {
         if(isset(Yii::$app->modules['karma'])) {
-            Karma::addKarma('asked', $event->sender->user->id);
+            Karma::addKarma('asked', $event->sender->user->id, $event->sender, true);
         }
     }
 
@@ -123,7 +123,7 @@ class Events extends \yii\base\Object
     public static function onAnswerAfterSave($event)
     {
         if(isset(Yii::$app->modules['karma'])) {
-            Karma::addKarma('answered', $event->sender->user->id);
+            Karma::addKarma('answered', $event->sender->user->id, $event->sender, true);
         }
     }
 
@@ -148,17 +148,14 @@ class Events extends \yii\base\Object
                 // Only vote on questions and answers
                 switch($event->sender->vote_on) {
                     case "question":
-
-                        if(isset(Yii::  $app->modules['karma'])) {
-                            Karma::addKarma('question_up_vote', $event->sender->created_by);
+                        if(isset(Yii::$app->modules['karma'])) {
+                            Karma::addKarma('question_up_vote', $event->sender->question->created_by, $event->sender->question);
                         }
-
                     break;
 
                     case "answer":
-
                         if(isset(Yii::$app->modules['karma'])) {
-                            Karma::addKarma('answer_up_vote', $event->sender->created_by);
+                            Karma::addKarma('answer_up_vote', $event->sender->answer->created_by, $event->sender->answer);
                         }
                     break;
 
@@ -169,7 +166,7 @@ class Events extends \yii\base\Object
             case "accepted_answer":
 
                 if(isset(Yii::$app->modules['karma'])) {
-                    Karma::addKarma('accepted_answer', $event->sender->created_by);
+                    Karma::addKarma('accepted_answer', $event->sender->answer->created_by, $event->sender->answer);
                 }
 
             break;

@@ -135,7 +135,47 @@ class QuestionVotes extends ActiveRecord
         );
     }
 
-	/** 
+
+
+    public function getPost()
+    {
+        switch($this->vote_on) {
+            default:
+            case "question":
+                $class = Question::class;
+            break;
+
+            case "answer":
+                $class = Answer::class;
+            break;
+        }
+
+        return $this->hasOne($class, ['id' => 'post_id'])->andWhere(['post_type' => $this->vote_on]);
+    }
+
+
+    /**
+     * Get the question voted on
+     *
+     * @return $this
+     */
+    public function getQuestion()
+    {
+        return $this->getPost();
+    }
+
+    /**
+     * Get the answer voted on
+     *
+     * @return $this
+     */
+    public function getAnswer()
+    {
+        return $this->getPost();
+    }
+
+
+    /**
 	 * Filters results by post_id
 	 * @param $user_id
 	 */
