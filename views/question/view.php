@@ -77,88 +77,85 @@ humhub\modules\questionanswer\Asset::register($this);
                             </div>
                             
                         </div>
-                        
-                        <?php
-                        echo ProfileWidget::widget(array('user' => $model->user, 'timestamp' => $model->created_at));
-                        ?>
+                        <?php echo ProfileWidget::widget(array('user' => $model->user, 'timestamp' => $model->created_at)); ?>
 
-                        <div class="media-body question-content-body">
+                        <div>
+                            <div class="media-body question-content-body">
 
-                            <!-- Post Title -->
-                            <h3 id="post-title" class="media-heading">
-                                <?php echo Html::a(Html::encode($model->post_title), Url::createUrl('question/view', ['id' => $model->id])); ?>
-                            </h3>
+                                <!-- Post Title -->
+                                <h3 id="post-title" class="media-heading" style="margin-top:15px;">
+                                    <?php echo Html::a(Html::encode($model->post_title), Url::createUrl('question/view', ['id' => $model->id])); ?>
+                                </h3>
 
-                            <!-- Post Text -->
-                            <div class="post-text">
-                                <?php echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $model->post_text, 'record' => $model]); ?>
-                            </div>
+                                <!-- Post Text -->
+                                <div class="post-text" style="padding-bottom: 10px">
+                                    <?php echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $model->post_text, 'record' => $model]); ?>
+                                </div>
 
-                            <br /><br />
+                                <!-- Labels -->
+                                <?php foreach($model->tags as $tag) { ?>
+                                    <span class="label label-default"><a href="<?php echo Url::createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
+                                <?php } ?>
 
-                            <!-- Labels -->
-                            <?php foreach($model->tags as $tag) { ?>
-                                <span class="label label-default"><a href="<?php echo Url::createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
-                            <?php } ?>
+                                <!-- Attachments -->
+                                <?php echo ShowFiles::widget(array('object' => $model)); ?>
 
-                            <!-- Attachments -->
-                            <?php echo ShowFiles::widget(array('object' => $model)); ?>
+                                <?php
+                                $comments = Comment::findAll(['parent_id' => $model->id]);
+                                if($comments) {
+                                    echo "<div class=\"comment-area\">";
+                                    foreach($comments as $comment) {
+                                        echo '<div class="comment">';
+                                        echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $comment->post_text, 'record' => $comment]);
+                                        echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
 
-                            <?php
-                            $comments = Comment::findAll(['parent_id' => $model->id]);
-                            if($comments) {
-                                echo "<div class=\"comment-area\">";
-                                foreach($comments as $comment) {
-                                    echo '<div class="comment">';
-                                    echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $comment->post_text, 'record' => $comment]);
-                                    echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
+                                        echo "<small>";
+                                        if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
+                                            echo " &#8212; ";
+                                            echo Html::a("Edit", Url::createUrl('comment/update', ['id'=>$comment->id]));
+                                        }
 
-                                    echo "<small>";
-                                    if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
-                                        echo " &#8212; ";
-                                        echo Html::a("Edit", Url::createUrl('comment/update', ['id'=>$comment->id]));
+                                        if(Yii::$app->user->isAdmin()) {
+                                            echo " &bull; ";
+                                            echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                                'id' => 'comment_'.$comment->id,
+                                                'deleteRoute' => URL::createUrl('comment/delete', ['id' => $comment->id]),
+                                                'title' => '<strong>Confirm</strong> delete comment',
+                                                'message' => 'Do you really want to delete this comment?',
+                                            ]);
+                                        }
+                                        echo "</small>";
+
+                                        echo '</div>';
                                     }
-
-                                    if(Yii::$app->user->isAdmin()) {
-                                        echo " &bull; ";
-                                        echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
-                                            'id' => 'comment_'.$comment->id,
-                                            'deleteRoute' => URL::createUrl('comment/delete', ['id' => $comment->id]),
-                                            'title' => '<strong>Confirm</strong> delete comment',
-                                            'message' => 'Do you really want to delete this comment?',
-                                        ]);
-                                    }
-                                    echo "</small>";
-
-                                    echo '</div>';
+                                    echo "</div>";
                                 }
-                                echo "</div>";
-                            }
-                            ?>
-                            <br />
-                            <br />
-                            <?php
-                            echo \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
-                            ?>
-                            <?php
-                            if(Yii::$app->user->isAdmin() || $model->created_by == Yii::$app->user->id) {
-                            	echo Html::a("Edit", Url::createUrl('update', ['id'=>$model->id]));
-                            }
-                            ?>
-                            &bull;
-							<?php
-						    if(Yii::$app->user->isAdmin()) {
-                                echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
-                                    'id' => 'question_'.$model->id,
-                                    'deleteRoute' => URL::createUrl('question/delete', ['id' => $model->id]),
-                                    'title' => '<strong>Confirm</strong> delete question',
-                                    'message' => 'Do you really want to delete this question? All answers will be lost!',
-                                ]);
-                            }
+                                ?>
+                                <br />
+                                <br />
+                                <?php
+                                echo \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $model->id, 'parent_id' => $model->id));
+                                ?>
+                                <?php
+                                if(Yii::$app->user->isAdmin() || $model->created_by == Yii::$app->user->id) {
+                                    echo Html::a("Edit", Url::createUrl('update', ['id'=>$model->id]));
+                                }
+                                ?>
+                                &bull;
+                                <?php
+                                if(Yii::$app->user->isAdmin()) {
+                                    echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                        'id' => 'question_'.$model->id,
+                                        'deleteRoute' => URL::createUrl('question/delete', ['id' => $model->id]),
+                                        'title' => '<strong>Confirm</strong> delete question',
+                                        'message' => 'Do you really want to delete this question? All answers will be lost!',
+                                    ]);
+                                }
 
-							?>
+                                ?>
 
-                            <a href="#"></a>
+                                <a href="#"></a>
+                            </div>
                         </div>
                     </div>
 
@@ -193,79 +190,81 @@ humhub\modules\questionanswer\Asset::register($this);
                         $user = User::findOne(['id' => $question_answer['created_by']]);
                         echo ProfileWidget::widget(array('user' => $user, 'timestamp' => $question_answer['created_at']));
                         ?>
-                        <div class="media-body answer-body">
-                            <br />
-                            <div class="post-text">
-                                <?php echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $question_answer['post_text'], 'record' => $question_answer]); ?>
-                            </div>
-                            <br />
-                            <br />
-                            <?php
-                            echo \humhub\modules\questionanswer\widgets\BestAnswerWidget::widget(array(
-                                'post_id' => $question_answer['id'],
-                                'author' => $author,
-                                'model' => new QuestionVotes,
-                                'accepted_answer' => ($question_answer['answer_status'] ? true : false)
-                            ));
-                            ?>
+                        <div>
+                            <div class="media-body answer-body">
+                                <br />
+                                <div class="post-text">
+                                    <?php echo \humhub\modules\questionanswer\widgets\RichText::widget(['text' => $question_answer['post_text'], 'record' => $question_answer]); ?>
+                                </div>
+                                <br />
+                                <br />
+                                <?php
+                                echo \humhub\modules\questionanswer\widgets\BestAnswerWidget::widget(array(
+                                    'post_id' => $question_answer['id'],
+                                    'author' => $author,
+                                    'model' => new QuestionVotes,
+                                    'accepted_answer' => ($question_answer['answer_status'] ? true : false)
+                                ));
+                                ?>
 
-                            <?php
-                            $answerModel = Answer::findOne(['id' => $question_answer['id']]);
-                            $comments = $answerModel->comments;
+                                <?php
+                                $answerModel = Answer::findOne(['id' => $question_answer['id']]);
+                                $comments = $answerModel->comments;
 
-                            echo ShowFiles::widget(array('object' => $answerModel));
+                                echo ShowFiles::widget(array('object' => $answerModel));
 
-                            if($comments) {
-                                echo "<div class=\"comment-area\">";
-                                foreach($comments as $comment) {
-                                    echo '<div class=\"comment\">';
-                                    print Html::encode($comment->post_text);
+                                if($comments) {
+                                    echo "<div class=\"comment-area\">";
+                                    foreach($comments as $comment) {
+                                        echo '<div class=\"comment\">';
+                                        print Html::encode($comment->post_text);
 
-                                    echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
+                                        echo " &bull; <a href=\"". Url::createUrl('/user/profile', ['uguid' => $comment->user->guid]) . "\">" . $comment->user->displayName . "</a>";
 
-                                    echo "<small>";
-                                    if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
-                                        echo " &#8212; ";
-                                        echo Html::a("Edit", array('//questionanswer/comment/update', 'id'=>$comment->id));
+                                        echo "<small>";
+                                        if(Yii::$app->user->isAdmin() || $comment->created_by == Yii::$app->user->id) {
+                                            echo " &#8212; ";
+                                            echo Html::a("Edit", array('//questionanswer/comment/update', 'id'=>$comment->id));
+                                        }
+
+                                        if(Yii::$app->user->isAdmin()) {
+                                            echo " &bull; ";
+                                            echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                                'id' => 'comment_'.$comment->id,
+                                                'deleteRoute' => URL::createUrl('comment/delete', ['id' => $comment->id]),
+                                                'title' => '<strong>Confirm</strong> delete comment',
+                                                'message' => 'Are you sure want to delete this comment?',
+                                            ]);
+                                        }
+                                        echo "</small>";
+
+                                        echo '</div>';
                                     }
-
-                                    if(Yii::$app->user->isAdmin()) {
-                                        echo " &bull; ";
-                                        echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
-                                            'id' => 'comment_'.$comment->id,
-                                            'deleteRoute' => URL::createUrl('comment/delete', ['id' => $comment->id]),
-                                            'title' => '<strong>Confirm</strong> delete comment',
-                                            'message' => 'Are you sure want to delete this comment?',
-                                        ]);
-                                    }
-                                    echo "</small>";
-
-                                    echo '</div>';
+                                    echo "</div>";
                                 }
-                                echo "</div>";
-                            }
-                            ?>
-                            <br />
-                            <?php
-                            echo \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
-                            ?>
-                            <?php
-                            if(Yii::$app->user->isAdmin() || $question_answer['created_by'] == Yii::$app->user->id) {
-                                echo Html::a("Edit", array('//questionanswer/answer/update', 'id'=>$question_answer['id']));
-                            }
-                            ?>
-                            &bull;
-                            <?php
-                            if(Yii::$app->user->isAdmin()) {
-                                echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
-                                    'id' => 'answer_'.$question_answer['id'],
-                                    'deleteRoute' => URL::createUrl('answer/delete', ['id' => $question_answer['id']]),
-                                    'title' => '<strong>Confirm</strong> delete answer',
-                                    'message' => 'Are you sure want to delete this answer?',
-                                ]);
-                            }
+                                ?>
+                                <br />
+                                <?php
+                                echo \humhub\modules\questionanswer\widgets\CommentFormWidget::widget(array('model' => new Comment, 'question_id' => $question_answer['question_id'], 'parent_id' => $question_answer['id']));
+                                ?>
+                                <?php
+                                if(Yii::$app->user->isAdmin() || $question_answer['created_by'] == Yii::$app->user->id) {
+                                    echo Html::a("Edit", array('//questionanswer/answer/update', 'id'=>$question_answer['id']));
+                                }
+                                ?>
+                                &bull;
+                                <?php
+                                if(Yii::$app->user->isAdmin()) {
+                                    echo \humhub\modules\questionanswer\widgets\DeleteButtonWidget::widget([
+                                        'id' => 'answer_'.$question_answer['id'],
+                                        'deleteRoute' => URL::createUrl('answer/delete', ['id' => $question_answer['id']]),
+                                        'title' => '<strong>Confirm</strong> delete answer',
+                                        'message' => 'Are you sure want to delete this answer?',
+                                    ]);
+                                }
 
-                            ?>
+                                ?>
+                            </div>
                         </div>
 
                     </div>
