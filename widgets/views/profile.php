@@ -27,9 +27,10 @@
  */
 use yii\helpers\Html;
 use humhub\modules\karma\models\KarmaUser;
+use humhub\modules\user\widgets\Image as UserImage;
 ?>
 <?=
-\humhub\modules\user\widgets\Image::widget([
+UserImage::widget([
     'user' => $user,
     'width' => 40,
     'htmlOptions' => ['class' => 'pull-left']
@@ -39,9 +40,9 @@ use humhub\modules\karma\models\KarmaUser;
     <div class="media-heading" style="margin-bottom: 0; margin-top:3px;">
         <div class="user-title">
             <a href="<?php echo \yii\helpers\Url::toRoute(['/user/profile', 'uguid' => $user->guid]); ?>" style="padding-right: 5px;">
-                <strong><?php echo Html::encode($user->displayName); ?> <?php if(isset(Yii::$app->modules['karma'])) echo "(".KarmaUser::score($user->id).")"; ?></strong>
+                <strong><span class="fullname"><?php echo Html::encode($user->displayName); ?></span> <?php if(isset(Yii::$app->modules['karma'])) echo "(".KarmaUser::score($user->id).")"; ?></strong>
             </a>
-            <?= \humhub\widgets\TimeAgo::widget(['timestamp' => $timestamp]); ?>
+            <span class="post-timestamp" title="<?= $timestamp; ?>"><?= \humhub\widgets\TimeAgo::widget(['timestamp' => $timestamp]); ?></span>
         </div>
 
         <!--<div class="pull-right labels">-->
