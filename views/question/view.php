@@ -93,9 +93,11 @@ humhub\modules\questionanswer\Asset::register($this);
                                 </div>
 
                                 <!-- Labels -->
-                                <?php foreach($model->tags as $tag) { ?>
-                                    <span class="label label-default"><a href="<?php echo Url::createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
-                                <?php } ?>
+                                <div class="post-tags">
+                                    <?php foreach($model->tags as $tag) { ?>
+                                        <span class="label label-default"><a href="<?php echo Url::createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
+                                    <?php } ?>
+                                </div>
 
                                 <!-- Attachments -->
                                 <?php echo ShowFiles::widget(array('object' => $model)); ?>
