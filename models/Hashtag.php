@@ -25,8 +25,11 @@ use humhub\modules\questionanswer\widgets\HashtagLinkWidget;
 class Hashtag
 {
 
-    // const HASHTAG_PATTERN = '/\#\[(.*?)\]/'; // #[Hash Tag Here] format
+//    const HASHTAG_PATTERN = '/\#\[(.*?)\]/'; // #[Hash Tag Here] format
     const HASHTAG_PATTERN = '/#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/'; // #hashtag format
+
+    const ZERO_SPACE_CHAR = '&#x200b;';
+    const ZERO_SPACE_CHAR_ALT = '::!!ZERO_SPACE_CHAR!!::';
 
     /**
      * Strip the hashtag pattern from a string
@@ -58,9 +61,24 @@ class Hashtag
      */
     public static function translateHashtags($text)
     {
-        return preg_replace_callback(Hashtag::HASHTAG_PATTERN, function($hit) {
-            return HashtagLinkWidget::widget(['hashtag' => $hit[0]]);
-        }, $text);
+        return preg_replace_callback_array([
+
+            // Replace Zero Width Space character
+            '/' . Hashtag::ZERO_SPACE_CHAR .'/i' => function() {
+                return Hashtag::ZERO_SPACE_CHAR_ALT;
+            },
+
+            // Replace hashtag text with hashtag link
+            Hashtag::HASHTAG_PATTERN => function($hit) {
+                return HashtagLinkWidget::widget(['hashtag' => $hit[0]]);
+            },
+
+            // Replace alternative Zero Width Space character
+            '/' . Hashtag::ZERO_SPACE_CHAR_ALT . '/i' => function() {
+                return Hashtag::ZERO_SPACE_CHAR;
+            }
+
+        ], $text);
     }
 
 }

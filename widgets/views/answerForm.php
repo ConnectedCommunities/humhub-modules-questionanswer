@@ -28,7 +28,23 @@ $form=ActiveForm::begin(array(
         <strong>Your</strong> answer
     </div>
     <div class="panel-body">
-        <?php echo $form->field($answer, 'post_text')->textarea(array( 'rows' => '5', 'style' => 'height: auto !important;', "class" => "form-control contentForm", "tabindex" => "2", "placeholder" => "Your answer..."))->label(false); ?>
+
+        <style>
+            #answer_field {
+                height: 130px;
+            }
+        </style>
+
+        <?php
+        echo humhub\widgets\RichtextField::widget([
+            'id' => 'answer_field',
+            'model' => $answer,
+            'attribute' => 'post_text',
+            'placeholder' => 'Your answer...'
+        ]);
+        ?>
+
+
         <?php echo $form->field($answer,'question_id')->hiddenInput(array('value' => $question->id))->label(false); ?>
         <div class="pull-left">
             <?php

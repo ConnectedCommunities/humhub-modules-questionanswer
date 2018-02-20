@@ -24,14 +24,12 @@
 ]); ?>
 
 <?php echo $form->errorSummary($model); ?>
-<?php echo $form->field($model, 'post_text', array(
-    'options' => [
-        'id' => "contentForm_answersText",
-        'style' => 'height: auto !important;',
-        "class" => "contentForm",
-        "tabindex" => "2",
-    ]
-))->textArea(['rows' => 2, 'placeholder' => 'Add comment...'])->label(false);
+<?php
+echo humhub\widgets\RichtextField::widget([
+    'model' => $model,
+    'attribute' => 'post_text',
+    'placeholder' => 'Add comment...',
+]);
 ?>
 <?php
 echo $form->field($model, 'question_id', [])->hiddenInput(['value' => $question_id])->label(false);
