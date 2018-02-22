@@ -26,10 +26,10 @@ class Hashtag
 {
 
 //    const HASHTAG_PATTERN = '/\#\[(.*?)\]/'; // #[Hash Tag Here] format
+    const HTML_CODE_PATTERN = '/&#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z]\;)/i'; // detect html character codes
     const HASHTAG_PATTERN = '/#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])/'; // #hashtag format
-
-    const ZERO_SPACE_CHAR = '&#x200b;';
-    const ZERO_SPACE_CHAR_ALT = '::!!ZERO_SPACE_CHAR!!::';
+    const HASH_SYMBOL = "#";
+    const HASH_SYMBOL_ALT = "@::!!HASH_SYMBOL!!::@"; // temporary replacement while we parse hashtags
 
     /**
      * Strip the hashtag pattern from a string
@@ -63,9 +63,9 @@ class Hashtag
     {
         return preg_replace_callback_array([
 
-            // Replace Zero Width Space character
-            '/' . Hashtag::ZERO_SPACE_CHAR .'/i' => function() {
-                return Hashtag::ZERO_SPACE_CHAR_ALT;
+            // Replace the '#' in HTML char codes temporarily for hashtag parsing
+            Hashtag::HTML_CODE_PATTERN => function($hit) {
+                return substr_replace($hit[0], Hashtag::HASH_SYMBOL_ALT, 1, 1);
             },
 
             // Replace hashtag text with hashtag link
@@ -73,9 +73,9 @@ class Hashtag
                 return HashtagLinkWidget::widget(['hashtag' => $hit[0]]);
             },
 
-            // Replace alternative Zero Width Space character
-            '/' . Hashtag::ZERO_SPACE_CHAR_ALT . '/i' => function() {
-                return Hashtag::ZERO_SPACE_CHAR;
+            // Replace alt symbol with real value so text can be encoded correctly
+            '/' . Hashtag::HASH_SYMBOL_ALT . '/i' => function() {
+                return Hashtag::HASH_SYMBOL;
             }
 
         ], $text);
