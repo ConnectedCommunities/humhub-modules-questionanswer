@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use humhub\libs\Html;
 use humhub\modules\questionanswer\models\Question;
 use humhub\modules\questionanswer\models\QuestionVotes;
 
@@ -26,7 +27,20 @@ humhub\modules\questionanswer\Asset::register($this);
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="text-center">Questions Tagged: <?php echo $tag->tag; ?></h3>
+            <h3 class="text-center">Questions Tagged: <?php echo Html::encode($tag->tag); ?></h3>
+            <br>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="<?php echo \yii\helpers\Url::toRoute('/questionanswer/question/index'); ?>">Discussion Forums</a></li>
+                    <?php if(get_class($container) == \humhub\modules\space\models\Space::class) { ?>
+                        <li><a href="<?php echo $container->createUrl('/questionanswer/question/index') ?>"><?php echo $container->name; ?></a></li>
+                    <?php } ?>
+                    <li class="active">Questions tagged: <?php echo Html::encode($tag->tag); ?></li>
+                </ol>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
