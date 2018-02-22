@@ -117,7 +117,7 @@ class QuestionController extends ContentContainerController
         }
 
         // Return the aggregated view when useGlobalContentContainer == false AND no content container found
-        if(!$this->useGlobalContentContainer && !$this->contentContainer) {
+        if(!$this->useGlobalContentContainer && !$this->contentContainer && !Yii::$app->request->get('mode') == "global") {
             return $this->render('aggregated_index', array(
                 'groups' => Category::all(),
             ));
