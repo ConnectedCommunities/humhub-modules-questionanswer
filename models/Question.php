@@ -130,6 +130,11 @@ class Question extends ContentActiveRecord implements Searchable
 		return $this->hasMany(QuestionTag::class, ['question_id' => 'id']);
 	}
 
+	public function getSpace()
+    {
+        return $this->content->getContainer();
+    }
+
 
 	/**
 	 * Returns a title/text which identifies this IContent.

@@ -33,7 +33,7 @@ humhub\modules\questionanswer\Asset::register($this);
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <a href="<?php echo \yii\helpers\Url::toRoute('/questionanswer/question/index'); ?>"><i class="glyphicon glyphicon-chevron-left"></i> Back to Forum</a>
+            <a href="<?php echo $question->space->createUrl('/questionanswer/question/index') ?>"><i class="glyphicon glyphicon-chevron-left"></i> Back to Forum</a>
         </div>
     </div>
     <div class="row">
