@@ -124,6 +124,7 @@ class QuestionController extends ContentContainerController
         }
 
         return $this->render('index', array(
+            'contentContainer' => $this->contentContainer,
             'dataProvider' => $dataProvider,
             'searchModel' => $query,
             'model' => Question::find()

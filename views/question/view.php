@@ -33,9 +33,17 @@ humhub\modules\questionanswer\Asset::register($this);
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <a href="<?php echo $question->space->createUrl('/questionanswer/question/index') ?>"><i class="glyphicon glyphicon-chevron-left"></i> Back to Forum</a>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="<?php echo \yii\helpers\Url::toRoute('/questionanswer/question/index'); ?>">Discussion Forums</a></li>
+                <?php if(get_class($question->space) == \humhub\modules\space\models\Space::class) { ?>
+                    <li><a href="<?php echo $question->space->createUrl('/questionanswer/question/index') ?>"><?php echo $question->space->name; ?></a></li>
+                <?php } ?>
+                <li class="active"><?php echo Html::encode($model->post_title); ?></li>
+            </ol>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-9">
             <div id="post-<?php echo $model->id; ?>" class="panel panel-default qanda-panel question-area">

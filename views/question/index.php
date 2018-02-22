@@ -28,6 +28,17 @@ use yii\widgets\ListView;
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="<?php echo \yii\helpers\Url::toRoute('/questionanswer/question/index'); ?>">Discussion Forums</a></li>
+                <?php if(get_class($contentContainer) == \humhub\modules\space\models\Space::class) { ?>
+                    <li class="active"><?php echo $contentContainer->name; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="panel panel-default qanda-panel">
                 <?php echo $this->render('../partials/top_menu_bar'); ?>
                 <div class="panel-body">
