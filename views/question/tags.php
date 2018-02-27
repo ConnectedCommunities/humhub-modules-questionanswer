@@ -44,7 +44,7 @@ humhub\modules\questionanswer\Asset::register($this);
         </div>
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
-                <div class="panel panel-default qanda-panel">
+                <div class="panel panel-default qanda-panel" style="margin-top:57px;">
                     <?php echo $this->render('../partials/top_menu_bar'); ?>
                     <div class="panel-body">
 
