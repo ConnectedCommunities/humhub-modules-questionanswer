@@ -50,6 +50,6 @@ UserImage::widget([
         <!--</div>-->
     </div>
     <div class="media-subheading" style="margin-bottom: 5px;">
-        <span class="truncate"><?php echo Html::encode($user->profile->title); ?></span>
+        <span class="truncate"><?= \humhub\modules\directory\widgets\UserGroupList::widget(['user' => $user]); ?></span>
     </div>
 </div>
