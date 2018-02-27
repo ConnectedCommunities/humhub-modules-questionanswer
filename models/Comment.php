@@ -122,39 +122,5 @@ class Comment extends ActiveRecord
 			'updated_by' => 'Updated By',
 		);
 	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('id',$this->id);
-		$criteria->compare('question_id',$this->question_id);
-		$criteria->compare('parent_id',$this->parent_id);
-		$criteria->compare('post_title',$this->post_title,true);
-		$criteria->compare('post_text',$this->post_text,true);
-		$criteria->compare('post_type',$this->post_type,true);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('created_by',$this->created_by);
-		$criteria->compare('updated_at',$this->updated_at,true);
-		$criteria->compare('updated_by',$this->updated_by);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
-
+    
 }
