@@ -21,7 +21,9 @@
 namespace humhub\modules\questionanswer\models;
 
 use humhub\components\ActiveRecord;
+use humhub\modules\questionanswer\notifications\NewComment;
 use humhub\modules\user\models\User;
+use yii\helpers\Url;
 use Yii;
 use humhub\modules\content\components\ContentActiveRecord;
 use humhub\modules\search\interfaces\Searchable;
@@ -51,7 +53,31 @@ class Comment extends ActiveRecord
 		return 'question';
 	}
 
-	/**
+    public function getQuestion()
+    {
+        return $this->hasOne(Question::class, ['id' => 'question_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+
+    public function getParent()
+    {
+
+        // When the `parent_id` and `question_id` are the same, it's a comment on the question
+        if($this->parent_id == $this->question_id) {
+            return $this->hasOne(Question::class, ['id' => 'parent_id']);
+        }
+
+        // Otherwise it's a comment on an answer
+        return $this->hasOne(Answer::class, ['id' => 'parent_id']);
+
+    }
+
+
+    /**
 	 * Set default scope so that
 	 * only comments are retrieved 
 	 */
@@ -89,20 +115,6 @@ class Comment extends ActiveRecord
 		];
 	}
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-        return array(
-            'user' => array(static::BELONGS_TO, 'User', 'created_by')
-        );
-	}
-
-	public function getUser()
-	{
-		return $this->hasOne(User::class, ['id' => 'created_by']);
-	}
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -122,5 +134,34 @@ class Comment extends ActiveRecord
 			'updated_by' => 'Updated By',
 		);
 	}
-    
+
+
+    /**
+     * Returns URL to the Question
+     *
+     * @param array $parameters
+     * @return string
+     */
+    public function getUrl()
+    {
+        return Url::toRoute([
+            '/questionanswer/question/view',
+            'id' => $this->question_id,
+            '#' => 'post-' . $this->parent_id
+        ]);
+    }
+
+    /**
+     * After Save, notify user
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($insert) {
+            NewComment::instance()->from($this->user)->about($this)->send($this->parent->user);
+        }
+        return parent::afterSave($insert, $changedAttributes);
+    }
+
+
+
 }
