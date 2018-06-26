@@ -122,7 +122,7 @@ class Question extends ContentActiveRecord implements Searchable
 
     public function getAnswers()
     {
-//        return $this->hasMany(Answer)
+        return $this->hasMany(Answer::class, ['question_id' => 'id'])->andWhere(['parent_id' => null]);
     }
 
 	public function getTags()
@@ -177,13 +177,15 @@ class Question extends ContentActiveRecord implements Searchable
 	/**
 	 * Returns URL to the Question
 	 *
-	 * @param array $parameters
 	 * @return string
 	 */
-	public function getUrl($parameters = array())
+	public function getUrl()
 	{
-		array_unshift($parameters, "/questionanswer/question/view");
-		return Url::toRoute($parameters);
+		return Url::toRoute([
+		    '/questionanswer/question/view',
+            'id' => $this->id,
+            //'#' => 'post-' . $this->id
+        ]);
 	}
 
 

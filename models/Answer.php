@@ -20,8 +20,11 @@
 
 namespace humhub\modules\questionanswer\models;
 
+use humhub\modules\content\interfaces\ContentOwner;
 use humhub\modules\questionanswer\models\Comment;
 use humhub\components\ActiveRecord;
+use humhub\modules\questionanswer\notifications\NewAnswer;
+use humhub\modules\questionanswer\notifications\NewReply;
 use humhub\modules\user\models\User;
 use Yii;
 use humhub\modules\content\components\ContentActiveRecord;
@@ -174,7 +177,11 @@ class Answer extends ContentActiveRecord implements Searchable
      */
     public function getUrl()
     {
-		return Url::toRoute(['/questionanswer/question/view', 'id' => $this->question_id]);
+		return Url::toRoute([
+		    '/questionanswer/question/view',
+            'id' => $this->question_id,
+            '#' => 'post-' . $this->id
+        ]);
     }
 
 	/**
@@ -210,6 +217,18 @@ class Answer extends ContentActiveRecord implements Searchable
 
 		return $attributes;
 	}
+
+    /**
+     * After Save, notify user
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($insert) {
+            NewAnswer::instance()->from($this->user)->about($this)->send($this->question->user);
+        }
+        return parent::afterSave($insert, $changedAttributes);
+    }
+
 
 
 
