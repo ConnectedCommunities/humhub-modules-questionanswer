@@ -87,7 +87,7 @@ class AnswerController extends Controller
 
                 // Attach files
                 $answer->fileManager->attach(Yii::$app->request->post('fileList'));
-                $this->redirect(Url::toRoute(['question/view', 'id' => $answer->question_id]));
+                $this->redirect($answer->getUrl());
             }
         }
 	}
@@ -110,7 +110,7 @@ class AnswerController extends Controller
 		$model->content->container = $contentContainer;
 
 		if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
-			$this->redirect(array('question/view','id'=>$model->question_id));
+			$this->redirect($model->getUrl());
 		}
 
 		return $this->render('update',array(

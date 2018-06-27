@@ -143,14 +143,6 @@ class QuestionController extends ContentContainerController
 
 		$model = $this->loadModel($id);
 
-//        $question = Question::findOne(['id' => 54]);
-//
-//        NewPropertyQuestion::instance()
-//            ->from($question->user)
-//            ->about($question)
-//            ->send(Yii::$app->user->identity);
-
-
 		return $this->render('view',array(
 
     		'author' => $model->user->id,
@@ -213,7 +205,7 @@ class QuestionController extends ContentContainerController
                 }
 
 
-                $this->redirect(Url::toRoute(['question/view', 'id' => $question->id]));
+                $this->redirect($question->getUrl());
 
             }
 
@@ -243,7 +235,7 @@ class QuestionController extends ContentContainerController
 		$model->content->container = $contentContainer;
 
 		if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
-			$this->redirect(array('view','id'=>$model->id));
+			$this->redirect($model->getUrl());
 		}
 
 		return $this->render('update',array(

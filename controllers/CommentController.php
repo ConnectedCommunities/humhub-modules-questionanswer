@@ -76,7 +76,7 @@ class CommentController extends Controller
 
             if ($model->validate()) {
                 $model->save();
-                $this->redirect(Url::toRoute(['question/view', 'id' => $model->question_id]));
+                $this->redirect($model->getUrl());
             }
 
 		}
@@ -101,7 +101,7 @@ class CommentController extends Controller
 		//$model->content->container = $contentContainer;
 
 		if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
-			$this->redirect(array('question/view','id'=>$model->question_id));
+			$this->redirect($model->getUrl());
 		}
 
 		return $this->render('update',array(
