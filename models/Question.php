@@ -181,11 +181,16 @@ class Question extends ContentActiveRecord implements Searchable
 	 */
 	public function getUrl()
 	{
-		return Url::toRoute([
-		    '/questionanswer/question/view',
+        $params = [
+            '/questionanswer/question/view',
             'id' => $this->id,
-            //'#' => 'post-' . $this->id
-        ]);
+        ];
+
+        if(get_class($this->space) == \humhub\modules\space\models\Space::class) {
+            $params['sguid'] = $this->space->guid;
+        }
+
+		return Url::toRoute($params);
 	}
 
 

@@ -43,9 +43,16 @@ use humhub\modules\search\interfaces\Searchable;
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Comment extends ActiveRecord
+class Comment extends ContentActiveRecord
 {
-	/**
+
+    /**
+     * @inheritdoc
+     */
+    public $autoAddToWall = false;
+
+
+    /**
 	 * @return string the associated database table name
 	 */
 	public static function tableName()
@@ -135,21 +142,43 @@ class Comment extends ActiveRecord
 		);
 	}
 
-
     /**
      * Returns URL to the Question
      *
-     * @param array $parameters
      * @return string
      */
     public function getUrl()
     {
-        return Url::toRoute([
+        $params = [
             '/questionanswer/question/view',
             'id' => $this->question_id,
             '#' => 'post-' . $this->parent_id
-        ]);
+        ];
+
+        if(get_class($this->question->space) == \humhub\modules\space\models\Space::class) {
+            $params['sguid'] = $this->question->space->guid;
+        }
+
+        return Url::toRoute($params);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContentName()
+    {
+        return "Comment";
+    }
+
+    /**
+     * @inheritdoc
+     */
+
+    public function getContentDescription()
+    {
+        return $this->post_text;
+    }
+
 
     /**
      * After Save, notify user
