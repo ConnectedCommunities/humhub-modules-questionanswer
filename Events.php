@@ -76,36 +76,6 @@ class Events extends \yii\base\Object
 
 
     /**
-     * Catch and dispatch events for AfterSave
-     *
-     * This approach isn't preferable but it seems
-     * like the ability to tap into the afterSave event
-     * from Events has been removed. This will do as a
-     * temporary fix.
-     *
-     * @param $event
-     */
-    public static function onActiveRecordAfterSave($event)
-    {
-        switch(get_class($event->sender)) {
-
-            case Question::className():
-                self::onQuestionAfterSave($event);
-                break;
-
-            case Answer::className():
-                self::onAnswerAfterSave($event);
-                break;
-
-            case QuestionVotes::className():
-                self::onQuestionVoteAfterSave($event);
-                break;
-
-        }
-
-    }
-
-    /**
      * A question has been created
      * @param type $event
      */

@@ -42,16 +42,30 @@ return [
             'callback' => ['humhub\modules\questionanswer\Events', 'onAdminMenuInit']
         ],
         [
-            'class' => \humhub\components\ActiveRecord::className(),
-            'event' => \humhub\components\ActiveRecord::EVENT_AFTER_INSERT,
-            'callback' => ['humhub\modules\questionanswer\Events', 'onActiveRecordAfterSave'],
-
-        ],
-        [
             'class' => \humhub\modules\search\engine\Search::className(),
             'event' => \humhub\modules\search\engine\Search::EVENT_ON_REBUILD,
             'callback' => ['humhub\modules\questionanswer\Events', 'onSearchRebuild'],
-        ]
+        ],
+
+        // Default Karma Events
+        [
+            'class' => 'humhub\modules\questionanswer\models\Question',
+            'event' => 'afterInsert',
+            'callback' => ['humhub\modules\questionanswer\Events', 'onQuestionAfterSave'],
+        ],
+
+        [
+            'class' => 'humhub\modules\questionanswer\models\Answer',
+            'event' => 'afterInsert',
+            'callback' => ['humhub\modules\questionanswer\Events', 'onAnswerAfterSave'],
+        ],
+
+        [
+            'class' => 'humhub\modules\questionanswer\models\QuestionVotes',
+            'event' => 'afterInsert',
+            'callback' => ['humhub\modules\questionanswer\Events', 'onQuestionVoteAfterSave'],
+        ],
+
     ],
 ];
 ?>

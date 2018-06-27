@@ -22,8 +22,10 @@ namespace humhub\modules\questionanswer\controllers;
 
 use humhub\models\Setting;
 use humhub\modules\content\models\Content;
+use humhub\modules\property\notifications\NewPropertyQuestion;
 use humhub\modules\questionanswer\models\Answer;
 use humhub\modules\questionanswer\models\Category;
+use humhub\modules\questionanswer\models\Comment;
 use humhub\modules\questionanswer\models\QuestionTag;
 use humhub\modules\questionanswer\models\Tag;
 use humhub\modules\questionanswer\models\Question;
@@ -138,7 +140,16 @@ class QuestionController extends ContentContainerController
 	 */
 	public function actionView($id)
 	{
+
 		$model = $this->loadModel($id);
+
+//        $question = Question::findOne(['id' => 54]);
+//
+//        NewPropertyQuestion::instance()
+//            ->from($question->user)
+//            ->about($question)
+//            ->send(Yii::$app->user->identity);
+
 
 		return $this->render('view',array(
 
