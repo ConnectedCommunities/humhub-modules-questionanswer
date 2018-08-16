@@ -30,7 +30,7 @@ use humhub\modules\email_whitelist\models\EmailWhitelist;
 use Yii;
 use yii\helpers\Url;
 
-class Events extends \yii\base\Object
+class Events extends \yii\base\BaseObject
 {
 
     /**
