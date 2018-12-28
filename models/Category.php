@@ -48,7 +48,7 @@ class Category extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'space_module';
+        return 'module_enabled';
     }
 
     /**
