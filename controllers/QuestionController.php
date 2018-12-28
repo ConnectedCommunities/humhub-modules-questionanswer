@@ -356,6 +356,7 @@ class QuestionController extends ContentContainerController
 
 		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
+			'contentContainer'=>$this->contentContainer,
 		));
 	}
 
