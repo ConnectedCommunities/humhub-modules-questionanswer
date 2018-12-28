@@ -48,7 +48,7 @@ class Category extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'space_module';
+        return 'contentcontainer_module';
     }
 
     /**
@@ -58,7 +58,7 @@ class Category extends ActiveRecord
      */
     public function getSpace()
     {
-        return $this->hasOne(Space::class, ['id' => 'space_id']);
+        return $this->hasOne(Space::class, ['id' => 'contentcontainer_id']);
     }
 
     /**
