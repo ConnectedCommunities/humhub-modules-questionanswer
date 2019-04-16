@@ -356,6 +356,7 @@ class QuestionController extends ContentContainerController
 
 		return $this->render('index',array(
 			'dataProvider'=>$dataProvider,
+			'contentContainer'=>$this->contentContainer,
 		));
 	}
 
@@ -379,6 +380,7 @@ class QuestionController extends ContentContainerController
 		}
 
 		return $this->render('admin', array(
+			'contentContainer'=>$this->contentContainer,
 			'dataProvider' => $dataProvider,
 			'searchModel' => $query,
 			'model' => Question::find()
@@ -441,6 +443,7 @@ class QuestionController extends ContentContainerController
 
 
 		return $this->render('tags', array(
+			'contentContainer'=>$this->contentContainer,
 			'tag' => $tag,
             'container' => $container,
 			'questions' => Question::tag_overview($tag->id, $container)
