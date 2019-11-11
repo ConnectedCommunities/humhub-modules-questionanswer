@@ -24,7 +24,7 @@ use humhub\libs\Helpers;
 $question = $answer->question;
 ?>
 <p>
-    <a href="<b>Q: <?php echo Html::a(Html::encode($question->post_title), Url::toRoute(['/questionanswer/question/view', 'id' => $question->id])); ?></b>"></a>
+    <b>Q: <a href=""><?php echo Html::a(Html::encode($question->post_title), Url::toRoute(['/questionanswer/question/view', 'id' => $question->id])); ?></a>
 </p>
 <p>
     <span class="content" style="border-left:2px solid #ccc; padding-top:2px; padding-bottom:2px; padding-left:5px; margin-left: 5px;">
