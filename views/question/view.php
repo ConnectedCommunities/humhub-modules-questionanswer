@@ -35,7 +35,7 @@ humhub\modules\questionanswer\Asset::register($this);
         <div class="col-md-12">
             <ol class="breadcrumb">
                 <li><a href="#">Home</a></li>
-                <li><a href="<?php echo \yii\helpers\::toRoute('/questionanswer/question/index'); ?>">Discussion Forums</a></li>
+                <li><a href="<?php echo \yii\helpers\Url::toRoute('/questionanswer/question/index'); ?>">Discussion Forums</a></li>
                 <?php if(get_class($question->space) == \humhub\modules\space\models\Space::class) { ?>
                     <li><a href="<?php echo $question->space->createUrl('/questionanswer/question/index') ?>"><?php echo $question->space->name; ?></a></li>
                 <?php } ?>
