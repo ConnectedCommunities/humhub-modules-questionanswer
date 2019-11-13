@@ -69,9 +69,9 @@ use humhub\modules\questionanswer\helpers\Url;
         <h4 class="media-heading">
             <?php
             if($data->post_title != "") {
-                echo \yii\helpers\Html::a(\yii\helpers\Html::encode($data->post_title), Url::createUrl('view', ['id'=>$data->id]));
+                echo \yii\helpers\Html::a(\yii\helpers\Html::encode($data->post_title), $this->context->contentContainer->createUrl('view', ['id'=>$data->id]));
             } else {
-                echo \yii\helpers\Html::a("...", Url::createUrl('view', ['id'=>$data->id]));
+                echo \yii\helpers\Html::a("...", $this->context->contentContainer->createUrl('view', ['id'=>$data->id]));
             }
             ?>
         </h4>
