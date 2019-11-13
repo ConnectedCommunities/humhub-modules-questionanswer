@@ -92,7 +92,7 @@ humhub\modules\questionanswer\Asset::register($this);
 
                                 <!-- Post Title -->
                                 <h3 id="post-title" class="media-heading" style="margin-top:15px;">
-                                    <?php echo Html::a(Html::encode($model->post_title), Url::createUrl('question/view', ['id' => $model->id])); ?>
+                                    <?php echo Html::a(Html::encode($model->post_title), $this->context->contentContainer->createUrl('question/view', ['id' => $model->id])); ?>
                                 </h3>
 
                                 <!-- Post Text -->
@@ -103,7 +103,7 @@ humhub\modules\questionanswer\Asset::register($this);
                                 <!-- Labels -->
                                 <div class="post-tags">
                                     <?php foreach($model->tags as $tag) { ?>
-                                        <span class="label label-default"><a href="<?php echo Url::createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
+                                        <span class="label label-default"><a href="<?php echo $this->context->contentContainer->createUrl('question/tag', ['id' => $tag->tag_id]); ?>"><?php echo $tag->tag->tag; ?></a></span>
                                     <?php } ?>
                                 </div>
 
@@ -296,7 +296,7 @@ humhub\modules\questionanswer\Asset::register($this);
                 <?php if(count($related) > 0) { ?>
                     <div class="list-group">
                         <?php foreach ($related as $question) { ?>
-                            <a class="list-group-item" href="<?php echo Url::createUrl('question/view', ['id' => $question['id']]); ?>"><?php echo Html::encode($question['post_title']); ?></a>
+                            <a class="list-group-item" href="<?php echo $this->context->contentContainer->createUrl('question/view', ['id' => $question['id']]); ?>"><?php echo Html::encode($question['post_title']); ?></a>
                         <?php } ?>
                     </div>
                     <br>
